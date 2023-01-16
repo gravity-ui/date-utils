@@ -1,0 +1,23 @@
+// Copyright 2015 Grafana Labs
+// Copyright 2023 gravity-ui
+
+import {DateTimeOptions} from './common';
+import {DateTime, DateTimeInput} from './dateTime';
+
+export type DateTimeParser<T extends DateTimeOptions = DateTimeOptions> = (
+    value: DateTimeInput,
+    options?: T,
+) => DateTime | undefined;
+
+export interface DateTimeOptionsWhenParsing extends DateTimeOptions {
+    /**
+     * If the input is a relative date, e.g. now-6h, then you can specify this to control
+     * whether the last part of the date and time value is included or excluded.
+     *
+     * Example: now-6h and the current time is 12:20:00 if roundUp is set to true
+     * the returned DateTime value will be 06:00:00.
+     */
+    roundUp?: boolean;
+    /** Allows relative date input */
+    allowRelative?: boolean;
+}
