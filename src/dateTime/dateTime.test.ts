@@ -13,8 +13,6 @@ describe('DateTime', () => {
     describe('isDateTime', () => {
         it('should return true in case of DateTime checking', () => {
             const date = dateTime();
-            const test = dateTime({input: ''});
-            console.log(test?.format('YYYY-MM-DDTHH:mm:ssZ'));
             const result = isDateTime(date);
             expect(result).toEqual(true);
         });
