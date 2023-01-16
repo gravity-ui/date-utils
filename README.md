@@ -46,7 +46,7 @@ dateTime({input: '2021-08', format: 'YYYY-MM-DD'}).format(FORMAT); // "Invalid D
 ## Settings
 
 ```typescript
-import {dateTime, settings} from '@gravity-ui/date-utils';
+import {settings} from '@gravity-ui/date-utils';
 
 // Locales management
 settings.getLocale(); // default locale "en"
