@@ -1,5 +1,5 @@
 // Copyright 2015 Grafana Labs
-// Copyright 2023 gravity-ui
+// Copyright 2021 YANDEX LLC
 
 import {DateTimeOptions} from './common';
 import {DateTime, DateTimeInput} from './dateTime';
