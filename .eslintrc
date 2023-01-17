@@ -6,9 +6,6 @@
         "jest": true
     },
     "rules": {
-        "security/detect-child-process": 0,
-        "security/detect-non-literal-fs-filename": 0,
-        "camelcase": 0,
         "valid-jsdoc": 0
     }
 }
