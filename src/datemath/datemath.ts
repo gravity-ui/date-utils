@@ -26,14 +26,6 @@ export function isValid(value?: string | DateTime): boolean {
     return false;
 }
 
-/**
- * Parses different types input to a dayjs instance. There is a specific formatting language that can be used
- * if text arg is string. See unit tests for examples.
- * @param text
- * @param roundUp See parseDateMath function.
- * @param timeZone Only string 'utc' is acceptable here, for anything else, local timezone is used.
- * @returns {DateTime | undefined}
- */
 export function parse(
     text?: string | DateTime | Date | null,
     roundUp?: boolean,
@@ -84,13 +76,6 @@ export function parse(
     }
 }
 
-/**
- * Parses math part of the time string and shifts supplied time according to that math. See unit tests for examples.
- * @param mathString
- * @param time
- * @param roundUp If true it will round the time to endOf time unit, otherwise to startOf time unit.
- * @returns {DateTime | undefined}
- */
 export function parseDateMath(
     mathString: string,
     time: DateTime,

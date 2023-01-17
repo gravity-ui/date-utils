@@ -18,6 +18,5 @@ export interface DateTimeOptionsWhenParsing extends DateTimeOptions {
      * the returned DateTime value will be 06:00:00.
      */
     roundUp?: boolean;
-    /** Allows relative date input */
     allowRelative?: boolean;
 }
