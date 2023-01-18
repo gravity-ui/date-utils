@@ -5,7 +5,7 @@ Helpers to manage work with dates.
 ## Install
 
 ```shell
-npm i --save-dev @gravity-ui/date-utils
+npm i @gravity-ui/date-utils
 ```
 
 ## Usage
