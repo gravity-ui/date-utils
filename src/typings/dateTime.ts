@@ -63,11 +63,20 @@ export interface DateTime extends Object {
     utc: () => DateTime;
     utcOffset: () => number;
     daysInMonth: () => number;
-    date: () => number;
-    month: () => number;
-    year: () => number;
-    day: () => number;
-    hour: () => number;
-    minute: () => number;
-    second: () => number;
+    date(): number;
+    date(value: number): DateTime;
+    month(): number;
+    month(value: number): DateTime;
+    year(): number;
+    year(value: number): DateTime;
+    day(): number;
+    day(value: number): DateTime;
+    hour(): number;
+    hour(value: number): DateTime;
+    minute(): number;
+    minute(value: number): DateTime;
+    second(): number;
+    second(value: number): DateTime;
+    millisecond(): number;
+    millisecond(value: number): DateTime;
 }

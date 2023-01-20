@@ -61,5 +61,18 @@ describe('DateTime', () => {
                 .format(DEFAULT_SYSTEM_DATE_FORMAT);
             expect(date).toEqual('2021-08-01');
         });
+
+        it('should set/get hours, minutes, seconds, millisecond', () => {
+            let date = dateTime({input: TESTED_DATE_STRING});
+            expect(date.millisecond()).toEqual(0);
+            expect(date.second()).toEqual(0);
+            expect(date.minute()).toEqual(0);
+            expect(date.hour()).toEqual(0);
+            date = date.hour(10).minute(10).second(10).millisecond(999);
+            expect(date.millisecond()).toEqual(999);
+            expect(date.second()).toEqual(10);
+            expect(date.minute()).toEqual(10);
+            expect(date.hour()).toEqual(10);
+        });
     });
 });
