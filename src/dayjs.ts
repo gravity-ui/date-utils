@@ -8,6 +8,7 @@ import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import updateLocale from 'dayjs/plugin/updateLocale';
 
 dayjs.extend(arraySupport);
@@ -17,6 +18,7 @@ dayjs.extend(quarterOfYear);
 dayjs.extend(relativeTime);
 dayjs.extend(timezone);
 dayjs.extend(utc);
+dayjs.extend(localizedFormat);
 dayjs.extend(updateLocale);
 // the modifications made in objectSupport would preserve other plugins behavior
 // but not vice versa, therefore it should come last
