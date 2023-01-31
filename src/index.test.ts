@@ -44,4 +44,18 @@ describe('Public API', () => {
     it('year quarters are supported', () => {
         expect(date.startOf('Q').format('YYYY-MM-DD')).toBe('2000-01-01');
     });
+
+    it('localized formats are supported', () => {
+        expect(date.locale('en').format('L')).toBe('02/02/2000');
+        expect(date.locale('ru').format('L')).toBe('02.02.2000');
+
+        expect(date.locale('en').format('LL')).toBe('February 2, 2000');
+        expect(date.locale('ru').format('LL')).toBe('2 февраля 2000 г.');
+
+        expect(date.locale('en').format('LT')).toBe('12:00 AM');
+        expect(date.locale('ru').format('LT')).toBe('0:00');
+
+        expect(date.locale('en').format('LTS')).toBe('12:00:00 AM');
+        expect(date.locale('ru').format('LTS')).toBe('0:00:00');
+    });
 });
