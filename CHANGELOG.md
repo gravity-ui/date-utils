@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/gravity-ui/date-utils/compare/v1.0.0...v1.1.0) (2023-01-31)
+
+
+### Features
+
+* add localized formats plugin ([#11](https://github.com/gravity-ui/date-utils/issues/11)) ([a59640f](https://github.com/gravity-ui/date-utils/commit/a59640f27b77e0af09b1574f72ea641cbb60c03f))
+
+
+### Bug Fixes
+
+* fix DateTime interface ([#9](https://github.com/gravity-ui/date-utils/issues/9)) ([c2ddeb4](https://github.com/gravity-ui/date-utils/commit/c2ddeb4180a19069d769ce4d88e3980af4893afc))
+
 ## 1.0.0 (2023-01-18)
 
 
