@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/gravity-ui/date-utils/compare/v1.1.0...v1.1.1) (2023-02-01)
+
+
+### Bug Fixes
+
+* fix settings.loadLocale ([#12](https://github.com/gravity-ui/date-utils/issues/12)) ([753668b](https://github.com/gravity-ui/date-utils/commit/753668bb9189166a6b32034c6dbeea11addf2b6e))
+
 ## [1.1.0](https://github.com/gravity-ui/date-utils/compare/v1.0.0...v1.1.0) (2023-01-31)
 
 
