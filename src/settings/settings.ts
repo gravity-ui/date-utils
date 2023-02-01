@@ -14,7 +14,7 @@ class Settings {
             try {
                 const localeInLowerCase = locale.toLocaleLowerCase();
                 // https://github.com/iamkun/dayjs/issues/792#issuecomment-639961997
-                await import(`dayjs/locale/${localeInLowerCase}.js`);
+                await require(`dayjs/locale/${localeInLowerCase}.js`);
                 this.loadedLocales.add(localeInLowerCase);
             } catch (error) {
                 throw new Error(
