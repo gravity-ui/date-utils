@@ -4,7 +4,7 @@
 import dayjs from '../dayjs';
 import {dateTime} from '../dateTime';
 import {parse, isValid} from '../datemath';
-import {DateTimeOptionsWhenParsing, DateTime, DateTimeParser} from '../typings';
+import type {DateTimeOptionsWhenParsing, DateTime, DateTimeParser} from '../typings';
 
 const parseInput: DateTimeParser<DateTimeOptionsWhenParsing> = (
     input,

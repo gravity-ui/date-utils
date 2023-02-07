@@ -1,7 +1,9 @@
-import dayjs, {ConfigType} from '../dayjs';
-import {DateTime, DateTimeInput, FormatInput, TimeZone} from '../typings';
+import dayjs from '../dayjs';
 import {STRICT, UtcTimeZone} from '../constants';
 import {compareStrings} from '../utils';
+
+import type {ConfigType} from '../dayjs';
+import type {DateTime, DateTimeInput, FormatInput, TimeZone} from '../typings';
 
 export const createDateTime = (
     input?: DateTimeInput,
