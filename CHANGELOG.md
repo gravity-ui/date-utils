@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/gravity-ui/date-utils/compare/v1.1.1...v1.1.2) (2023-02-08)
+
+
+### Bug Fixes
+
+* properly export types dependent on dayjs plugins ([#14](https://github.com/gravity-ui/date-utils/issues/14)) ([8445819](https://github.com/gravity-ui/date-utils/commit/8445819eb4a3fc76e1da08287dd0393072d99a2b))
+
 ## [1.1.1](https://github.com/gravity-ui/date-utils/compare/v1.1.0...v1.1.1) (2023-02-01)
 
 
