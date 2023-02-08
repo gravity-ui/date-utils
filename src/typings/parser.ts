@@ -1,8 +1,8 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import {DateTimeOptions} from './common';
-import {DateTime, DateTimeInput} from './dateTime';
+import type {DateTimeOptions} from './common';
+import type {DateTime, DateTimeInput} from './dateTime';
 
 export type DateTimeParser<T extends DateTimeOptions = DateTimeOptions> = (
     value: DateTimeInput,

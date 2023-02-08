@@ -1,7 +1,7 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import {TimeZoneOptions} from './timeZone';
+import type {TimeZoneOptions} from './timeZone';
 
 export interface DateTimeOptions extends TimeZoneOptions {
     /**

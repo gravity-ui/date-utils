@@ -24,4 +24,18 @@ dayjs.extend(updateLocale);
 // but not vice versa, therefore it should come last
 dayjs.extend(objectSupport);
 
-export = dayjs;
+export default dayjs;
+
+export type {ConfigTypeMap, ConfigType} from 'dayjs';
+export type {
+    arraySupport,
+    customParseFormat,
+    isoWeek,
+    quarterOfYear,
+    relativeTime,
+    timezone,
+    utc,
+    localizedFormat,
+    updateLocale,
+    objectSupport,
+};

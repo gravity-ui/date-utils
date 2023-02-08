@@ -1,6 +1,6 @@
 import dayjs from '../dayjs';
 import {UtcTimeZone} from '../constants';
-import {TimeZone, TimeZoneOptions} from '../typings';
+import type {TimeZone, TimeZoneOptions} from '../typings';
 
 export const getTimeZone = <T extends TimeZoneOptions>(options?: T): TimeZone => {
     return options?.timeZone ?? UtcTimeZone;
