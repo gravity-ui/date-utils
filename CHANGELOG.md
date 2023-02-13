@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/gravity-ui/date-utils/compare/v1.1.2...v1.1.3) (2023-02-13)
+
+
+### Bug Fixes
+
+* import only used functions from lodash ([#16](https://github.com/gravity-ui/date-utils/issues/16)) ([cd8e057](https://github.com/gravity-ui/date-utils/commit/cd8e057963f8dc5f72051a36c4bed31e3771fc51))
+
 ## [1.1.2](https://github.com/gravity-ui/date-utils/compare/v1.1.1...v1.1.2) (2023-02-08)
 
 
