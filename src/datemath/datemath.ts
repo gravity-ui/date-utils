@@ -1,7 +1,8 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import {includes, isDate} from 'lodash';
+import isDate from 'lodash/isDate';
+import includes from 'lodash/includes';
 import {dateTime, isDateTime} from '../dateTime';
 import type {DateTime, DurationUnit, TimeZone} from '../typings';
 

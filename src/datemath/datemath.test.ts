@@ -2,7 +2,7 @@
 // Copyright 2021 YANDEX LLC
 
 import sinon, {SinonFakeTimers} from 'sinon';
-import {each} from 'lodash';
+import each from 'lodash/each';
 
 import {dateTime} from '../dateTime';
 import * as dateMath from './datemath';
