@@ -50,6 +50,7 @@ export interface DateTime extends Object {
     from: (formaInput: DateTimeInput) => string;
     isSame: (input?: DateTimeInput, granularity?: DurationUnit) => boolean;
     isBefore: (input?: DateTimeInput) => boolean;
+    isAfter: (input?: DateTimeInput) => boolean;
     isValid: () => boolean;
     local: () => DateTime;
     locale: (locale: string) => DateTime;
@@ -61,7 +62,7 @@ export interface DateTime extends Object {
     valueOf: () => number;
     unix: () => number;
     utc: () => DateTime;
-    utcOffset: () => number;
+    utcOffset: (offset?: number, keepLocalTime?: boolean) => DateTime;
     daysInMonth: () => number;
     date(): number;
     date(value: number): DateTime;
