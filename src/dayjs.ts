@@ -10,6 +10,7 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import updateLocale from 'dayjs/plugin/updateLocale';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 dayjs.extend(arraySupport);
 dayjs.extend(customParseFormat);
@@ -17,6 +18,8 @@ dayjs.extend(isoWeek);
 dayjs.extend(quarterOfYear);
 dayjs.extend(relativeTime);
 dayjs.extend(timezone);
+// advancedFormat requires timezone plugin
+dayjs.extend(advancedFormat);
 dayjs.extend(utc);
 dayjs.extend(localizedFormat);
 dayjs.extend(updateLocale);
