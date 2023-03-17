@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/gravity-ui/date-utils/compare/v1.1.3...v1.2.0) (2023-03-17)
+
+
+### Features
+
+* add advancedFormat plugin ([#20](https://github.com/gravity-ui/date-utils/issues/20)) ([b2a12e6](https://github.com/gravity-ui/date-utils/commit/b2a12e623574accdce0006cf55cee6ab924043c4))
+
 ## [1.1.3](https://github.com/gravity-ui/date-utils/compare/v1.1.2...v1.1.3) (2023-02-13)
 
 

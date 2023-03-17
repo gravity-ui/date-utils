@@ -58,4 +58,17 @@ describe('Public API', () => {
         expect(date.locale('en').format('LTS')).toBe('12:00:00 AM');
         expect(date.locale('ru').format('LTS')).toBe('0:00:00');
     });
+
+    it('timezones abbrevations are suported', () => {
+        const dateWithTimezone = dateTime({input: '2000-02-02', timeZone: 'Europe/London'}).locale(
+            'en',
+        );
+        const [_, shortTimezone] = dateWithTimezone.format('L z').split(' ');
+
+        expect(shortTimezone).toBe('GMT');
+
+        const [__, timezone] = dateWithTimezone.format('L zzz').split(' ');
+
+        expect(timezone).toBe('Greenwich');
+    });
 });
