@@ -1,6 +1,6 @@
 # @gravity-ui/date-utils
 
-Helpers to manage work with dates.
+Helpers for managing Date and Time.
 
 ## Install
 
