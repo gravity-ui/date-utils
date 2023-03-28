@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0](https://github.com/gravity-ui/date-utils/compare/v1.2.0...v1.3.0) (2023-03-28)
+
+
+### Features
+
+* support UTC timezone formatting ([#24](https://github.com/gravity-ui/date-utils/issues/24)) ([4a6f21f](https://github.com/gravity-ui/date-utils/commit/4a6f21f89fe49740bc972734db9df9e17ca99fd6))
+
+
+### Bug Fixes
+
+* add missing types signatures ([#18](https://github.com/gravity-ui/date-utils/issues/18)) ([5905e60](https://github.com/gravity-ui/date-utils/commit/5905e6076e731907b4a93fcbc0140ccb483dd273))
+* improve typings for utc plugin ([#23](https://github.com/gravity-ui/date-utils/issues/23)) ([d4df45f](https://github.com/gravity-ui/date-utils/commit/d4df45f4de99d2aa8e476e7e40d9264b4e84d804))
+
 ## [1.2.0](https://github.com/gravity-ui/date-utils/compare/v1.1.3...v1.2.0) (2023-03-17)
 
 
