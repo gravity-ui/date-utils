@@ -71,4 +71,13 @@ describe('Public API', () => {
 
         expect(timezone).toBe('Greenwich');
     });
+
+    it('utc timezone is supported', () => {
+        const dateWithTimezone = dateTime({
+            input: '2000-02-02T00:00:00.001Z',
+            timeZone: 'utc',
+        });
+
+        expect(dateWithTimezone.format('L z')).toBe('02/02/2000 UTC');
+    });
 });
