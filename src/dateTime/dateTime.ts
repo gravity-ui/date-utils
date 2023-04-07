@@ -18,7 +18,7 @@ export const createDateTime = (
 export const createUTCDateTime = (input?: DateTimeInput, format?: FormatInput) => {
     return (
         format ? dayjs.utc(input as ConfigType, format, STRICT) : dayjs.utc(input as ConfigType)
-    ).tz('UTC') as DateTime; // setting .tz('UTC') allows having .format('L z') -> `02/02/2000 UTC`
+    ) as DateTime;
 };
 
 /**
