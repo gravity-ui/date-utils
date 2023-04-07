@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/gravity-ui/date-utils/compare/v1.3.0...v1.3.1) (2023-04-07)
+
+
+### Bug Fixes
+
+* revert support UTC formatting ([#26](https://github.com/gravity-ui/date-utils/issues/26)) ([be2d98c](https://github.com/gravity-ui/date-utils/commit/be2d98c4bfc0ffd00cf807221c728fd13e084ac0))
+
 ## [1.3.0](https://github.com/gravity-ui/date-utils/compare/v1.2.0...v1.3.0) (2023-03-28)
 
 
