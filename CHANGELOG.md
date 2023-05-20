@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/gravity-ui/date-utils/compare/v1.3.1...v1.4.0) (2023-05-20)
+
+
+### Features
+
+* **Settings:** add getLocaleData method ([#28](https://github.com/gravity-ui/date-utils/issues/28)) ([746383e](https://github.com/gravity-ui/date-utils/commit/746383eaff6e1e5dfb1fd0f7005dd5e9be0a4f86))
+
 ## [1.3.1](https://github.com/gravity-ui/date-utils/compare/v1.3.0...v1.3.1) (2023-04-07)
 
 
