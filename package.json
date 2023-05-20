@@ -46,8 +46,7 @@
   },
   "nano-staged": {
     "*.{js,ts}": [
-      "eslint --fix --quiet",
-      "prettier --write"
+      "eslint --fix --quiet"
     ],
     "*.md": [
       "prettier --write"

@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash/cloneDeep';
 import dayjs from '../dayjs';
 import type {UpdateLocaleConfig} from './types';
 
@@ -26,6 +27,21 @@ class Settings {
 
     getLocale() {
         return dayjs.locale();
+    }
+
+    getLocaleData() {
+        const locales = dayjs.Ls;
+
+        let localeObject = locales[this.getLocale()];
+        if (!localeObject) {
+            localeObject = locales.en;
+        }
+
+        if (!localeObject) {
+            throw new Error('There is something really wrong happening. Locale data is absent.');
+        }
+
+        return cloneDeep(localeObject);
     }
 
     setLocale(locale: string) {
