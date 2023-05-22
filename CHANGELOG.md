@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/gravity-ui/date-utils/compare/v1.4.0...v1.4.1) (2023-05-22)
+
+
+### Bug Fixes
+
+* **DurationUnit:** add date unit ([#30](https://github.com/gravity-ui/date-utils/issues/30)) ([ea7c455](https://github.com/gravity-ui/date-utils/commit/ea7c45510ea134a6dedc90cb24be5e0b2d59a759))
+
 ## [1.4.0](https://github.com/gravity-ui/date-utils/compare/v1.3.1...v1.4.0) (2023-05-20)
 
 
