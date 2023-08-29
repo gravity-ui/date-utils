@@ -65,7 +65,8 @@ export interface DateTime extends Object {
     valueOf: () => number;
     unix: () => number;
     utc: (keepLocalTime?: boolean) => DateTime;
-    utcOffset: (offset?: number, keepLocalTime?: boolean) => DateTime;
+    utcOffset(offset: number | string, keepLocalTime?: boolean): DateTime;
+    utcOffset(): number;
     daysInMonth: () => number;
     date(): number;
     date(value: number): DateTime;

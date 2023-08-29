@@ -45,6 +45,12 @@ describe('DateTime', () => {
             expect(date).toEqual('+09:00');
         });
 
+        it('should return offset as number of minutes for specified timeZone', () => {
+            const date = dateTime({timeZone: 'Asia/Tokyo'});
+            const offset = date.utcOffset();
+            expect(offset).toEqual(9 * 60);
+        });
+
         test.each<[string | undefined, string]>([
             ['ru', '07 авг. 2021'],
             ['en', '07 Aug 2021'],
