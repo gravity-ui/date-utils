@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/gravity-ui/date-utils/compare/v1.4.1...v1.4.2) (2023-08-29)
+
+
+### Bug Fixes
+
+* **dateTime:** fix typings for utcOffset() ([#33](https://github.com/gravity-ui/date-utils/issues/33)) ([0559cf0](https://github.com/gravity-ui/date-utils/commit/0559cf0b141855732d62ddcc4115986934dd6502))
+
 ## [1.4.1](https://github.com/gravity-ui/date-utils/compare/v1.4.0...v1.4.1) (2023-05-22)
 
 
