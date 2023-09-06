@@ -1,6 +1,5 @@
 import dayjs from '../dayjs';
-import {STRICT, UtcTimeZone} from '../constants';
-import {compareStrings} from '../utils';
+import {STRICT} from '../constants';
 
 import type {ConfigType} from '../dayjs';
 import type {DateTime, DateTimeInput, FormatInput, TimeZone} from '../typings';
@@ -12,13 +11,7 @@ export const createDateTime = (
 ) => {
     const date = format ? dayjs(input as ConfigType, format, STRICT) : dayjs(input as ConfigType);
 
-    return (timeZone ? date.tz(timeZone) : date) as DateTime;
-};
-
-export const createUTCDateTime = (input?: DateTimeInput, format?: FormatInput) => {
-    return (
-        format ? dayjs.utc(input as ConfigType, format, STRICT) : dayjs.utc(input as ConfigType)
-    ) as DateTime;
+    return (timeZone ? date.tz(timeZone, true) : date) as DateTime;
 };
 
 /**
@@ -44,9 +37,7 @@ export const dateTime = (opt?: {
         dayjs.locale(lang);
     }
 
-    const date = compareStrings(timeZone, UtcTimeZone, {ignoreCase: true})
-        ? createUTCDateTime(input, format)
-        : createDateTime(input, format, timeZone);
+    const date = createDateTime(input, format, timeZone);
 
     if (shouldSetLocale) {
         dayjs.locale(prevLang);

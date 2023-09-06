@@ -2,6 +2,7 @@ import MockDate from 'mockdate';
 import {DEFAULT_SYSTEM_DATE_FORMAT} from '../constants';
 import type {DateTime} from '../typings';
 import {dateTimeParse} from './parser';
+import dayjs from '../dayjs';
 
 const TESTED_DATE_STRING = '2021-08-07';
 const TESTED_TIMESTAMP = 1621708204063;
@@ -37,6 +38,15 @@ describe('Parser', () => {
         expect(date).toEqual('+09:00');
     });
 
+    it('should return DateTime with correct time with when timeZone is defined', () => {
+        dayjs.tz.setDefault('Europe/Moscow');
+        const date = dateTimeParse('2021-08-07T12:10:00', {
+            timeZone: 'Europe/Amsterdam',
+        })?.toISOString();
+        dayjs.tz.setDefault();
+        expect(date).toBe('2021-08-07T10:10:00.000Z');
+    });
+
     it('should return DateTime in case of using format arg and input corresponding to this format', () => {
         const date = dateTimeParse('2021', {format: 'YYYY'});
         expect(Boolean(date)).toEqual(true);
@@ -45,6 +55,16 @@ describe('Parser', () => {
     it('should return undefined in case of using format arg and input does not corresponding to this format', () => {
         const date = dateTimeParse('2021', {format: 'YYYY-MM-DD'});
         expect(Boolean(date)).toEqual(false);
+    });
+
+    it('should return equal dates for UTC and Etc/GMT time zones', () => {
+        const utcDate = dateTimeParse(MOCKED_DATE, {timeZone: 'UTC'})?.format(
+            DEFAULT_SYSTEM_DATE_FORMAT,
+        );
+        const gmtDate = dateTimeParse(MOCKED_DATE, {timeZone: 'Etc/GMT'})?.format(
+            DEFAULT_SYSTEM_DATE_FORMAT,
+        );
+        expect(utcDate).toEqual(gmtDate);
     });
 
     test.each<[string | undefined, string]>([
