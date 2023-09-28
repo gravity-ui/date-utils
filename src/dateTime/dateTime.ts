@@ -11,7 +11,20 @@ export const createDateTime = (
 ) => {
     const date = format ? dayjs(input as ConfigType, format, STRICT) : dayjs(input as ConfigType);
 
-    return (timeZone ? date.tz(timeZone, true) : date) as DateTime;
+    if (timeZone) {
+        const utcDate = format
+            ? dayjs.utc(input as ConfigType, format, STRICT)
+            : dayjs.utc(input as ConfigType);
+        const isIsoInput = date.isValid() && date.toISOString() === utcDate.toISOString();
+
+        if (timeZone === 'UTC' || timeZone.includes('GMT')) {
+            return utcDate as DateTime;
+        }
+
+        return date.tz(timeZone, !isIsoInput) as DateTime;
+    }
+
+    return date as DateTime;
 };
 
 /**

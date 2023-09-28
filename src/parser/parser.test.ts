@@ -2,7 +2,6 @@ import MockDate from 'mockdate';
 import {DEFAULT_SYSTEM_DATE_FORMAT} from '../constants';
 import type {DateTime} from '../typings';
 import {dateTimeParse} from './parser';
-import dayjs from '../dayjs';
 
 const TESTED_DATE_STRING = '2021-08-07';
 const TESTED_TIMESTAMP = 1621708204063;
@@ -39,12 +38,17 @@ describe('Parser', () => {
     });
 
     it('should return DateTime with correct time with when timeZone is defined', () => {
-        dayjs.tz.setDefault('Europe/Moscow');
         const date = dateTimeParse('2021-08-07T12:10:00', {
             timeZone: 'Europe/Amsterdam',
-        })?.toISOString();
-        dayjs.tz.setDefault();
-        expect(date).toBe('2021-08-07T10:10:00.000Z');
+        });
+        expect(date?.toISOString()).toBe('2021-08-07T10:10:00.000Z');
+    });
+
+    it('test', () => {
+        const date = dateTimeParse('2023-09-05T13:39:00.000Z', {
+            timeZone: 'Europe/Amsterdam',
+        });
+        expect(date?.toISOString()).toBe('2023-09-05T13:39:00.000Z');
     });
 
     it('should return DateTime in case of using format arg and input corresponding to this format', () => {
