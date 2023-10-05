@@ -37,14 +37,21 @@ describe('Parser', () => {
         expect(date).toEqual('+09:00');
     });
 
-    it('should return DateTime with correct time with when timeZone is defined', () => {
+    it('should return DateTime with correct time when is local date and timeZone is defined', () => {
         const date = dateTimeParse('2021-08-07T12:10:00', {
             timeZone: 'Europe/Amsterdam',
         });
         expect(date?.toISOString()).toBe('2021-08-07T10:10:00.000Z');
     });
 
-    it('test', () => {
+    it('should return DateTime with correct time when is local date with timeZone and timeZone option is defined', () => {
+        const date = dateTimeParse('2021-08-07T12:10:00+00:00', {
+            timeZone: 'Europe/Amsterdam',
+        });
+        expect(date?.toISOString()).toBe('2021-08-07T10:10:00.000Z');
+    });
+
+    it('should return DateTime with correct time when is ISO date and timeZone is defined', () => {
         const date = dateTimeParse('2023-09-05T13:39:00.000Z', {
             timeZone: 'Europe/Amsterdam',
         });
