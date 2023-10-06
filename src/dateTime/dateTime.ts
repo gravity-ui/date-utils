@@ -11,7 +11,7 @@ export const createDateTime = (
     timeZone?: TimeZone,
 ) => {
     const date = format ? dayjs(input as ConfigType, format, STRICT) : dayjs(input as ConfigType);
-    const isIsoInput = typeof input === 'string' && input.includes('Z');
+    const isIsoInput = typeof input === 'string' && (input.includes('Z') || input.includes('+'));
     return (timeZone ? date.tz(timeZone, !isIsoInput) : date) as DateTime;
 };
 
