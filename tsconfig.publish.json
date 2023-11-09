@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "outDir": "build"
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "**/*.test.ts",
+    "**/__tests__/**/*"
+  ]
+}

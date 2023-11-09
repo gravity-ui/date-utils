@@ -1,13 +1,19 @@
 import cloneDeep from 'lodash/cloneDeep';
 import dayjs from '../dayjs';
+import {guessUserTimeZone, normalizeTimeZone} from '../timeZone';
 import type {UpdateLocaleConfig} from './types';
 
 class Settings {
     // 'en' - preloaded locale in dayjs
     private loadedLocales = new Set(['en']);
+    private defaultLocale = 'en';
+    private defaultTimeZone: string | undefined;
 
     constructor() {
-        this.updateLocale({weekStart: 1});
+        this.updateLocale({
+            weekStart: 1, // First day of week is Monday
+            yearStart: 1, // First week of year must contain 1 January
+        });
     }
 
     async loadLocale(locale: string) {
@@ -26,7 +32,7 @@ class Settings {
     }
 
     getLocale() {
-        return dayjs.locale();
+        return this.defaultLocale;
     }
 
     getLocaleData() {
@@ -51,12 +57,20 @@ class Settings {
             );
         }
 
-        dayjs.locale(locale);
+        this.defaultLocale = locale;
     }
 
     updateLocale(config: UpdateLocaleConfig) {
         const locale = this.getLocale();
         dayjs.updateLocale(locale, config);
+    }
+
+    setDefaultTimeZone(zone: string) {
+        this.defaultTimeZone = zone;
+    }
+
+    getDefaultTimeZone() {
+        return normalizeTimeZone(this.defaultTimeZone, guessUserTimeZone());
     }
 
     private isLocaleLoaded(locale: string) {
