@@ -69,11 +69,8 @@ export function timeZoneOffset(zone: TimeZone, ts: number) {
             .map(({type, value}) => [type, type === 'era' ? value : parseInt(value, 10)]),
     ) as DateParts;
 
-    if (parts.era === 'BC') {
-        parts.year = -parts.year + 1;
-    }
-
-    const year = parts.era === 'BC' ? -parts.year + 1 : parts.year;
+    // Date.UTC(year), year: 0 — is 1 BC, -1 — is 2 BC, e.t.c
+    const year = parts.era === 'BC' ? -Math.abs(parts.year) + 1 : parts.year;
     const month = parts.month - 1; // month is zero base index
 
     // https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
@@ -116,7 +113,7 @@ export function normalizeTimeZone(input: string | undefined, defaultZone: string
         return input;
     }
 
-    return 'InvalidZone';
+    throw new Error(`InvalidZone: ${input}`);
 }
 
 export function fixOffset(

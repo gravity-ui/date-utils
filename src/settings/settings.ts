@@ -7,7 +7,7 @@ class Settings {
     // 'en' - preloaded locale in dayjs
     private loadedLocales = new Set(['en']);
     private defaultLocale = 'en';
-    private defaultTimeZone: string | undefined;
+    private defaultTimeZone = guessUserTimeZone();
 
     constructor() {
         this.updateLocale({
@@ -65,12 +65,12 @@ class Settings {
         dayjs.updateLocale(locale, config);
     }
 
-    setDefaultTimeZone(zone: string) {
-        this.defaultTimeZone = zone;
+    setDefaultTimeZone(zone: 'system' | (string & {})) {
+        this.defaultTimeZone = normalizeTimeZone(zone, guessUserTimeZone());
     }
 
     getDefaultTimeZone() {
-        return normalizeTimeZone(this.defaultTimeZone, guessUserTimeZone());
+        return this.defaultTimeZone;
     }
 
     private isLocaleLoaded(locale: string) {

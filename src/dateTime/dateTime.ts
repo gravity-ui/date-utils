@@ -37,7 +37,6 @@ class DateTimeImpl implements DateTime {
     private _offset: number;
     private _locale: string;
     private _date: dayjs.Dayjs;
-    // private _utcDate: dayjs.Dayjs;
 
     constructor(
         opt: {
@@ -56,19 +55,22 @@ class DateTimeImpl implements DateTime {
         }
         const locale = opt.locale || settings.getLocale();
         const localDate = opt.format
-            ? // @ts-expect-error
+            ? // DateTimeInput !== dayjs.ConfigType;
+              // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
+              // @ts-expect-error
               dayjs(input, opt.format, locale, STRICT)
-            : // @ts-expect-error
+            : // DateTimeInput !== dayjs.ConfigType;
+              // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
+              // @ts-expect-error
               dayjs(input, undefined, locale);
 
         this._timestamp = localDate.valueOf();
-        // this._utcDate = localDate.utc();
         this._locale = locale;
         if (typeof opt.utcOffset === 'number') {
             this._timeZone = UtcTimeZone;
             this._offset = opt.utcOffset;
             this._date = localDate.utc().utcOffset(this._offset).locale(locale);
-            // @ts-expect-error set timezone to utc date
+            // @ts-expect-error set timezone to utc date, it will be shown with `format('z')`.
             this._date.$x.$timezone = this._timeZone;
         } else {
             this._timeZone = normalizeTimeZone(opt.timeZone, settings.getDefaultTimeZone());
@@ -149,6 +151,8 @@ class DateTimeImpl implements DateTime {
     }
 
     startOf(unitOfTime: StartOfUnit): DateTime {
+        // type of startOf is ((unit: QuarterUnit) => DateJs) | ((unit: BaseUnit) => DateJs).
+        // It cannot get unit of type QuarterUnit | BaseUnit
         // @ts-expect-error
         const ts = this._date.startOf(unitOfTime).valueOf();
         return createDateTime({
@@ -160,6 +164,8 @@ class DateTimeImpl implements DateTime {
     }
 
     endOf(unitOfTime: StartOfUnit): DateTime {
+        // type of endOf is ((unit: QuarterUnit) => DateJs) | ((unit: BaseUnit) => DateJs).
+        // It cannot get unit of type QuarterUnit | BaseUnit
         // @ts-expect-error
         const ts = this._date.endOf(unitOfTime).valueOf();
         return createDateTime({
@@ -180,18 +186,24 @@ class DateTimeImpl implements DateTime {
 
     isSame(input?: DateTimeInput, granularity?: DurationUnit): boolean {
         const value = DateTimeImpl.isDateTime(input) ? input.valueOf() : input;
+        // DateTimeInput !== dayjs.ConfigType;
+        // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
         // @ts-expect-error
         return this._date.isSame(value, granularity);
     }
 
     isBefore(input?: DateTimeInput): boolean {
         const value = DateTimeImpl.isDateTime(input) ? input.valueOf() : input;
+        // DateTimeInput !== dayjs.ConfigType;
+        // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
         // @ts-expect-error
         return this._date.isBefore(value);
     }
 
     isAfter(input?: DateTimeInput): boolean {
         const value = DateTimeImpl.isDateTime(input) ? input.valueOf() : input;
+        // DateTimeInput !== dayjs.ConfigType;
+        // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
         // @ts-expect-error
         return this._date.isBefore(value);
     }
@@ -206,6 +218,11 @@ class DateTimeImpl implements DateTime {
         truncate?: boolean | undefined,
     ): number {
         const value = DateTimeImpl.isDateTime(amount) ? amount.valueOf() : amount;
+        // value:
+        //   DateTimeInput !== dayjs.ConfigType;
+        //   Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
+        // unit:
+        //   the same problem as for startOf
         // @ts-expect-error
         return this._date.diff(value, unit, truncate);
     }
@@ -213,8 +230,11 @@ class DateTimeImpl implements DateTime {
         return this._date.fromNow(withoutSuffix);
     }
     from(formaInput: DateTimeInput, withoutSuffix?: boolean): string {
+        const value = DateTimeImpl.isDateTime(formaInput) ? formaInput.valueOf() : formaInput;
+        // DateTimeInput !== dayjs.ConfigType;
+        // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
         // @ts-expect-error
-        return this._date.from(formaInput, withoutSuffix);
+        return this._date.from(value, withoutSuffix);
     }
     locale(): string;
     locale(locale: string): DateTime;
@@ -253,7 +273,6 @@ class DateTimeImpl implements DateTime {
         );
 
         const settingWeekStuff =
-            newComponents.weekYear !== undefined ||
             newComponents.weekNumber !== undefined ||
             newComponents.day !== undefined ||
             newComponents.isoWeekNumber !== undefined ||
@@ -272,7 +291,6 @@ class DateTimeImpl implements DateTime {
         if (settingWeekStuff) {
             let date = dayjs.utc(objToTS(dateComponents));
             const toDayjsUnit = {
-                // weekYear: 'isoWeekYear',
                 weekNumber: 'week',
                 day: 'day',
                 isoWeekNumber: 'isoWeek',

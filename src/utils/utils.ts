@@ -73,9 +73,7 @@ type NormalizedUnit =
     | 'second'
     | 'millisecond'
     | 'quarter'
-    // | 'weekday'
     | 'weekNumber'
-    | 'weekYear'
     | 'isoWeekNumber'
     | 'isoWeekday';
 
