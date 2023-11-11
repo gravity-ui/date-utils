@@ -1,32 +1,24 @@
-import type {ConfigTypeMap} from '../dayjs';
-
 export type DateTimeInput =
-    | ConfigTypeMap['objectSupport']
+    | InputObject
     | Date
     | string
     | number
     | Array<string | number>
     | DateTime
+    | null
     | undefined;
 export type FormatInput = string | undefined;
-
-export type DurationUnit =
+export type DurationInput = number | string | DurationInputObject | null | undefined;
+type BaseUnit =
     | 'year'
     | 'years'
     | 'y'
     | 'month'
     | 'months'
     | 'M'
-    | 'week'
-    | 'weeks'
-    | 'isoWeek'
-    | 'w'
     | 'day'
     | 'days'
     | 'd'
-    | 'date'
-    | 'dates'
-    | 'D'
     | 'hour'
     | 'hours'
     | 'h'
@@ -38,40 +30,83 @@ export type DurationUnit =
     | 's'
     | 'millisecond'
     | 'milliseconds'
-    | 'ms'
-    | 'quarter'
-    | 'quarters'
-    | 'Q';
+    | 'ms';
+
+type QuarterUnit = 'quarter' | 'quarters' | 'Q';
+type WeekUnit = 'week' | 'weeks' | 'w';
+type IsoWeekUnit = 'isoWeek' | 'isoWeeks'; // | 'W'; - not supported;
+type DateUnit = 'date' | 'dates' | 'D';
+export type StartOfUnit = BaseUnit | QuarterUnit | WeekUnit | IsoWeekUnit | DateUnit;
+export type DurationUnit = BaseUnit | QuarterUnit | WeekUnit;
+export type AllUnit =
+    | BaseUnit
+    | QuarterUnit
+    | DateUnit
+    | WeekUnit
+    | IsoWeekUnit
+    | 'isoWeekday'
+    | 'isoWeekdays'
+    | 'E';
+
+export type InputObject = Partial<Record<BaseUnit | DateUnit, number>>;
+export type DurationInputObject = Partial<Record<DurationUnit, number>>;
+export type SetObject = Partial<
+    Record<
+        | BaseUnit
+        | QuarterUnit
+        | DateUnit
+        | WeekUnit
+        | IsoWeekUnit
+        | 'weekday'
+        | 'weekdays'
+        | 'e'
+        | 'isoWeekday'
+        | 'isoWeekdays'
+        | 'E',
+        number
+    >
+>;
 
 export interface DateTime extends Object {
-    add: (amount?: DateTimeInput, unit?: DurationUnit) => DateTime;
-    set: (unit: DurationUnit, amount: DateTimeInput) => DateTime;
-    diff: (amount: DateTimeInput, unit?: DurationUnit, truncate?: boolean) => number;
-    endOf: (unitOfTime: DurationUnit) => DateTime;
-    format: (formatInput?: FormatInput) => string;
-    fromNow: (withoutSuffix?: boolean) => string;
-    from: (formaInput: DateTimeInput) => string;
-    isSame: (input?: DateTimeInput, granularity?: DurationUnit) => boolean;
-    isBefore: (input?: DateTimeInput) => boolean;
-    isAfter: (input?: DateTimeInput) => boolean;
-    isValid: () => boolean;
-    local: () => DateTime;
-    locale: (locale: string) => DateTime;
-    startOf: (unitOfTime: DurationUnit) => DateTime;
-    subtract: (amount?: DateTimeInput, unit?: DurationUnit) => DateTime;
-    toDate: () => Date;
-    toISOString: (keepOffset?: boolean) => string;
-    isoWeekday: (day?: number | string) => number | string;
-    valueOf: () => number;
-    unix: () => number;
-    utc: (keepLocalTime?: boolean) => DateTime;
-    utcOffset(offset: number | string, keepLocalTime?: boolean): DateTime;
+    add(amount: DurationInput, unit?: DurationUnit): DateTime;
+    subtract(amount: DurationInput, unit?: DurationUnit): DateTime;
+    set(unit: AllUnit, amount: number): DateTime;
+    set(amount: SetObject): DateTime;
+    diff(amount: DateTimeInput, unit?: DurationUnit, truncate?: boolean): number;
+    format(formatInput?: FormatInput): string;
+    fromNow(withoutSuffix?: boolean): string;
+    from(formaInput: DateTimeInput, withoutSuffix?: boolean): string;
+    isSame(input?: DateTimeInput, granularity?: StartOfUnit): boolean;
+    isBefore(input?: DateTimeInput): boolean;
+    isAfter(input?: DateTimeInput): boolean;
+    isValid(): boolean;
+    local(keepLocalTime?: boolean): DateTime;
+    locale(): string;
+    locale(locale: string): DateTime;
+    startOf(unitOfTime: StartOfUnit): DateTime;
+    endOf(unitOfTime: StartOfUnit): DateTime;
+    toDate(): Date;
+    toISOString(keepOffset?: boolean): string;
+    valueOf(): number;
+    unix(): number;
+    utc(keepLocalTime?: boolean): DateTime;
     utcOffset(): number;
+    utcOffset(offset: number | string, keepLocalTime?: boolean): DateTime;
+    timeZone(): string;
+    timeZone(timeZone: string, keepLocalTime?: boolean): DateTime;
     daysInMonth: () => number;
     date(): number;
     date(value: number): DateTime;
+    week(): number;
+    week(value: number): DateTime;
+    isoWeek(): number;
+    isoWeek(value: number): DateTime;
+    isoWeekday(): number;
+    isoWeekday(value: number): DateTime;
     month(): number;
     month(value: number): DateTime;
+    quarter(): number;
+    quarter(value: number): DateTime;
     year(): number;
     year(value: number): DateTime;
     day(): number;

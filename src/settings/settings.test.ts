@@ -1,5 +1,9 @@
 import {settings} from './settings';
 
+afterAll(() => {
+    settings.setLocale('en');
+});
+
 describe('settings', () => {
     it('default locale should be "en"', () => {
         expect(settings.getLocale()).toEqual('en');
