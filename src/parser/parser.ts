@@ -2,8 +2,8 @@
 // Copyright 2021 YANDEX LLC
 
 import {dateTime} from '../dateTime';
-import {parse, isValid} from '../datemath';
-import type {DateTimeOptionsWhenParsing, DateTime, DateTimeParser} from '../typings';
+import {isValid, parse} from '../datemath';
+import type {DateTime, DateTimeOptionsWhenParsing, DateTimeParser} from '../typings';
 
 const parseInput: DateTimeParser<DateTimeOptionsWhenParsing> = (
     input,

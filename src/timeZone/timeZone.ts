@@ -1,5 +1,5 @@
-import dayjs from '../dayjs';
 import {UtcTimeZone} from '../constants';
+import dayjs from '../dayjs';
 import type {TimeZone} from '../typings';
 
 /**
@@ -54,7 +54,8 @@ const dateFields = [
     'second',
     'era',
 ] satisfies Intl.DateTimeFormatPartTypes[];
-type DateParts = Record<Exclude<(typeof dateFields)[number], 'era'>, number> & {era: string};
+type DateField = (typeof dateFields)[number];
+type DateParts = Record<Exclude<DateField, 'era'>, number> & {era: string};
 export function timeZoneOffset(zone: TimeZone, ts: number) {
     const date = new Date(ts);
     if (isNaN(date.valueOf()) || !isValidTimeZone(zone)) {
@@ -65,7 +66,7 @@ export function timeZoneOffset(zone: TimeZone, ts: number) {
     const parts = Object.fromEntries(
         dtf
             .formatToParts(date)
-            .filter(({type}) => dateFields.includes(type as any))
+            .filter(({type}) => dateFields.includes(type as DateField))
             .map(({type, value}) => [type, type === 'era' ? value : parseInt(value, 10)]),
     ) as DateParts;
 
