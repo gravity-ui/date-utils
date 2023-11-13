@@ -1,8 +1,9 @@
 import isNumber from 'lodash/isNumber';
-import {isDateTime} from '../dateTime';
-import {normalizeDateComponents} from './utils';
 
+import {isDateTime} from '../dateTime';
 import type {DateTimeInput, DurationInputObject, DurationUnit, InputObject} from '../typings';
+
+import {normalizeDateComponents} from './utils';
 
 const isoRegex =
     /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;

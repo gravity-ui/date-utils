@@ -1,7 +1,7 @@
-import dayjs from '../dayjs';
 import {STRICT, UtcTimeZone} from '../constants';
-import {timeZoneOffset, normalizeTimeZone, fixOffset} from '../timeZone';
-
+import dayjs from '../dayjs';
+import {settings} from '../settings';
+import {fixOffset, normalizeTimeZone, timeZoneOffset} from '../timeZone';
 import type {
     AllUnit,
     DateTime,
@@ -14,13 +14,12 @@ import type {
 } from '../typings';
 import {
     daysInMonth,
+    getDuration,
     normalizeDateComponents,
     objToTS,
-    tsToObject,
-    getDuration,
     offsetFromString,
+    tsToObject,
 } from '../utils';
-import {settings} from '../settings';
 
 const IS_DATE_TIME = Symbol('isDateTime');
 class DateTimeImpl implements DateTime {
