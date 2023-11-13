@@ -1,17 +1,17 @@
 import dayjs from 'dayjs';
-
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 import arraySupport from 'dayjs/plugin/arraySupport';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import weekOfYear from 'dayjs/plugin/weekOfYear';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import objectSupport from 'dayjs/plugin/objectSupport';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
 import updateLocale from 'dayjs/plugin/updateLocale';
-import advancedFormat from 'dayjs/plugin/advancedFormat';
+import utc from 'dayjs/plugin/utc';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+
 import {fixOffset, timeZoneOffset} from './timeZone';
 
 dayjs.extend(arraySupport);
