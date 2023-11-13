@@ -1,8 +1,10 @@
 import MockDate from 'mockdate';
+
 import {DEFAULT_SYSTEM_DATE_FORMAT} from '../constants';
 import {settings} from '../settings';
-import {dateTime, isDateTime} from './dateTime';
 import type {DurationUnit} from '../typings';
+
+import {dateTime, isDateTime} from './dateTime';
 
 const MOCKED_DATE = '2021-08-07T12:10:00';
 

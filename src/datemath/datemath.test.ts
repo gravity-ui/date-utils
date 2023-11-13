@@ -1,12 +1,14 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import sinon, {SinonFakeTimers} from 'sinon';
 import each from 'lodash/each';
+import sinon from 'sinon';
+import type {SinonFakeTimers} from 'sinon';
 
 import {dateTime} from '../dateTime';
+import type {DateTime, DurationUnit} from '../typings';
+
 import * as dateMath from './datemath';
-import type {DurationUnit, DateTime} from '../typings';
 
 describe('DateMath', () => {
     const spans: DurationUnit[] = ['s', 'm', 'h', 'd', 'w', 'M', 'Q', 'y'];

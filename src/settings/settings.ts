@@ -1,6 +1,8 @@
 import cloneDeep from 'lodash/cloneDeep';
+
 import dayjs from '../dayjs';
 import {guessUserTimeZone, normalizeTimeZone} from '../timeZone';
+
 import type {UpdateLocaleConfig} from './types';
 
 class Settings {
@@ -21,7 +23,7 @@ class Settings {
             try {
                 const localeInLowerCase = locale.toLocaleLowerCase();
                 // https://github.com/iamkun/dayjs/issues/792#issuecomment-639961997
-                await require(`dayjs/locale/${localeInLowerCase}.js`);
+                await import(`dayjs/locale/${localeInLowerCase}.js`);
                 this.loadedLocales.add(localeInLowerCase);
             } catch (error) {
                 throw new Error(

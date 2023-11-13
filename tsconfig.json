@@ -4,12 +4,10 @@
     "noEmit": true,
     "target": "es5",
     "allowJs": false,
-    "importsNotUsedAsValues": "error",
+    "module": "ESNext",
+    "moduleResolution": "Node10",
+    "verbatimModuleSyntax": true
   },
-  "include": [
-    "**/*"
-  ],
-  "exclude": [
-    "build"
-  ]
+  "include": ["**/*"],
+  "exclude": ["build"]
 }
