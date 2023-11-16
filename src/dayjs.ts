@@ -42,25 +42,63 @@ dayjs.extend((_, Dayjs, d) => {
     //   dayjs('2023-10-29T00:00:00Z').tz('Europe/Moscow').format() === '2023-10-29T03:00:00+04:00'
     // but should be '2023-10-29T03:00:00+03:00'
     proto.tz = function (timeZone: string, keepLocalTime = false) {
-        let ts = this.valueOf();
+        const ts = this.valueOf();
+        let localOffset = new Date(ts).getTimezoneOffset();
         let offset = timeZoneOffset(timeZone, ts);
+        let target: number | string = ts;
 
-        if (keepLocalTime) {
-            const oldOffset = this.utcOffset();
-            ts += oldOffset * 60 * 1000;
-            [ts, offset] = fixOffset(ts, offset, timeZone);
+        if (localOffset !== -offset) {
+            if (keepLocalTime) {
+                const oldOffset = this.utcOffset();
+                target += oldOffset * 60 * 1000;
+                [target, offset] = fixOffset(target, offset, timeZone);
+            }
+
+            if (offset !== 0) {
+                target += offset * 60 * 1000;
+                [target, localOffset] = fixOffset(target, localOffset, 'system');
+                localOffset = -localOffset;
+            }
         }
 
-        const target = new Date(ts).toLocaleString('en-US', {timeZone});
-        // use private members of Dayjs object
-        // @ts-expect-error
-        const ins = d(target, {locale: this.$L}).$set('millisecond', ts % 1000);
-        ins.$offset = offset;
-        ins.$u = offset === 0;
-        ins.$x.$timezone = timeZone;
+        const ins = d(target, {
+            // @ts-expect-error get locale from current instance
+            locale: this.$L,
+            utc: offset === 0,
+            // @ts-expect-error private fields used by utc and timezone plugins
+            $offset: offset ? offset : undefined,
+            x: {$timezone: timeZone, $localOffset: localOffset},
+        });
+        return ins;
+    };
+
+    // @ts-expect-error used internally by DateTimeImpl
+    d.createDayjs = function (ts: number, timeZone: string, offset: number, locale: string) {
+        let localOffset = new Date(ts).getTimezoneOffset();
+        let newTs = ts;
+        if (offset !== 0 && localOffset !== -offset) {
+            newTs += offset * 60 * 1000;
+            [newTs, localOffset] = fixOffset(newTs, localOffset, 'system');
+            localOffset = -localOffset;
+        }
+        const ins = d(newTs, {
+            locale,
+            utc: offset === 0,
+            // @ts-expect-error private fields used by utc and timezone plugins
+            $offset: offset ? offset : undefined,
+            x: {$timezone: timeZone, $localOffset: localOffset},
+        });
         return ins;
     };
 });
+
+declare module 'dayjs' {
+    interface LocalDate {
+        (ts: number, timeZone: string, offset: number, locale: string): dayjs.Dayjs;
+    }
+
+    const createDayjs: LocalDate;
+}
 
 export default dayjs;
 

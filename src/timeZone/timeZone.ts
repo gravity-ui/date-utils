@@ -14,15 +14,22 @@ export const guessUserTimeZone = () => dayjs.tz.guess();
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/49231
 export const getTimeZonesList = (): string[] => Intl.supportedValuesOf?.('timeZone') || [];
 
+const validTimeZones: Record<TimeZone, boolean> = {};
 export function isValidTimeZone(zone: string) {
     if (!zone) {
         return false;
     }
 
+    if (Object.prototype.hasOwnProperty.call(validTimeZones, zone)) {
+        return validTimeZones[zone];
+    }
+
     try {
         new Intl.DateTimeFormat('en-US', {timeZone: zone}).format();
+        validTimeZones[zone] = true;
         return true;
     } catch {
+        validTimeZones[zone] = false;
         return false;
     }
 }
@@ -56,19 +63,37 @@ const dateFields = [
 ] satisfies Intl.DateTimeFormatPartTypes[];
 type DateField = (typeof dateFields)[number];
 type DateParts = Record<Exclude<DateField, 'era'>, number> & {era: string};
+function isDateField(v: string): v is DateField {
+    return dateFields.includes(v as DateField);
+}
 export function timeZoneOffset(zone: TimeZone, ts: number) {
     const date = new Date(ts);
-    if (isNaN(date.valueOf()) || !isValidTimeZone(zone)) {
+    if (isNaN(date.valueOf()) || (zone !== 'system' && !isValidTimeZone(zone))) {
         return NaN;
     }
 
+    if (zone === 'system') {
+        return -date.getTimezoneOffset();
+    }
+
     const dtf = makeDateTimeFormat(zone);
-    const parts = Object.fromEntries(
-        dtf
-            .formatToParts(date)
-            .filter(({type}) => dateFields.includes(type as DateField))
-            .map(({type, value}) => [type, type === 'era' ? value : parseInt(value, 10)]),
-    ) as DateParts;
+    const formatted = dtf.formatToParts(date);
+    const parts: DateParts = {
+        year: 1,
+        month: 1,
+        day: 1,
+        hour: 0,
+        minute: 0,
+        second: 0,
+        era: 'AC',
+    };
+    for (const {type, value} of formatted) {
+        if (type === 'era') {
+            parts.era = value;
+        } else if (isDateField(type)) {
+            parts[type] = parseInt(value, 10);
+        }
+    }
 
     // Date.UTC(year), year: 0 — is 1 BC, -1 — is 2 BC, e.t.c
     const year = parts.era === 'BC' ? -Math.abs(parts.year) + 1 : parts.year;

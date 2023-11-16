@@ -114,6 +114,9 @@ const normalizedUnits = {
     E: 'isoWeekday',
     isoweekday: 'isoWeekday',
     isoweekdays: 'isoWeekday',
+    weekday: 'day',
+    weekdays: 'day',
+    e: 'day',
 } as const;
 
 function normalizeComponent(component: string) {
