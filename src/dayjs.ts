@@ -43,22 +43,19 @@ dayjs.extend((_, Dayjs, d) => {
     // but should be '2023-10-29T03:00:00+03:00'
     proto.tz = function (timeZone: string, keepLocalTime = false) {
         const ts = this.valueOf();
-        let localOffset = new Date(ts).getTimezoneOffset();
+        let localOffset = timeZoneOffset('system', ts);
         let offset = timeZoneOffset(timeZone, ts);
         let target: number | string = ts;
 
-        if (localOffset !== -offset) {
-            if (keepLocalTime) {
-                const oldOffset = this.utcOffset();
-                target += oldOffset * 60 * 1000;
-                [target, offset] = fixOffset(target, offset, timeZone);
-            }
+        const oldOffset = this.utcOffset();
+        if (keepLocalTime && oldOffset !== offset) {
+            target += oldOffset * 60 * 1000;
+            [target, offset] = fixOffset(target, offset, timeZone);
+        }
 
-            if (offset !== 0) {
-                target += offset * 60 * 1000;
-                [target, localOffset] = fixOffset(target, localOffset, 'system');
-                localOffset = -localOffset;
-            }
+        if (offset !== 0 && localOffset !== offset) {
+            target += offset * 60 * 1000;
+            [target, localOffset] = fixOffset(target, localOffset, 'system');
         }
 
         const ins = d(target, {
@@ -67,26 +64,29 @@ dayjs.extend((_, Dayjs, d) => {
             utc: offset === 0,
             // @ts-expect-error private fields used by utc and timezone plugins
             $offset: offset ? offset : undefined,
-            x: {$timezone: timeZone, $localOffset: localOffset},
+            x: {$timezone: timeZone, $localOffset: -localOffset},
         });
         return ins;
     };
 
     // @ts-expect-error used internally by DateTimeImpl
     d.createDayjs = function (ts: number, timeZone: string, offset: number, locale: string) {
-        let localOffset = new Date(ts).getTimezoneOffset();
+        if (timeZone === 'system') {
+            return d(ts, {locale});
+        }
+
+        let localOffset = timeZoneOffset('system', ts);
         let newTs = ts;
-        if (offset !== 0 && localOffset !== -offset) {
+        if (offset !== 0 && localOffset !== offset) {
             newTs += offset * 60 * 1000;
             [newTs, localOffset] = fixOffset(newTs, localOffset, 'system');
-            localOffset = -localOffset;
         }
         const ins = d(newTs, {
             locale,
             utc: offset === 0,
             // @ts-expect-error private fields used by utc and timezone plugins
             $offset: offset ? offset : undefined,
-            x: {$timezone: timeZone, $localOffset: localOffset},
+            x: {$timezone: timeZone, $localOffset: -localOffset},
         });
         return ins;
     };

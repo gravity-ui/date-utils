@@ -1,7 +1,7 @@
 import {STRICT, UtcTimeZone} from '../constants';
 import dayjs from '../dayjs';
 import {settings} from '../settings';
-import {fixOffset, normalizeTimeZone, timeZoneOffset} from '../timeZone';
+import {fixOffset, guessUserTimeZone, normalizeTimeZone, timeZoneOffset} from '../timeZone';
 import type {
     AllUnit,
     DateTime,
@@ -15,6 +15,7 @@ import type {
 import {
     daysInMonth,
     getDuration,
+    normalizeComponent,
     normalizeDateComponents,
     objToTS,
     offsetFromString,
@@ -96,7 +97,7 @@ class DateTimeImpl implements DateTime {
     timeZone(timeZone: string, keepLocalTime?: boolean | undefined): DateTime;
     timeZone(timeZone?: string, keepLocalTime?: boolean | undefined): DateTime | string {
         if (timeZone === undefined) {
-            return this._timeZone;
+            return this._timeZone === 'system' ? guessUserTimeZone() : this._timeZone;
         }
 
         const zone = normalizeTimeZone(timeZone, settings.getDefaultTimeZone());
@@ -111,57 +112,105 @@ class DateTimeImpl implements DateTime {
     }
 
     add(amount: DateTimeInput, unit?: DurationUnit): DateTime {
-        return addSubtract(this, amount, unit, 1);
+        return this.addSubtract(amount, unit, 1);
     }
 
     subtract(amount: DateTimeInput, unit?: DurationUnit): DateTime {
-        return addSubtract(this, amount, unit, -1);
+        return this.addSubtract(amount, unit, -1);
     }
 
-    startOf(unitOfTime: StartOfUnit): DateTime {
+    startOf(unitOfTime: StartOfUnit | 'weekNumber' | 'isoWeekNumber' | 'isoWeekday') {
         if (!this.isValid()) {
             return this;
         }
 
-        // type of startOf is ((unit: QuarterUnit) => DateJs) | ((unit: BaseUnit) => DateJs).
-        // It cannot get unit of type QuarterUnit | BaseUnit
-        // @ts-expect-error
-        const ts = this._date.startOf(unitOfTime).valueOf();
-        let offset = this._offset;
-        if (this._timeZone !== UtcTimeZone) {
-            offset = timeZoneOffset(this._timeZone, ts);
+        const dateComponents: Partial<
+            Record<'year' | 'month' | 'date' | 'hour' | 'minute' | 'second' | 'millisecond', number>
+        > = {};
+        const unit = normalizeComponent(unitOfTime);
+        /* eslint-disable no-fallthrough */
+        switch (unit) {
+            case 'year':
+                dateComponents.month = 0;
+            case 'quarter':
+                dateComponents.month = this.month() - (this.month() % 3);
+            case 'month':
+            case 'weekNumber':
+            case 'isoWeekNumber':
+                if (unit === 'weekNumber') {
+                    dateComponents.date = this.date() - this.weekday();
+                } else if (unit === 'isoWeekNumber') {
+                    dateComponents.date = this.date() - (this.isoWeekday() - 1);
+                } else {
+                    dateComponents.date = 1;
+                }
+            case 'day':
+            case 'date':
+            case 'isoWeekday':
+                dateComponents.hour = 0;
+            case 'hour':
+                dateComponents.minute = 0;
+            case 'minute':
+                dateComponents.second = 0;
+            case 'second': {
+                dateComponents.millisecond = 0;
+            }
         }
-        return createDateTime({
-            ts,
-            timeZone: this._timeZone,
-            offset,
-            locale: this._locale,
-        });
+        /* eslint-enable no-fallthrough */
+
+        return this.set(dateComponents);
     }
 
-    endOf(unitOfTime: StartOfUnit): DateTime {
+    endOf(unitOfTime: StartOfUnit | 'weekNumber' | 'isoWeekNumber' | 'isoWeekday'): DateTime {
         if (!this.isValid()) {
             return this;
         }
 
-        // type of endOf is ((unit: QuarterUnit) => DateJs) | ((unit: BaseUnit) => DateJs).
-        // It cannot get unit of type QuarterUnit | BaseUnit
-        // @ts-expect-error
-        const ts = this._date.endOf(unitOfTime).valueOf();
-        let offset = this._offset;
-        if (this._timeZone !== UtcTimeZone) {
-            offset = timeZoneOffset(this._timeZone, ts);
+        const dateComponents: Partial<
+            Record<'year' | 'month' | 'date' | 'hour' | 'minute' | 'second' | 'millisecond', number>
+        > = {};
+        const unit = normalizeComponent(unitOfTime);
+        /* eslint-disable no-fallthrough */
+        switch (unit) {
+            case 'year':
+            case 'quarter':
+                if (unit === 'quarter') {
+                    dateComponents.month = this.month() - (this.month() % 3) + 2;
+                } else {
+                    dateComponents.month = 11;
+                }
+            case 'month':
+            case 'weekNumber':
+            case 'isoWeekNumber':
+                if (unit === 'weekNumber') {
+                    dateComponents.date = this.date() - this.weekday() + 6;
+                } else if (unit === 'isoWeekNumber') {
+                    dateComponents.date = this.date() - (this.isoWeekday() - 1) + 6;
+                } else {
+                    dateComponents.date = daysInMonth(
+                        this.year(),
+                        dateComponents.month ?? this.month(),
+                    );
+                }
+            case 'day':
+            case 'date':
+            case 'isoWeekday':
+                dateComponents.hour = 23;
+            case 'hour':
+                dateComponents.minute = 59;
+            case 'minute':
+                dateComponents.second = 59;
+            case 'second': {
+                dateComponents.millisecond = 999;
+            }
         }
-        return createDateTime({
-            ts,
-            timeZone: this._timeZone,
-            offset,
-            locale: this._locale,
-        });
+        /* eslint-enable no-fallthrough */
+
+        return this.set(dateComponents);
     }
 
     local(keepLocalTime?: boolean): DateTime {
-        return this.timeZone('default', keepLocalTime);
+        return this.timeZone('system', keepLocalTime);
     }
 
     valueOf(): number {
@@ -169,27 +218,31 @@ class DateTimeImpl implements DateTime {
     }
 
     isSame(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const value = DateTimeImpl.isDateTime(input) ? input.valueOf() : input;
-        // DateTimeInput !== dayjs.ConfigType;
-        // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
-        // @ts-expect-error
-        return this._date.isSame(value, granularity);
+        const ts = getTimestamp(input);
+        if (!this.isValid() || isNaN(ts)) {
+            return false;
+        }
+        return !this.isBefore(ts, granularity) && !this.isAfter(ts, granularity);
     }
 
-    isBefore(input?: DateTimeInput): boolean {
-        const value = DateTimeImpl.isDateTime(input) ? input.valueOf() : input;
-        // DateTimeInput !== dayjs.ConfigType;
-        // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
-        // @ts-expect-error
-        return this._date.isBefore(value);
+    isBefore(input?: DateTimeInput, granularity?: DurationUnit): boolean {
+        const ts = getTimestamp(input);
+        if (!this.isValid() || isNaN(ts)) {
+            return false;
+        }
+        const unit = normalizeComponent(granularity ?? 'millisecond');
+        const localTs = unit === 'millisecond' ? this.valueOf() : this.endOf(unit).valueOf();
+        return localTs < ts;
     }
 
-    isAfter(input?: DateTimeInput): boolean {
-        const value = DateTimeImpl.isDateTime(input) ? input.valueOf() : input;
-        // DateTimeInput !== dayjs.ConfigType;
-        // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
-        // @ts-expect-error
-        return this._date.isBefore(value);
+    isAfter(input?: DateTimeInput, granularity?: DurationUnit): boolean {
+        const ts = getTimestamp(input);
+        if (!this.isValid() || isNaN(ts)) {
+            return false;
+        }
+        const unit = normalizeComponent(granularity ?? 'millisecond');
+        const localTs = unit === 'millisecond' ? this.valueOf() : this.startOf(unit).valueOf();
+        return localTs > ts;
     }
 
     isValid(): boolean {
@@ -199,7 +252,7 @@ class DateTimeImpl implements DateTime {
     diff(
         amount: DateTimeInput,
         unit?: DurationUnit | undefined,
-        truncate?: boolean | undefined,
+        asFloat?: boolean | undefined,
     ): number {
         const value = DateTimeImpl.isDateTime(amount) ? amount.valueOf() : amount;
         // value:
@@ -208,7 +261,7 @@ class DateTimeImpl implements DateTime {
         // unit:
         //   the same problem as for startOf
         // @ts-expect-error
-        return this._date.diff(value, unit, truncate);
+        return this._date.diff(value, unit, asFloat);
     }
     fromNow(withoutSuffix?: boolean | undefined): string {
         return this._date.fromNow(withoutSuffix);
@@ -240,11 +293,7 @@ class DateTimeImpl implements DateTime {
         return Math.floor(this.valueOf() / 1000);
     }
     utc(keepLocalTime?: boolean | undefined): DateTime {
-        let ts = this.valueOf();
-        if (keepLocalTime) {
-            ts += this._offset * 60 * 1000;
-        }
-        return createDateTime({ts, timeZone: UtcTimeZone, offset: 0, locale: this._locale});
+        return this.timeZone(UtcTimeZone, keepLocalTime);
     }
     daysInMonth(): number {
         return this._date.daysInMonth();
@@ -410,54 +459,59 @@ class DateTimeImpl implements DateTime {
         }
         return this._date.isoWeek();
     }
+    weekday(): number {
+        // @ts-expect-error get locale object
+        const weekStart = this._date.$locale().weekStart || 0;
+        const day = this.day();
+        const weekday = (day < weekStart ? day + 7 : day) - weekStart;
+        return weekday;
+    }
 
     toString(): string {
         return this._date.toString();
     }
-}
-
-function addSubtract(
-    instance: DateTime,
-    amount: DateTimeInput,
-    unit: DurationUnit | undefined,
-    sign: 1 | -1,
-) {
-    const timeZone = instance.timeZone();
-    let ts = instance.valueOf();
-    let offset = instance.utcOffset();
-
-    const duration = getDuration(amount, unit);
-    const dateComponents = tsToObject(ts, offset);
-
-    const monthsInput = absRound(duration.months);
-    const daysInput = absRound(duration.days);
-
-    if (monthsInput || daysInput) {
-        const month = dateComponents.month + sign * monthsInput;
-        const date =
-            Math.min(dateComponents.date, daysInMonth(dateComponents.year, month)) +
-            sign * daysInput;
-        ts = objToTS({...dateComponents, month, date});
-        if (timeZone === UtcTimeZone) {
-            ts -= offset * 60 * 1000;
-        } else {
-            [ts, offset] = fixOffset(ts, offset, timeZone);
+    private addSubtract(amount: DateTimeInput, unit: DurationUnit | undefined, sign: 1 | -1) {
+        if (!this.isValid()) {
+            return this;
         }
-    }
 
-    if (duration.milliseconds) {
-        ts += sign * duration.milliseconds;
-        if (timeZone !== UtcTimeZone) {
-            offset = timeZoneOffset(timeZone, ts);
+        const timeZone = this._timeZone;
+        let ts = this.valueOf();
+        let offset = this._offset;
+
+        const duration = getDuration(amount, unit);
+        const dateComponents = tsToObject(ts, offset);
+
+        const monthsInput = absRound(duration.months);
+        const daysInput = absRound(duration.days);
+
+        if (monthsInput || daysInput) {
+            const month = dateComponents.month + sign * monthsInput;
+            const date =
+                Math.min(dateComponents.date, daysInMonth(dateComponents.year, month)) +
+                sign * daysInput;
+            ts = objToTS({...dateComponents, month, date});
+            if (timeZone === UtcTimeZone) {
+                ts -= offset * 60 * 1000;
+            } else {
+                [ts, offset] = fixOffset(ts, offset, timeZone);
+            }
         }
-    }
 
-    return createDateTime({
-        ts,
-        timeZone,
-        offset,
-        locale: instance.locale(),
-    });
+        if (duration.milliseconds) {
+            ts += sign * duration.milliseconds;
+            if (timeZone !== UtcTimeZone) {
+                offset = timeZoneOffset(timeZone, ts);
+            }
+        }
+
+        return createDateTime({
+            ts,
+            timeZone,
+            offset,
+            locale: this._locale,
+        });
+    }
 }
 
 function absRound(v: number) {
@@ -477,6 +531,28 @@ function createDateTime({
     locale: string;
 }): DateTime {
     return new DateTimeImpl({ts, timeZone, offset, locale});
+}
+
+function getTimestamp(input: DateTimeInput, format?: string, lang?: string) {
+    const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
+
+    let ts: number;
+    if (DateTimeImpl.isDateTime(input) || typeof input === 'number' || input instanceof Date) {
+        ts = Number(input);
+    } else {
+        const localDate = format
+            ? // DateTimeInput !== dayjs.ConfigType;
+              // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
+              // @ts-expect-error
+              dayjs(input, format, locale, STRICT)
+            : // DateTimeInput !== dayjs.ConfigType;
+              // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
+              // @ts-expect-error
+              dayjs(input, undefined, locale);
+
+        ts = localDate.valueOf();
+    }
+    return ts;
 }
 
 /**
@@ -506,22 +582,7 @@ export function dateTime(opt?: {
     const timeZoneOrDefault = normalizeTimeZone(timeZone, settings.getDefaultTimeZone());
     const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
 
-    let ts: number;
-    if (DateTimeImpl.isDateTime(input) || typeof input === 'number' || input instanceof Date) {
-        ts = Number(input);
-    } else {
-        const localDate = format
-            ? // DateTimeInput !== dayjs.ConfigType;
-              // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
-              // @ts-expect-error
-              dayjs(input, format, locale, STRICT)
-            : // DateTimeInput !== dayjs.ConfigType;
-              // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
-              // @ts-expect-error
-              dayjs(input, undefined, locale);
-
-        ts = localDate.valueOf();
-    }
+    const ts = getTimestamp(input, format, lang);
 
     const offset = timeZoneOffset(timeZoneOrDefault, ts);
 

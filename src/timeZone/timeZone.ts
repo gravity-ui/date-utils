@@ -39,7 +39,7 @@ function makeDateTimeFormat(zone: TimeZone) {
     if (!dateTimeFormatCache[zone]) {
         dateTimeFormatCache[zone] = new Intl.DateTimeFormat('en-US', {
             hour12: false,
-            timeZone: zone,
+            timeZone: zone === 'system' ? undefined : zone,
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
@@ -85,7 +85,7 @@ export function timeZoneOffset(zone: TimeZone, ts: number) {
         hour: 0,
         minute: 0,
         second: 0,
-        era: 'AC',
+        era: 'AD',
     };
     for (const {type, value} of formatted) {
         if (type === 'era') {
@@ -128,7 +128,7 @@ export function normalizeTimeZone(input: string | undefined, defaultZone: string
     }
 
     if (lowered === 'system') {
-        return guessUserTimeZone();
+        return 'system';
     }
 
     if (lowered === 'default') {

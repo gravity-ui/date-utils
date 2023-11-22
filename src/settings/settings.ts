@@ -1,7 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 
 import dayjs from '../dayjs';
-import {guessUserTimeZone, normalizeTimeZone} from '../timeZone';
+import {normalizeTimeZone} from '../timeZone';
 
 import type {UpdateLocaleConfig} from './types';
 
@@ -9,7 +9,7 @@ class Settings {
     // 'en' - preloaded locale in dayjs
     private loadedLocales = new Set(['en']);
     private defaultLocale = 'en';
-    private defaultTimeZone = guessUserTimeZone();
+    private defaultTimeZone = 'system';
 
     constructor() {
         this.updateLocale({
@@ -68,7 +68,7 @@ class Settings {
     }
 
     setDefaultTimeZone(zone: 'system' | (string & {})) {
-        this.defaultTimeZone = normalizeTimeZone(zone, guessUserTimeZone());
+        this.defaultTimeZone = normalizeTimeZone(zone, 'system');
     }
 
     getDefaultTimeZone() {

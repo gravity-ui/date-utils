@@ -6,7 +6,8 @@
     "allowJs": false,
     "module": "ESNext",
     "moduleResolution": "Node10",
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "noFallthroughCasesInSwitch": false
   },
   "include": ["**/*"],
   "exclude": ["build"]

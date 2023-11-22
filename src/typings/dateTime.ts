@@ -72,13 +72,13 @@ export interface DateTime extends Object {
     subtract(amount: DurationInput, unit?: DurationUnit): DateTime;
     set(unit: AllUnit, amount: number): DateTime;
     set(amount: SetObject): DateTime;
-    diff(amount: DateTimeInput, unit?: DurationUnit, truncate?: boolean): number;
+    diff(amount: DateTimeInput, unit?: DurationUnit, asFloat?: boolean): number;
     format(formatInput?: FormatInput): string;
     fromNow(withoutSuffix?: boolean): string;
     from(formaInput: DateTimeInput, withoutSuffix?: boolean): string;
-    isSame(input?: DateTimeInput, granularity?: StartOfUnit): boolean;
-    isBefore(input?: DateTimeInput): boolean;
-    isAfter(input?: DateTimeInput): boolean;
+    isSame(input: DateTimeInput, granularity?: StartOfUnit): boolean;
+    isBefore(input: DateTimeInput): boolean;
+    isAfter(input: DateTimeInput): boolean;
     isValid(): boolean;
     local(keepLocalTime?: boolean): DateTime;
     locale(): string;
