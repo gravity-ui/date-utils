@@ -212,5 +212,20 @@ describe('DateTime', () => {
 
             expect(dateTime({input: '20130531', format: 'YYYYMMDD'}).month(3).month()).toBe(3);
         });
+
+        it('should work with years >= 0 and < 100 ', () => {
+            const date = dateTime({input: '0001-01-12T00:00:00Z', timeZone: 'Europe/Amsterdam'});
+            expect(date.toISOString()).toBe('0001-01-12T00:00:00.000Z');
+            expect(date.startOf('s').toISOString()).toBe('0001-01-12T00:00:00.000Z');
+            expect(date.startOf('s').valueOf()).toBe(date.valueOf());
+            expect(date.set({year: 2, month: 1, date: 20}).toISOString()).toBe(
+                '0002-02-20T00:00:00.000Z',
+            );
+            expect(date.add(1, 'year').toISOString()).toBe('0002-01-12T00:00:00.000Z');
+            expect(date.subtract(1, 'year').toISOString()).toBe('0000-01-12T00:00:00.000Z');
+
+            expect(date.isSame(date)).toBe(true);
+            expect(date.valueOf()).toBe(date.startOf('ms').valueOf());
+        });
     });
 });

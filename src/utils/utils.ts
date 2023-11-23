@@ -56,7 +56,7 @@ export function objToTS(obj: Record<keyof ReturnType<typeof tsToObject>, number>
         // set the month and day again, this is necessary because year 2000 is a leap year, but year 100 is not
         // so if obj.year is in 99, but obj.day makes it roll over into year 100,
         // the calculations done by Date.UTC are using year 2000 - which is incorrect
-        d.setUTCFullYear(obj.year, obj.month - 1, obj.date);
+        d.setUTCFullYear(obj.year, obj.month, obj.date);
 
         return d.valueOf();
     }
@@ -105,18 +105,23 @@ const normalizedUnits = {
     d: 'day',
     day: 'day',
     days: 'day',
+    weeknumber: 'weekNumber',
     w: 'weekNumber',
     week: 'weekNumber',
     weeks: 'weekNumber',
+    isoweeknumber: 'isoWeekNumber',
     W: 'isoWeekNumber',
     isoweek: 'isoWeekNumber',
     isoweeks: 'isoWeekNumber',
     E: 'isoWeekday',
     isoweekday: 'isoWeekday',
     isoweekdays: 'isoWeekday',
+    weekday: 'day',
+    weekdays: 'day',
+    e: 'day',
 } as const;
 
-function normalizeComponent(component: string) {
+export function normalizeComponent(component: string) {
     const unit = ['d', 'D', 'm', 'M', 'w', 'W', 'E', 'Q'].includes(component)
         ? component
         : component.toLowerCase();
