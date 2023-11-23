@@ -76,9 +76,9 @@ export interface DateTime extends Object {
     format(formatInput?: FormatInput): string;
     fromNow(withoutSuffix?: boolean): string;
     from(formaInput: DateTimeInput, withoutSuffix?: boolean): string;
-    isSame(input: DateTimeInput, granularity?: StartOfUnit): boolean;
-    isBefore(input: DateTimeInput): boolean;
-    isAfter(input: DateTimeInput): boolean;
+    isSame(input?: DateTimeInput, granularity?: StartOfUnit): boolean;
+    isBefore(input?: DateTimeInput): boolean;
+    isAfter(input?: DateTimeInput): boolean;
     isValid(): boolean;
     local(keepLocalTime?: boolean): DateTime;
     locale(): string;
