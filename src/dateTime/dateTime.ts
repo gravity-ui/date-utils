@@ -38,14 +38,20 @@ class DateTimeImpl implements DateTime {
     private _locale: string;
     private _date: dayjs.Dayjs;
 
-    constructor(opt: {ts: number; timeZone: TimeZone; offset: number; locale: string}) {
+    constructor(opt: {
+        ts: number;
+        timeZone: TimeZone;
+        offset: number;
+        locale: string;
+        date: dayjs.Dayjs;
+    }) {
         this[IS_DATE_TIME] = true;
 
         this._timestamp = opt.ts;
         this._locale = opt.locale;
         this._timeZone = opt.timeZone;
         this._offset = opt.offset;
-        this._date = dayjs.createDayjs(opt.ts, opt.timeZone, opt.offset, opt.locale);
+        this._date = opt.date;
     }
 
     format(formatInput?: FormatInput) {
@@ -530,7 +536,26 @@ function createDateTime({
     offset: number;
     locale: string;
 }): DateTime {
-    return new DateTimeImpl({ts, timeZone, offset, locale});
+    let date: dayjs.Dayjs;
+    if (timeZone === 'system') {
+        date = dayjs(ts, {locale});
+    } else {
+        let localOffset = timeZoneOffset('system', ts);
+        let newTs = ts;
+        if (offset !== 0 && localOffset !== offset) {
+            newTs += offset * 60 * 1000;
+            [newTs, localOffset] = fixOffset(newTs, localOffset, 'system');
+        }
+        date = dayjs(newTs, {
+            locale,
+            utc: offset === 0,
+            // @ts-expect-error private fields used by utc and timezone plugins
+            $offset: offset ? offset : undefined,
+            x: {$timezone: timeZone, $localOffset: -localOffset},
+        });
+    }
+
+    return new DateTimeImpl({ts, timeZone, offset, locale, date});
 }
 
 function getTimestamp(input: DateTimeInput, format?: string, lang?: string) {
