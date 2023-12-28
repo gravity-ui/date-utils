@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.0.0](https://github.com/gravity-ui/date-utils/compare/v1.4.2...v2.0.0) (2023-12-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **dateTime:**  work with UTC the same as with other timezones, in case if input date does not contain timezone information
+
+```js
+guessUserTimeZone() == 'Europe/Moscow';
+ // Before
+dateTime({input: '2023-12-31', timeZone: 'UTC') == '2023-12-31T00:00Z'
+// After
+dateTime({input: '2023-12-31', timeZone: 'UTC') == '2023-12-30T21:00Z'
+```
+
+### Bug Fixes
+
+* **dateTime:** correctly works with timezones, utc offsets and DST ([#41](https://github.com/gravity-ui/date-utils/issues/41)) ([23488cc](https://github.com/gravity-ui/date-utils/commit/23488cc07f481c2f285abb40bec2dbb44f37ccac))
+
 ## [1.4.2](https://github.com/gravity-ui/date-utils/compare/v1.4.1...v1.4.2) (2023-08-29)
 
 
