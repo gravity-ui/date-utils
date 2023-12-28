@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/gravity-ui/date-utils/compare/v1.4.2...v2.0.0) (2023-12-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **dateTime:** correctly works with timezones, utc offsets and DST ([#41](https://github.com/gravity-ui/date-utils/issues/41))
+
+### Bug Fixes
+
+* **dateTime:** correctly works with timezones, utc offsets and DST ([#41](https://github.com/gravity-ui/date-utils/issues/41)) ([23488cc](https://github.com/gravity-ui/date-utils/commit/23488cc07f481c2f285abb40bec2dbb44f37ccac))
+
 ## [1.4.2](https://github.com/gravity-ui/date-utils/compare/v1.4.1...v1.4.2) (2023-08-29)
 
 
