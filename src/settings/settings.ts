@@ -1,13 +1,21 @@
 import cloneDeep from 'lodash/cloneDeep';
+
 import dayjs from '../dayjs';
+import {normalizeTimeZone} from '../timeZone';
+
 import type {UpdateLocaleConfig} from './types';
 
 class Settings {
     // 'en' - preloaded locale in dayjs
     private loadedLocales = new Set(['en']);
+    private defaultLocale = 'en';
+    private defaultTimeZone = 'system';
 
     constructor() {
-        this.updateLocale({weekStart: 1});
+        this.updateLocale({
+            weekStart: 1, // First day of week is Monday
+            yearStart: 1, // First week of year must contain 1 January
+        });
     }
 
     async loadLocale(locale: string) {
@@ -15,7 +23,7 @@ class Settings {
             try {
                 const localeInLowerCase = locale.toLocaleLowerCase();
                 // https://github.com/iamkun/dayjs/issues/792#issuecomment-639961997
-                await require(`dayjs/locale/${localeInLowerCase}.js`);
+                await import(`dayjs/locale/${localeInLowerCase}.js`);
                 this.loadedLocales.add(localeInLowerCase);
             } catch (error) {
                 throw new Error(
@@ -26,7 +34,7 @@ class Settings {
     }
 
     getLocale() {
-        return dayjs.locale();
+        return this.defaultLocale;
     }
 
     getLocaleData() {
@@ -51,12 +59,20 @@ class Settings {
             );
         }
 
-        dayjs.locale(locale);
+        this.defaultLocale = locale;
     }
 
     updateLocale(config: UpdateLocaleConfig) {
         const locale = this.getLocale();
         dayjs.updateLocale(locale, config);
+    }
+
+    setDefaultTimeZone(zone: 'system' | (string & {})) {
+        this.defaultTimeZone = normalizeTimeZone(zone, 'system');
+    }
+
+    getDefaultTimeZone() {
+        return this.defaultTimeZone;
     }
 
     private isLocaleLoaded(locale: string) {

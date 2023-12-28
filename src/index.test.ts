@@ -1,4 +1,5 @@
-import {DateTime, dateTime, guessUserTimeZone} from './index';
+import {dateTime, guessUserTimeZone} from './index';
+import type {DateTime} from './index';
 
 describe('Public API', () => {
     const date = dateTime({input: '2000-02-02'});

@@ -5,7 +5,7 @@ import type {DateTimeOptions} from './common';
 import type {DateTime, DateTimeInput} from './dateTime';
 
 export type DateTimeParser<T extends DateTimeOptions = DateTimeOptions> = (
-    value: DateTimeInput,
+    value?: DateTimeInput,
     options?: T,
 ) => DateTime | undefined;
 

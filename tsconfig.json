@@ -1,16 +1,14 @@
 {
   "extends": "@gravity-ui/tsconfig/tsconfig",
   "compilerOptions": {
+    "noEmit": true,
     "target": "es5",
     "allowJs": false,
-    "declaration": true,
-    "importsNotUsedAsValues": "error",
-    "outDir": "build"
+    "module": "ESNext",
+    "moduleResolution": "Node10",
+    "verbatimModuleSyntax": true,
+    "noFallthroughCasesInSwitch": false
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "build"
-  ]
+  "include": ["**/*"],
+  "exclude": ["build"]
 }

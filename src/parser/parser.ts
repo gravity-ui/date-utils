@@ -1,10 +1,9 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import dayjs from '../dayjs';
 import {dateTime} from '../dateTime';
-import {parse, isValid} from '../datemath';
-import type {DateTimeOptionsWhenParsing, DateTime, DateTimeParser} from '../typings';
+import {isValid, parse} from '../datemath';
+import type {DateTime, DateTimeOptionsWhenParsing, DateTimeParser} from '../typings';
 
 const parseInput: DateTimeParser<DateTimeOptionsWhenParsing> = (
     input,
@@ -46,11 +45,7 @@ export const dateTimeParse: DateTimeParser<DateTimeOptionsWhenParsing> = (
         return undefined;
     }
 
-    dayjs.tz.setDefault(options?.timeZone);
-
     const date = parseInput(input, options);
-
-    dayjs.tz.setDefault();
 
     return date;
 };

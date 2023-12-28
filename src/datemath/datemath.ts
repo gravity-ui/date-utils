@@ -1,8 +1,9 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import isDate from 'lodash/isDate';
 import includes from 'lodash/includes';
+import isDate from 'lodash/isDate';
+
 import {dateTime, isDateTime} from '../dateTime';
 import type {DateTime, DurationUnit, TimeZone} from '../typings';
 
@@ -105,7 +106,7 @@ export function parseDateMath(
         if (isNaN(parseInt(strippedMathString.charAt(i), 10))) {
             num = 1;
         } else if (strippedMathString.length === 2) {
-            num = strippedMathString.charAt(i);
+            num = parseInt(strippedMathString.charAt(i), 10);
         } else {
             const numFrom = i;
             while (!isNaN(parseInt(strippedMathString.charAt(i), 10))) {
