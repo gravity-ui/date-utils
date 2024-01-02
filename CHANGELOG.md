@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/gravity-ui/date-utils/compare/v2.0.0...v2.0.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* **DateTime:** correctly calculate start of year ([#43](https://github.com/gravity-ui/date-utils/issues/43)) ([c902937](https://github.com/gravity-ui/date-utils/commit/c9029376ddc7fe10cb96ed2b89a60c1759c56b5d))
+
 ## [2.0.0](https://github.com/gravity-ui/date-utils/compare/v1.4.2...v2.0.0) (2023-12-28)
 
 
