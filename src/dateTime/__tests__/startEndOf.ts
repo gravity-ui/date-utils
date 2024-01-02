@@ -2,8 +2,8 @@ import {dateTime} from '../dateTime';
 
 test('start of year', () => {
     const m = dateTime({input: new Date(2011, 1, 2, 3, 4, 5, 6)}).startOf('year');
-    const ms = dateTime({input: new Date(2011, 1, 2, 3, 4, 5, 6)}).startOf('years');
-    const ma = dateTime({input: new Date(2011, 1, 2, 3, 4, 5, 6)}).startOf('y');
+    const ms = dateTime({input: new Date(2011, 7, 2, 3, 4, 5, 6)}).startOf('years');
+    const ma = dateTime({input: new Date(2011, 11, 2, 3, 4, 5, 6)}).startOf('y');
 
     expect(Number(m)).toBe(Number(ms)); // 'Plural or singular should work'
     expect(Number(m)).toBe(Number(ma)); // 'Full or abbreviated should work'
@@ -18,8 +18,8 @@ test('start of year', () => {
 
 test('end of year', () => {
     const m = dateTime({input: new Date(2011, 1, 2, 3, 4, 5, 6)}).endOf('year');
-    const ms = dateTime({input: new Date(2011, 1, 2, 3, 4, 5, 6)}).endOf('years');
-    const ma = dateTime({input: new Date(2011, 1, 2, 3, 4, 5, 6)}).endOf('y');
+    const ms = dateTime({input: new Date(2011, 7, 2, 3, 4, 5, 6)}).endOf('years');
+    const ma = dateTime({input: new Date(2011, 11, 2, 3, 4, 5, 6)}).endOf('y');
 
     expect(Number(m)).toBe(Number(ms)); // 'Plural or singular should work'
     expect(Number(m)).toBe(Number(ma)); // 'Full or abbreviated should work'

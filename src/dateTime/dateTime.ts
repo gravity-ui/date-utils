@@ -137,9 +137,12 @@ class DateTimeImpl implements DateTime {
         /* eslint-disable no-fallthrough */
         switch (unit) {
             case 'year':
-                dateComponents.month = 0;
             case 'quarter':
-                dateComponents.month = this.month() - (this.month() % 3);
+                if (unit === 'quarter') {
+                    dateComponents.month = this.month() - (this.month() % 3);
+                } else {
+                    dateComponents.month = 0;
+                }
             case 'month':
             case 'weekNumber':
             case 'isoWeekNumber':
@@ -345,7 +348,7 @@ class DateTimeImpl implements DateTime {
         } else {
             mixed = {...dateComponents, ...newComponents};
 
-            if (newComponents.day === undefined) {
+            if (newComponents.date === undefined) {
                 mixed.date = Math.min(daysInMonth(mixed.year, mixed.month), mixed.date);
             }
         }
