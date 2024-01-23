@@ -23,7 +23,7 @@ const fetchLocalesList = async (githubUrl) => {
     }
 };
 
-const createLocaleFile = async (localesPath) => {
+const createLocalesFile = async (localesPath) => {
     if (require('node:fs').existsSync(localesPath)) {
         await fs.rm(localesPath);
     }
@@ -31,39 +31,45 @@ const createLocaleFile = async (localesPath) => {
     return await fs.open(localesPath, 'w');
 };
 
+const buildLocalesContent = (localesList) => {
+    const isEmptyStr = (s) => !s.length || !s;
+
+    const localeChunks = [];
+
+    localeChunks.push("type LocaleLoader = () => Promise<typeof import('dayjs/locale/*.js')>;\n");
+    localeChunks.push('export const localeLoaders: Record<string, LocaleLoader> = {');
+
+    localesList.forEach((locale) => {
+        if (isEmptyStr(locale)) return;
+
+        const name = locale.substring(0, locale.lastIndexOf('.'));
+        const localeName = name.includes('-') ? `'${name}'` : name;
+
+        localeChunks.push(`    ${localeName}: () => import('dayjs/locale/${locale}'),`);
+    });
+
+    localeChunks.push('};\n');
+
+    return localeChunks.join('\n');
+};
+
 (async function () {
     try {
         const localesList = await fetchLocalesList(GITHUB_LOCALES_URL);
 
-        console.log('Locales loaded successfully');
+        console.info('Locales loaded successfully');
 
-        const localeFile = await createLocaleFile(LOCALES_PATH);
+        const localeFile = await createLocalesFile(LOCALES_PATH);
 
-        console.log(`File "${LOCALES_PATH}" created successfully`);
+        console.info(`File "${LOCALES_PATH}" created successfully`);
 
-        const localeLoaderType =
-            "type LocaleLoader = () => Promise<typeof import('dayjs/locale/*.js')>;\n\n";
+        const localesContent = buildLocalesContent(localesList);
 
-        await localeFile.appendFile(localeLoaderType);
-        await localeFile.appendFile('export const localeLoaders: Record<string, LocaleLoader> = ');
-        await localeFile.appendFile('{\n');
+        console.info(`File content built successfully`);
 
-        await Promise.allSettled(
-            localesList.map(async (locale) => {
-                if (locale === '' || locale === undefined || locale === null) return;
+        await localeFile.appendFile(localesContent);
 
-                const localeName = locale.substring(0, locale.lastIndexOf('.'));
-                const localeModulesObjectPart = `    "${localeName}": () => import('dayjs/locale/${locale}'),\n`;
-
-                await localeFile.appendFile(localeModulesObjectPart);
-
-                console.log(`Locale "${localeName}" written successfully`);
-            }),
-        );
-
-        await localeFile.appendFile('};\n');
-
-        console.log(`Object "localeLoaders" written in file "${LOCALES_PATH}" successfully`);
+        console.info(`Object "localeLoaders" written in file "${LOCALES_PATH}" successfully`);
     } catch (error) {
         console.error(error);
     }
