@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/gravity-ui/date-utils/compare/v2.0.1...v2.1.0) (2024-01-25)
+
+
+### Features
+
+* **settings:** replaces dynamic import with getting a ready static module loader ([#46](https://github.com/gravity-ui/date-utils/issues/46)) ([d9f46a8](https://github.com/gravity-ui/date-utils/commit/d9f46a82679084c5051e6b18826d5f39a732915d))
+
 ## [2.0.1](https://github.com/gravity-ui/date-utils/compare/v2.0.0...v2.0.1) (2024-01-02)
 
 
