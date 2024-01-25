@@ -4,31 +4,30 @@
  * @module Locale
  * */
 
-const fs = require('node:fs/promises');
+const fs = require('node:fs');
+const fsPromises = require('node:fs/promises');
 
+const VALID_FILE_PATTERN = /^((?!index).)*.js$/;
 const LOCALES_PATH = 'src/settings/locales.ts';
-const GITHUB_LOCALES_URL = 'https://github.com/iamkun/dayjs/tree/dev/src/locale';
+const LOCALES_DIR_PATH = 'node_modules/dayjs/locale';
 
-const fetchLocalesList = async (githubUrl) => {
-    try {
-        const res = await fetch(githubUrl);
-        const json = await res.json();
-        const {items} = json.payload.tree;
-
-        return items.map((item) => item.name);
-    } catch (error) {
-        throw new Error(
-            `Something went wrong when trying to retrieve data from github dayjs, check if the URL is correct ${GITHUB_LOCALES_URL}`,
-        );
+const getLocalesList = async (localesDirPath) => {
+    if (fs.existsSync(localesDirPath)) {
+        const localesList = await fsPromises.readdir(localesDirPath);
+        return localesList.filter((locale) => VALID_FILE_PATTERN.test(locale));
     }
+
+    throw new Error(
+        'The script was called before the dayjs library was installed, install it and try again',
+    );
 };
 
 const createLocalesFile = async (localesPath) => {
-    if (require('node:fs').existsSync(localesPath)) {
-        await fs.rm(localesPath);
+    if (fs.existsSync(localesPath)) {
+        await fsPromises.rm(localesPath);
     }
 
-    return await fs.open(localesPath, 'w');
+    return await fsPromises.open(localesPath, 'w');
 };
 
 const buildLocalesContent = (localesList) => {
@@ -55,7 +54,7 @@ const buildLocalesContent = (localesList) => {
 
 (async function () {
     try {
-        const localesList = await fetchLocalesList(GITHUB_LOCALES_URL);
+        const localesList = await getLocalesList(LOCALES_DIR_PATH);
 
         console.info('Locales loaded successfully');
 
