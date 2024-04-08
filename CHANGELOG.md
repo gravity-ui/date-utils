@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/gravity-ui/date-utils/compare/v2.1.0...v2.2.0) (2024-04-08)
+
+
+### Features
+
+* **DateTime:** add helper to interpret input without timezone as utc time otherwise convert to utc ([#50](https://github.com/gravity-ui/date-utils/issues/50)) ([8de9d1d](https://github.com/gravity-ui/date-utils/commit/8de9d1ddf9845978fffc97e3ed52563b739fbcf5))
+
 ## [2.1.0](https://github.com/gravity-ui/date-utils/compare/v2.0.1...v2.1.0) (2024-01-25)
 
 
