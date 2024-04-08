@@ -57,7 +57,7 @@ export function parse(
                 mathString = text.substring(index + 2);
             }
 
-            time = dateTime({input: parseString});
+            time = dateTime({input: parseString, timeZone});
         }
 
         if (!mathString.length) {
@@ -71,7 +71,7 @@ export function parse(
         }
 
         if (isDate(text)) {
-            return dateTime({input: text});
+            return dateTime({input: text, timeZone});
         }
 
         return undefined;
