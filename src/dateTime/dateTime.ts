@@ -264,12 +264,6 @@ class DateTimeImpl implements DateTime {
         asFloat?: boolean | undefined,
     ): number {
         const value = DateTimeImpl.isDateTime(amount) ? amount.valueOf() : amount;
-        // value:
-        //   DateTimeInput !== dayjs.ConfigType;
-        //   Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
-        // unit:
-        //   the same problem as for startOf
-        // @ts-expect-error
         return this._date.diff(value, unit, asFloat);
     }
     fromNow(withoutSuffix?: boolean | undefined): string {
@@ -277,9 +271,6 @@ class DateTimeImpl implements DateTime {
     }
     from(formaInput: DateTimeInput, withoutSuffix?: boolean): string {
         const value = DateTimeImpl.isDateTime(formaInput) ? formaInput.valueOf() : formaInput;
-        // DateTimeInput !== dayjs.ConfigType;
-        // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
-        // @ts-expect-error
         return this._date.from(value, withoutSuffix);
     }
     locale(): string;
@@ -569,14 +560,8 @@ function getTimestamp(input: DateTimeInput, format?: string, lang?: string) {
         ts = Number(input);
     } else {
         const localDate = format
-            ? // DateTimeInput !== dayjs.ConfigType;
-              // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
-              // @ts-expect-error
-              dayjs(input, format, locale, STRICT)
-            : // DateTimeInput !== dayjs.ConfigType;
-              // Array<string, number> !== [number?, number?, number?, number?, number?, number?, number?]
-              // @ts-expect-error
-              dayjs(input, undefined, locale);
+            ? dayjs(input, format, locale, STRICT)
+            : dayjs(input, undefined, locale);
 
         ts = localDate.valueOf();
     }
@@ -618,6 +603,28 @@ export function dateTime(opt?: {
         ts,
         timeZone: timeZoneOrDefault,
         offset,
+        locale,
+    });
+
+    return date;
+}
+
+export function dateTimeUtc(opt?: {input?: DateTimeInput; format?: FormatInput; lang?: string}) {
+    const {input, format, lang} = opt || {};
+
+    const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
+
+    let ts: number;
+    if (DateTimeImpl.isDateTime(input) || typeof input === 'number' || input instanceof Date) {
+        ts = Number(input);
+    } else {
+        ts = dayjs.utc(input, format, STRICT).valueOf();
+    }
+
+    const date = createDateTime({
+        ts,
+        timeZone: UtcTimeZone,
+        offset: 0,
         locale,
     });
 

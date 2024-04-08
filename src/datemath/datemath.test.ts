@@ -17,7 +17,7 @@ describe('DateMath', () => {
     const format = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
     let clock: SinonFakeTimers;
 
-    describe('Ошибки', () => {
+    describe('Issues', () => {
         it('should return undefined if passed empty string', () => {
             expect(dateMath.parse('')).toBe(undefined);
         });
@@ -134,7 +134,7 @@ describe('DateMath', () => {
         });
     });
 
-    describe('Парс части относительной даты, начинающейся после now', () => {
+    describe('Parsing part after now', () => {
         it('should handle negative time', () => {
             const date = dateMath.parseDateMath('-2d', dateTime({input: [2014, 1, 5]}));
             expect(date?.valueOf()).toEqual(dateTime({input: [2014, 1, 3]}).valueOf());
