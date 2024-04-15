@@ -52,7 +52,7 @@ describe('DateMath', () => {
         expected.setSeconds(0);
         expected.setMilliseconds(0);
 
-        const startOfDay = dateMath.parse('now/d', false)?.valueOf();
+        const startOfDay = dateMath.parse('now/d', {roundUp: false})?.valueOf();
         expect(startOfDay).toBe(expected.getTime());
     });
 
@@ -62,7 +62,7 @@ describe('DateMath', () => {
             Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate(), 0, 0, 0, 0),
         );
 
-        const startOfDay = dateMath.parse('now/d', false, 'utc')?.valueOf();
+        const startOfDay = dateMath.parse('now/d', {roundUp: false, timeZone: 'utc'})?.valueOf();
         expect(startOfDay).toBe(expected.getTime());
     });
 
@@ -114,7 +114,7 @@ describe('DateMath', () => {
             });
 
             it('should round now to the end of the ' + span, () => {
-                expect(dateMath.parse('now/' + span, true)?.format(format)).toEqual(
+                expect(dateMath.parse('now/' + span, {roundUp: true})?.format(format)).toEqual(
                     now.endOf(span).format(format),
                 );
             });
@@ -122,15 +122,6 @@ describe('DateMath', () => {
 
         afterEach(() => {
             clock.restore();
-        });
-    });
-
-    describe('isValid', () => {
-        it('should return false when invalid date text', () => {
-            expect(dateMath.isValid('asd')).toBe(false);
-        });
-        it('should return true when valid date text', () => {
-            expect(dateMath.isValid('now-1h')).toBe(true);
         });
     });
 

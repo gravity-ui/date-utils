@@ -2,80 +2,59 @@
 // Copyright 2021 YANDEX LLC
 
 import includes from 'lodash/includes';
-import isDate from 'lodash/isDate';
 
-import {dateTime, isDateTime} from '../dateTime';
+import {dateTime} from '../dateTime';
 import type {DateTime, DurationUnit, TimeZone} from '../typings';
 
 const units: DurationUnit[] = ['y', 'Q', 'M', 'w', 'd', 'h', 'm', 's'];
 
-/**
- * Checks if value is a valid date which in this context means that it is either
- * a Dayjs instance or it can be parsed by parse function.
- * @param value value to parse.
- */
-export function isValid(value?: string | DateTime): boolean {
-    const date = parse(value);
-
-    if (!date) {
-        return false;
-    }
-
-    if (isDateTime(date)) {
-        return date.isValid();
-    }
-
-    return false;
+export function isLikeRelative(text: string) {
+    return text.startsWith('now');
 }
 
-export function parse(
-    text?: string | DateTime | Date | null,
-    roundUp?: boolean,
-    timeZone?: TimeZone,
-): DateTime | undefined {
+export interface ParseOptions {
+    roundUp?: boolean;
+    timeZone?: TimeZone;
+}
+
+export function parse(text: string, options: ParseOptions = {}): DateTime | undefined {
     if (!text) {
         return undefined;
     }
 
-    if (typeof text === 'string') {
-        let time;
-        let mathString = '';
-        let index;
-        let parseString;
+    const {roundUp, timeZone} = options;
 
-        if (text.substring(0, 3) === 'now') {
-            time = dateTime({timeZone});
-            mathString = text.substring('now'.length);
-        } else {
-            index = text.indexOf('||');
+    let time;
+    let mathString = '';
+    let index;
+    let parseString;
 
-            if (index === -1) {
-                parseString = text;
-                mathString = '';
-            } else {
-                parseString = text.substring(0, index);
-                mathString = text.substring(index + 2);
-            }
-
-            time = dateTime({input: parseString, timeZone});
-        }
-
-        if (!mathString.length) {
-            return time;
-        }
-
-        return parseDateMath(mathString, time, roundUp);
+    if (text.substring(0, 3) === 'now') {
+        time = dateTime({timeZone});
+        mathString = text.substring('now'.length);
     } else {
-        if (isDateTime(text)) {
-            return text;
+        index = text.indexOf('||');
+
+        if (index === -1) {
+            parseString = text;
+            mathString = '';
+        } else {
+            parseString = text.substring(0, index);
+            mathString = text.substring(index + 2);
         }
 
-        if (isDate(text)) {
-            return dateTime({input: text, timeZone});
-        }
+        time = dateTime({input: parseString, timeZone});
+    }
 
+    if (!time.isValid()) {
         return undefined;
     }
+
+    if (!mathString.length) {
+        return time;
+    }
+
+    return parseDateMath(mathString, time, roundUp);
 }
 
 export function parseDateMath(
