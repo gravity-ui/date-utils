@@ -1,9 +1,14 @@
 import MockDate from 'mockdate';
 
 import {DEFAULT_SYSTEM_DATE_FORMAT} from '../constants';
+import {
+    dateTimeParse,
+    defaultIsLikeRelative,
+    defaultRelativeParse,
+    isValid,
+    settings,
+} from '../index';
 import type {DateTime} from '../typings';
-
-import {dateTimeParse} from './parser';
 
 const TESTED_DATE_STRING = '2021-08-07';
 const TESTED_TIMESTAMP = 1621708204063;
@@ -66,5 +71,42 @@ describe('Parser', () => {
     ])('should return DateTime in case of using timestamp (%p)', (input, expected) => {
         const date = dateTimeParse(input);
         expect(date?.toISOString()).toEqual(expected);
+    });
+});
+
+describe('custom parser', () => {
+    afterEach(() => {
+        settings.setRelativeParser({
+            parse: defaultRelativeParse,
+            isLikeRelative: defaultIsLikeRelative,
+        });
+    });
+
+    it('should return DateTime in case of using custom parser', () => {
+        settings.setRelativeParser({
+            isLikeRelative: (text) => {
+                return text.startsWith('test');
+            },
+            parse: (text, options) => {
+                const t = text.replace(/^test/, 'now');
+                return defaultRelativeParse(t, options);
+            },
+        });
+
+        const date = dateTimeParse('test-1h');
+        expect(date?.toISOString()).toEqual(new Date(Date.now() - 3600000).toISOString());
+    });
+});
+
+describe('isValid', () => {
+    it('should return false when invalid date text', () => {
+        expect(isValid('asd')).toBe(false);
+    });
+    it('should return true when valid date text', () => {
+        expect(isValid('now-1h')).toBe(true);
+    });
+    it('should return false when value is falsy', () => {
+        expect(isValid(undefined)).toBe(false);
+        expect(isValid('')).toBe(false);
     });
 });

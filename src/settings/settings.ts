@@ -1,16 +1,18 @@
 import cloneDeep from 'lodash/cloneDeep';
 
+import {isLikeRelative, parse} from '../datemath';
 import dayjs from '../dayjs';
 import {normalizeTimeZone} from '../timeZone';
 
 import {localeLoaders} from './locales';
-import type {UpdateLocaleConfig} from './types';
+import type {Parser, PublicSettings, UpdateLocaleConfig} from './types';
 
-class Settings {
+class Settings implements PublicSettings {
     // 'en' - preloaded locale in dayjs
     private loadedLocales = new Set(['en']);
     private defaultLocale = 'en';
     private defaultTimeZone = 'system';
+    private parser: Parser = {parse, isLikeRelative};
 
     constructor() {
         this.updateLocale({
@@ -76,6 +78,14 @@ class Settings {
         return this.defaultTimeZone;
     }
 
+    setRelativeParser(parser: Parser) {
+        this.parser = parser;
+    }
+
+    getRelativeParser() {
+        return this.parser;
+    }
+
     private isLocaleLoaded(locale: string) {
         const localeInLowerCase = locale.toLocaleLowerCase();
         return this.loadedLocales.has(localeInLowerCase);
@@ -83,6 +93,6 @@ class Settings {
 }
 
 /**
- * Settings to manage Dayjs customization
+ * Settings to manage DateTime customization
  */
 export const settings = new Settings();

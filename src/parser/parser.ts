@@ -1,22 +1,27 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import {dateTime} from '../dateTime';
-import {isValid, parse} from '../datemath';
+import {dateTime, isDateTime} from '../dateTime';
+import {settings} from '../settings';
 import type {DateTime, DateTimeOptionsWhenParsing, DateTimeParser} from '../typings';
+
+export function isLikeRelative(text: unknown): text is string {
+    return typeof text === 'string' && settings.getRelativeParser().isLikeRelative(text);
+}
 
 const parseInput: DateTimeParser<DateTimeOptionsWhenParsing> = (
     input,
     options,
 ): DateTime | undefined => {
-    if (typeof input === 'string' && input.indexOf('now') !== -1) {
+    if (isLikeRelative(input)) {
         const allowRelative = options?.allowRelative ?? true;
 
-        if (!isValid(input) || !allowRelative) {
+        if (!allowRelative) {
             return undefined;
         }
 
-        return parse(input, options?.roundUp, options?.timeZone);
+        const parser = settings.getRelativeParser();
+        return parser.parse(input, options);
     }
 
     const {format, lang} = options || {};
@@ -49,3 +54,22 @@ export const dateTimeParse: DateTimeParser<DateTimeOptionsWhenParsing> = (
 
     return date;
 };
+
+/**
+ * Checks if value is a valid date which in this context means that it is either
+ * a DateTime instance or it can be parsed by parse function.
+ * @param value value to parse.
+ */
+export function isValid(value?: string | DateTime): boolean {
+    if (isDateTime(value)) {
+        return value.isValid();
+    }
+
+    const date = dateTimeParse(value, {allowRelative: true});
+
+    if (!date) {
+        return false;
+    }
+
+    return date.isValid();
+}
