@@ -1,11 +1,13 @@
 import {STRICT, UtcTimeZone} from '../constants';
 import dayjs from '../dayjs';
+import {duration} from '../duration';
 import {settings} from '../settings';
 import {fixOffset, guessUserTimeZone, normalizeTimeZone, timeZoneOffset} from '../timeZone';
 import type {
     AllUnit,
     DateTime,
     DateTimeInput,
+    DurationInput,
     DurationUnit,
     FormatInput,
     SetObject,
@@ -14,7 +16,6 @@ import type {
 } from '../typings';
 import {
     daysInMonth,
-    getDuration,
     normalizeComponent,
     normalizeDateComponents,
     objToTS,
@@ -117,11 +118,11 @@ class DateTimeImpl implements DateTime {
         return createDateTime({ts, timeZone: zone, offset, locale: this._locale});
     }
 
-    add(amount: DateTimeInput, unit?: DurationUnit): DateTime {
+    add(amount: DurationInput, unit?: DurationUnit): DateTime {
         return this.addSubtract(amount, unit, 1);
     }
 
-    subtract(amount: DateTimeInput, unit?: DurationUnit): DateTime {
+    subtract(amount: DurationInput, unit?: DurationUnit): DateTime {
         return this.addSubtract(amount, unit, -1);
     }
 
@@ -303,6 +304,7 @@ class DateTimeImpl implements DateTime {
         const dateComponents = tsToObject(this._timestamp, this._offset);
         const newComponents = normalizeDateComponents(
             typeof unit === 'object' ? unit : {[unit]: amount},
+            normalizeComponent,
         );
 
         const settingWeekStuff =
@@ -470,7 +472,7 @@ class DateTimeImpl implements DateTime {
     toString(): string {
         return this._date.toString();
     }
-    private addSubtract(amount: DateTimeInput, unit: DurationUnit | undefined, sign: 1 | -1) {
+    private addSubtract(amount: DurationInput, unit: DurationUnit | undefined, sign: 1 | -1) {
         if (!this.isValid()) {
             return this;
         }
@@ -479,11 +481,16 @@ class DateTimeImpl implements DateTime {
         let ts = this.valueOf();
         let offset = this._offset;
 
-        const duration = getDuration(amount, unit);
+        const dur = duration(amount, unit);
         const dateComponents = tsToObject(ts, offset);
 
-        const monthsInput = absRound(duration.months);
-        const daysInput = absRound(duration.days);
+        const monthsInput = absRound(dur.months() + dur.quarters() * 3 + dur.years() * 12);
+        const daysInput = absRound(dur.days() + dur.weeks() * 7);
+        const milliseconds =
+            dur.milliseconds() +
+            dur.seconds() * 1000 +
+            dur.minutes() * 60 * 1000 +
+            dur.hours() * 60 * 60 * 1000;
 
         if (monthsInput || daysInput) {
             const month = dateComponents.month + sign * monthsInput;
@@ -498,8 +505,8 @@ class DateTimeImpl implements DateTime {
             }
         }
 
-        if (duration.milliseconds) {
-            ts += sign * duration.milliseconds;
+        if (milliseconds) {
+            ts += sign * milliseconds;
             if (timeZone !== UtcTimeZone) {
                 offset = timeZoneOffset(timeZone, ts);
             }

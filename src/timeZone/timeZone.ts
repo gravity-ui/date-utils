@@ -1,6 +1,7 @@
 import {UtcTimeZone} from '../constants';
 import dayjs from '../dayjs';
 import type {TimeZone} from '../typings';
+import {getDateTimeFormat} from '../utils/locale';
 
 /**
  * Returns the user's time zone.
@@ -34,24 +35,6 @@ export function isValidTimeZone(zone: string) {
     }
 }
 
-const dateTimeFormatCache: Record<TimeZone, Intl.DateTimeFormat> = {};
-function makeDateTimeFormat(zone: TimeZone) {
-    if (!dateTimeFormatCache[zone]) {
-        dateTimeFormatCache[zone] = new Intl.DateTimeFormat('en-US', {
-            hour12: false,
-            timeZone: zone === 'system' ? undefined : zone,
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            era: 'short',
-        });
-    }
-    return dateTimeFormatCache[zone];
-}
-
 const dateFields = [
     'year',
     'month',
@@ -76,7 +59,17 @@ export function timeZoneOffset(zone: TimeZone, ts: number) {
         return -date.getTimezoneOffset();
     }
 
-    const dtf = makeDateTimeFormat(zone);
+    const dtf = getDateTimeFormat('en-US', {
+        hour12: false,
+        timeZone: zone === 'system' ? undefined : zone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        era: 'short',
+    });
     const formatted = dtf.formatToParts(date);
     const parts: DateParts = {
         year: 1,

@@ -1,5 +1,3 @@
-import type {SetObject} from '../typings';
-
 export type CompareStringsOptions = {
     ignoreCase?: boolean;
 };
@@ -63,19 +61,46 @@ export function objToTS(obj: Record<keyof ReturnType<typeof tsToObject>, number>
     return ts;
 }
 
-type NormalizedUnit =
-    | 'year'
-    | 'month'
-    | 'date'
-    | 'day'
-    | 'hour'
-    | 'minute'
-    | 'second'
-    | 'millisecond'
-    | 'quarter'
-    | 'weekNumber'
-    | 'isoWeekNumber'
-    | 'isoWeekday';
+const durationNormalizedUnits = {
+    y: 'years',
+    year: 'years',
+    years: 'years',
+    Q: 'quarters',
+    quarter: 'quarters',
+    quarters: 'quarters',
+    M: 'months',
+    month: 'months',
+    months: 'months',
+    w: 'weeks',
+    week: 'weeks',
+    weeks: 'weeks',
+    d: 'days',
+    day: 'days',
+    days: 'days',
+    h: 'hours',
+    hour: 'hours',
+    hours: 'hours',
+    m: 'minutes',
+    minute: 'minutes',
+    minutes: 'minutes',
+    s: 'seconds',
+    second: 'seconds',
+    seconds: 'seconds',
+    ms: 'milliseconds',
+    millisecond: 'milliseconds',
+    milliseconds: 'milliseconds',
+} as const;
+
+export function normalizeDurationUnit(component: string) {
+    const unit = ['d', 'D', 'm', 'M', 'w', 'W', 'E', 'Q'].includes(component)
+        ? component
+        : component.toLowerCase();
+    if (unit in durationNormalizedUnits) {
+        return durationNormalizedUnits[unit as keyof typeof durationNormalizedUnits];
+    }
+
+    throw new Error(`Invalid unit ${component}`);
+}
 
 const normalizedUnits = {
     y: 'year',
@@ -140,11 +165,16 @@ function asNumber(value: unknown) {
     return numericValue;
 }
 
-export function normalizeDateComponents(components: SetObject) {
-    const normalized: Partial<Record<NormalizedUnit, number>> = {};
+export function normalizeDateComponents<From extends string, To extends string>(
+    components: Partial<Record<From, string | number | undefined>>,
+    normalizer: (unit: string) => To,
+) {
+    const normalized: Partial<Record<To, number>> = {};
     for (const [c, v] of Object.entries(components)) {
-        if (v === undefined || v === null) continue;
-        normalized[normalizeComponent(c)] = asNumber(v);
+        if (v === undefined || v === null) {
+            continue;
+        }
+        normalized[normalizer(c)] = asNumber(v);
     }
     return normalized;
 }
