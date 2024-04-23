@@ -1,3 +1,5 @@
+import type {DurationInput, DurationUnit} from './duration';
+
 export type DateTimeInput =
     | InputObject
     | Date
@@ -8,8 +10,7 @@ export type DateTimeInput =
     | null
     | undefined;
 export type FormatInput = string | undefined;
-export type DurationInput = number | string | DurationInputObject | null | undefined;
-type BaseUnit =
+export type BaseUnit =
     | 'year'
     | 'years'
     | 'y'
@@ -32,12 +33,11 @@ type BaseUnit =
     | 'milliseconds'
     | 'ms';
 
-type QuarterUnit = 'quarter' | 'quarters' | 'Q';
-type WeekUnit = 'week' | 'weeks' | 'w';
+export type QuarterUnit = 'quarter' | 'quarters' | 'Q';
+export type WeekUnit = 'week' | 'weeks' | 'w';
 type IsoWeekUnit = 'isoWeek' | 'isoWeeks'; // | 'W'; - not supported;
 type DateUnit = 'date' | 'dates' | 'D';
 export type StartOfUnit = BaseUnit | QuarterUnit | WeekUnit | IsoWeekUnit | DateUnit;
-export type DurationUnit = BaseUnit | QuarterUnit | WeekUnit;
 export type AllUnit =
     | BaseUnit
     | QuarterUnit
@@ -49,7 +49,6 @@ export type AllUnit =
     | 'E';
 
 export type InputObject = Partial<Record<BaseUnit | DateUnit, number>>;
-export type DurationInputObject = Partial<Record<DurationUnit, number>>;
 export type SetObject = Partial<
     Record<
         | BaseUnit
@@ -63,7 +62,7 @@ export type SetObject = Partial<
         | 'isoWeekday'
         | 'isoWeekdays'
         | 'E',
-        number
+        number | string
     >
 >;
 

@@ -1,7 +1,6 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import each from 'lodash/each';
 import sinon from 'sinon';
 import type {SinonFakeTimers} from 'sinon';
 
@@ -76,7 +75,7 @@ describe('DateMath', () => {
             anchored = dateTime({input: anchor});
         });
 
-        each(spans, (span) => {
+        spans.forEach((span) => {
             const nowEx = 'now-5' + span;
             const thenEx = anchor + '||-5' + span;
 
@@ -106,7 +105,7 @@ describe('DateMath', () => {
             now = dateTime();
         });
 
-        each(spans, (span) => {
+        spans.forEach((span) => {
             it('should round now to the beginning of the ' + span, () => {
                 expect(dateMath.parse('now/' + span)?.format(format)).toEqual(
                     now.startOf(span).format(format),

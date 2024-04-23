@@ -1,8 +1,6 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import includes from 'lodash/includes';
-
 import {dateTime} from '../dateTime';
 import type {DateTime, DurationUnit, TimeZone} from '../typings';
 
@@ -106,7 +104,7 @@ export function parseDateMath(
 
         const unit = strippedMathString.charAt(i++) as DurationUnit;
 
-        if (includes(units, unit)) {
+        if (units.includes(unit)) {
             if (type === 0) {
                 if (roundUp) {
                     resultTime = resultTime.endOf(unit);
