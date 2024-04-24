@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.4.0](https://github.com/gravity-ui/date-utils/compare/v2.3.0...v2.4.0) (2024-04-24)
+
+
+### Features
+
+* add Duration ([#55](https://github.com/gravity-ui/date-utils/issues/55)) ([2da2434](https://github.com/gravity-ui/date-utils/commit/2da243405a5da7b88a11185d23aa4f415ef747f9))
+
+
+### Bug Fixes
+
+* **Duration:** humanize should not depend on DST ([#56](https://github.com/gravity-ui/date-utils/issues/56)) ([9784b50](https://github.com/gravity-ui/date-utils/commit/9784b50c505e51e6daf2654b663cded59b2bd3c8))
+
 ## [2.3.0](https://github.com/gravity-ui/date-utils/compare/v2.2.0...v2.3.0) (2024-04-15)
 
 
