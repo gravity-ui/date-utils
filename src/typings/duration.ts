@@ -6,6 +6,10 @@ export type DurationUnit = BaseUnit | QuarterUnit | WeekUnit;
 export type DurationInputObject = Partial<Record<DurationUnit, number | string>>;
 export type DurationInput = Duration | number | string | DurationInputObject | null | undefined;
 
+export type FormatOptions = {
+    floor?: boolean;
+} & Intl.NumberFormatOptions;
+
 export interface Duration {
     /** Return the length of the duration in the specified unit. */
     as(unit: DurationUnit): number;
@@ -90,6 +94,12 @@ export interface Duration {
         listStyle?: 'long' | 'short' | 'narrow'; // Intl.ListFormatStyle
         unitDisplay?: Intl.NumberFormatOptions['unitDisplay'];
     }): string;
+
+    /** Returns a string representation of this Duration formatted according to the specified format string.
+     * Used tokens are S for milliseconds, s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months, and y for years.
+     * Add padding by repeating the token, e.g. 'yy' pads the years to two digits, "hhhh" pads the hours to four digits.
+     */
+    format(formatInput: string, options?: FormatOptions): string;
 
     /** Reduce this Duration to its canonical representation in its current units. */
     normalize(options?: {roundUp?: boolean}): Duration;

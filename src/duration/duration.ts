@@ -3,7 +3,13 @@
 
 import {dateTimeUtc} from '../dateTime';
 import {settings} from '../settings';
-import type {Duration, DurationInput, DurationInputObject, DurationUnit} from '../typings';
+import type {
+    Duration,
+    DurationInput,
+    DurationInputObject,
+    DurationUnit,
+    FormatOptions,
+} from '../typings';
 import {normalizeDateComponents, normalizeDurationUnit} from '../utils';
 import {getListFormat, getNumberFormat} from '../utils/locale';
 
@@ -322,6 +328,62 @@ export class DurationImpl implements Duration {
         }).format(l);
     }
 
+    format(formatInput: string, options: FormatOptions & {forceSimple?: boolean} = {}): string {
+        if (!this.isValid()) {
+            return 'Invalid Duration';
+        }
+
+        const formattingTokens = /(\[[^[]*\])|y+|M+|w+|d+|h+|m+|s+|S+|./g;
+        const tokens: Array<
+            {literal: true; value: string} | {literal: false; padTo: number; unit: DurationUnit}
+        > = [];
+        const units: DurationUnit[] = [];
+        let match: RegExpMatchArray | null;
+        while ((match = formattingTokens.exec(formatInput))) {
+            const value = match[0];
+            const escaped = match[1];
+            const unit = tokenToField(value[0]);
+            if (unit) {
+                tokens.push({literal: false, padTo: value.length, unit});
+                units.push(unit);
+            } else if (escaped) {
+                tokens.push({literal: true, value: escaped.slice(1, -1)});
+            } else {
+                tokens.push({literal: true, value});
+            }
+        }
+
+        const dur = this.shiftTo(units);
+        let result = '';
+
+        const {floor = true, forceSimple, ...other} = options;
+        const useIntlFormatter = !forceSimple || Object.keys(other).length > 0;
+
+        for (const token of tokens) {
+            if (token.literal) {
+                result += token.value;
+            } else {
+                const val = dur.get(token.unit);
+
+                if (useIntlFormatter) {
+                    const formatter = getNumberFormat(this._locale, {
+                        useGrouping: false,
+                        ...other,
+                        minimumIntegerDigits: token.padTo,
+                    });
+                    const fixed = floor ? Math.floor(val) : val;
+                    result += formatter.format(fixed);
+                } else {
+                    const fixed = floor ? Math.floor(val) : Math.round(val * 1000) / 1000;
+                    result += `${fixed < 0 ? '-' : ''}${Math.abs(fixed)
+                        .toString()
+                        .padStart(token.padTo, '0')}`;
+                }
+            }
+        }
+        return result;
+    }
+
     isValid(): boolean {
         return this._isValid;
     }
@@ -349,4 +411,27 @@ function daysToMonths(days: number) {
 function monthsToDays(months: number) {
     // the reverse of daysToMonths
     return (months * 146097) / 4800;
+}
+
+function tokenToField(token: string) {
+    switch (token[0]) {
+        case 'S':
+            return 'millisecond';
+        case 's':
+            return 'second';
+        case 'm':
+            return 'minute';
+        case 'h':
+            return 'hour';
+        case 'd':
+            return 'day';
+        case 'w':
+            return 'week';
+        case 'M':
+            return 'month';
+        case 'y':
+            return 'year';
+        default:
+            return null;
+    }
 }

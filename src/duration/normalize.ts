@@ -170,7 +170,7 @@ export function shiftTo(
     }
     const newValues: DurationValues = {};
     const accumulated: DurationValues = {};
-    let lastUnit;
+    let lastUnit: keyof DurationValues | undefined;
 
     for (const unit of orderedUnits) {
         if (!units.includes(unit)) {
@@ -201,18 +201,25 @@ export function shiftTo(
         const i = Math.trunc(own);
         newValues[unit] = i;
         accumulated[unit] = (own * 1000 - i * 1000) / 1000;
+        // console.log(newValues, accumulated);
     }
 
-    // anything leftover becomes the decimal for the last unit
     // lastUnit must be defined since units is not empty
-    for (const [key, value] of Object.entries(accumulated)) {
-        if (value !== 0) {
-            newValues[lastUnit as keyof DurationValues] =
-                (newValues[lastUnit as keyof DurationValues] ?? 0) +
-                (key === lastUnit
-                    ? value
-                    : // @ts-expect-error
-                      value / matrix[lastUnit][key]);
+    if (lastUnit) {
+        // anything leftover becomes the decimal for the last unit
+        for (const [key, value] of Object.entries(accumulated)) {
+            if (value !== 0) {
+                newValues[lastUnit] =
+                    (newValues[lastUnit] ?? 0) +
+                    (key === lastUnit
+                        ? value
+                        : // @ts-expect-error
+                          value / matrix[lastUnit][key]);
+            }
+        }
+        const v = newValues[lastUnit];
+        if (v) {
+            newValues[lastUnit] = Math.round(v * 1000) / 1000;
         }
     }
 

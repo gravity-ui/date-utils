@@ -42,7 +42,7 @@ test('Duration#shiftTo throws on invalid units', () => {
 test('Duration#shiftTo tacks decimals onto the end', () => {
     const dur = duration({minutes: 73}).shiftTo(['hours']);
     expect(dur.isValid()).toBe(true);
-    expect(dur.hours()).toBeCloseTo(1.2167, 4);
+    expect(dur.hours()).toBeCloseTo(1.217, 3);
 });
 
 test('Duration#shiftTo deconstructs decimal inputs', () => {
