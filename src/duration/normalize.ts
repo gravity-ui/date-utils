@@ -201,7 +201,6 @@ export function shiftTo(
         const i = Math.trunc(own);
         newValues[unit] = i;
         accumulated[unit] = (own * 1000 - i * 1000) / 1000;
-        // console.log(newValues, accumulated);
     }
 
     // lastUnit must be defined since units is not empty
