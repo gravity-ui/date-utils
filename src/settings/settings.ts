@@ -5,7 +5,7 @@ import dayjs from '../dayjs';
 import {normalizeTimeZone} from '../timeZone';
 
 import {localeLoaders} from './locales';
-import type {Parser, PublicSettings, UpdateLocaleConfig} from './types';
+import type {Locale, Parser, PublicSettings, UpdateLocaleConfig} from './types';
 
 class Settings implements PublicSettings {
     // 'en' - preloaded locale in dayjs
@@ -40,7 +40,7 @@ class Settings implements PublicSettings {
         return this.defaultLocale;
     }
 
-    getLocaleData() {
+    getLocaleData(): Locale {
         const locales = dayjs.Ls;
 
         let localeObject = locales[this.getLocale()];
@@ -52,7 +52,7 @@ class Settings implements PublicSettings {
             throw new Error('There is something really wrong happening. Locale data is absent.');
         }
 
-        return cloneDeep(localeObject);
+        return cloneDeep(localeObject) as Locale;
     }
 
     setLocale(locale: string) {

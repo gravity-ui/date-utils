@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Fetches and writes to the locale file from github dayjs
  * node.js >= 20 lts

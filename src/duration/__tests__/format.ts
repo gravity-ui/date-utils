@@ -25,7 +25,7 @@ test('Duration#toISOString fills out every field', () => {
 });
 
 test('Duration#toISOString fills out every field with fractional', () => {
-    const dur = duration({
+    const durFrac = duration({
         years: 1.1,
         months: 2.2,
         weeks: 1.1,
@@ -35,7 +35,7 @@ test('Duration#toISOString fills out every field with fractional', () => {
         seconds: 6.6,
         milliseconds: 7,
     });
-    expect(dur.toISOString()).toBe('P1.1Y2.2M1.1W3.3DT4.4H5.5M6.607S');
+    expect(durFrac.toISOString()).toBe('P1.1Y2.2M1.1W3.3DT4.4H5.5M6.607S');
 });
 
 test('Duration#toISOString creates a minimal string', () => {
