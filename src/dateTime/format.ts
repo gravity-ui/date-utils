@@ -1,16 +1,8 @@
+import {englishFormats} from '../constants';
 import {settings} from '../settings';
 import type {Locale, LongDateFormat} from '../settings/types';
 import {parseZoneInfo} from '../timeZone';
 import type {DateTime} from '../typings';
-
-export const englishFormats = {
-    LTS: 'h:mm:ss A',
-    LT: 'h:mm A',
-    L: 'MM/DD/YYYY',
-    LL: 'MMMM D, YYYY',
-    LLL: 'MMMM D, YYYY h:mm A',
-    LLLL: 'dddd, MMMM D, YYYY h:mm A',
-} satisfies LongDateFormat;
 
 function getShortLocalizedFormatFromLongLocalizedFormat(formatBis: string) {
     return formatBis.replace(
