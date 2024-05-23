@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/gravity-ui/date-utils/compare/v2.5.0...v2.5.1) (2024-05-23)
+
+
+### Bug Fixes
+
+* **locale:** add formats to en locale ([#64](https://github.com/gravity-ui/date-utils/issues/64)) ([8e2025e](https://github.com/gravity-ui/date-utils/commit/8e2025e426dd844d1d91a867655501511c33e392))
+
 ## [2.5.0](https://github.com/gravity-ui/date-utils/compare/v2.4.0...v2.5.0) (2024-05-23)
 
 
