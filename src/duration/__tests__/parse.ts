@@ -3,7 +3,7 @@
 
 import {duration} from '..';
 
-const check = (s: any, ob: any) => {
+const check = (s: string, ob: unknown) => {
     expect(duration(s).toObject()).toEqual(ob);
 };
 

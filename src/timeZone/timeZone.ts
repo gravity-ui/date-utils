@@ -1,12 +1,12 @@
 import {UtcTimeZone} from '../constants';
-import dayjs from '../dayjs';
 import type {TimeZone} from '../typings';
 import {getDateTimeFormat} from '../utils/locale';
 
 /**
  * Returns the user's time zone.
  */
-export const guessUserTimeZone = () => dayjs.tz.guess();
+// eslint-disable-next-line new-cap
+export const guessUserTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 /**
  * Returns all time zones.
@@ -162,4 +162,37 @@ export function fixOffset(
 
     // If it's different, we're in a hole time. The offset has changed, but we don't adjust the time
     return [localTS - Math.min(o2, o3) * 60 * 1000, Math.min(o2, o3)];
+}
+
+export function parseZoneInfo({
+    timeZone,
+    ts,
+    locale,
+    offsetFormat,
+}: {
+    timeZone?: string;
+    ts: number;
+    locale: string;
+    offsetFormat?: 'short' | 'long';
+}) {
+    const date = new Date(ts);
+    const intlOpts: Intl.DateTimeFormatOptions = {
+        hourCycle: 'h23',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+    };
+
+    if (timeZone) {
+        intlOpts.timeZone = normalizeTimeZone(timeZone, timeZone);
+    }
+
+    const modified = {timeZoneName: offsetFormat, ...intlOpts};
+
+    const parsed = new Intl.DateTimeFormat(locale, modified)
+        .formatToParts(date)
+        .find((m) => m.type.toLowerCase() === 'timezonename');
+    return parsed ? parsed.value : '';
 }

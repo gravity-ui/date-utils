@@ -1,7 +1,8 @@
-import {STRICT, UtcTimeZone} from '../constants';
+import {INVALID_DATE_STRING, STRICT, UtcTimeZone} from '../constants';
 import dayjs from '../dayjs';
 import {duration} from '../duration';
 import {settings} from '../settings';
+import type {Locale} from '../settings/types';
 import {fixOffset, guessUserTimeZone, normalizeTimeZone, timeZoneOffset} from '../timeZone';
 import type {
     AllUnit,
@@ -15,13 +16,24 @@ import type {
     TimeZone,
 } from '../typings';
 import {
+    computeOrdinal,
     daysInMonth,
+    gregorianToWeek,
+    monthDiff,
     normalizeComponent,
     normalizeDateComponents,
+    normalizeDurationUnit,
     objToTS,
     offsetFromString,
     tsToObject,
+    uncomputeOrdinal,
+    weekToGregorian,
 } from '../utils';
+import type {DateObject} from '../utils';
+
+import {formatDate} from './format';
+import {getTimestampFromArray, getTimestampFromObject} from './parse';
+import {fromTo} from './relative';
 
 const IS_DATE_TIME = Symbol('isDateTime');
 class DateTimeImpl implements DateTime {
@@ -37,14 +49,18 @@ class DateTimeImpl implements DateTime {
     private _timeZone: string;
     private _offset: number;
     private _locale: string;
-    private _date: dayjs.Dayjs;
+    private _c: DateObject;
+    private _weekInfo: ReturnType<typeof gregorianToWeek> | null = null;
+    private _localeData: Locale;
+    private _isValid: boolean;
 
     constructor(opt: {
         ts: number;
         timeZone: TimeZone;
         offset: number;
         locale: string;
-        date: dayjs.Dayjs;
+        localeData: Locale;
+        isValid: boolean;
     }) {
         this[IS_DATE_TIME] = true;
 
@@ -52,18 +68,27 @@ class DateTimeImpl implements DateTime {
         this._locale = opt.locale;
         this._timeZone = opt.timeZone;
         this._offset = opt.offset;
-        this._date = opt.date;
+        this._c = tsToObject(opt.ts, opt.offset);
+        this._localeData = opt.localeData;
+        this._isValid = opt.isValid;
     }
 
-    format(formatInput?: FormatInput) {
-        return this._date.format(formatInput);
+    format(formatInput?: FormatInput): string {
+        if (!this.isValid()) {
+            return this._localeData.invalidDate || INVALID_DATE_STRING;
+        }
+
+        if (formatInput === undefined && this._offset === 0) {
+            return this.format('YYYY-MM-DDTHH:mm:ss[Z]');
+        }
+        return formatDate(this, formatInput, this._localeData);
     }
 
     toISOString(keepOffset?: boolean): string {
         if (keepOffset) {
-            return this._date.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+            return this.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
         }
-        return this._date.toISOString();
+        return this.toDate().toISOString();
     }
 
     utcOffset(): number;
@@ -126,7 +151,15 @@ class DateTimeImpl implements DateTime {
         return this.addSubtract(amount, unit, -1);
     }
 
-    startOf(unitOfTime: StartOfUnit | 'weekNumber' | 'isoWeekNumber' | 'isoWeekday') {
+    startOf(
+        unitOfTime:
+            | StartOfUnit
+            | 'weekNumber'
+            | 'isoWeekNumber'
+            | 'weekday'
+            | 'isoWeekday'
+            | 'dayOfYear',
+    ) {
         if (!this.isValid()) {
             return this;
         }
@@ -156,7 +189,9 @@ class DateTimeImpl implements DateTime {
                 }
             case 'day':
             case 'date':
+            case 'weekday':
             case 'isoWeekday':
+            case 'dayOfYear':
                 dateComponents.hour = 0;
             case 'hour':
                 dateComponents.minute = 0;
@@ -171,7 +206,15 @@ class DateTimeImpl implements DateTime {
         return this.set(dateComponents);
     }
 
-    endOf(unitOfTime: StartOfUnit | 'weekNumber' | 'isoWeekNumber' | 'isoWeekday'): DateTime {
+    endOf(
+        unitOfTime:
+            | StartOfUnit
+            | 'weekNumber'
+            | 'isoWeekNumber'
+            | 'weekday'
+            | 'isoWeekday'
+            | 'dayOfYear',
+    ): DateTime {
         if (!this.isValid()) {
             return this;
         }
@@ -204,7 +247,9 @@ class DateTimeImpl implements DateTime {
                 }
             case 'day':
             case 'date':
+            case 'weekday':
             case 'isoWeekday':
+            case 'dayOfYear':
                 dateComponents.hour = 23;
             case 'hour':
                 dateComponents.minute = 59;
@@ -240,8 +285,8 @@ class DateTimeImpl implements DateTime {
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
-        const unit = normalizeComponent(granularity ?? 'millisecond');
-        const localTs = unit === 'millisecond' ? this.valueOf() : this.endOf(unit).valueOf();
+        const unit = normalizeDurationUnit(granularity ?? 'millisecond');
+        const localTs = unit === 'milliseconds' ? this.valueOf() : this.endOf(unit).valueOf();
         return localTs < ts;
     }
 
@@ -250,13 +295,13 @@ class DateTimeImpl implements DateTime {
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
-        const unit = normalizeComponent(granularity ?? 'millisecond');
-        const localTs = unit === 'millisecond' ? this.valueOf() : this.startOf(unit).valueOf();
+        const unit = normalizeDurationUnit(granularity ?? 'millisecond');
+        const localTs = unit === 'milliseconds' ? this.valueOf() : this.startOf(unit).valueOf();
         return localTs > ts;
     }
 
     isValid(): boolean {
-        return this._date.isValid();
+        return this._isValid;
     }
 
     diff(
@@ -264,15 +309,71 @@ class DateTimeImpl implements DateTime {
         unit?: DurationUnit | undefined,
         asFloat?: boolean | undefined,
     ): number {
-        const value = DateTimeImpl.isDateTime(amount) ? amount.valueOf() : amount;
-        return this._date.diff(value, unit, asFloat);
+        if (!this.isValid()) {
+            return NaN;
+        }
+        const value = DateTimeImpl.isDateTime(amount)
+            ? amount.timeZone(this._timeZone)
+            : createDateTime({
+                  ts: getTimestamp(amount),
+                  timeZone: this._timeZone,
+                  locale: this._locale,
+                  offset: this._offset,
+              });
+        if (!value.isValid()) {
+            return NaN;
+        }
+
+        const unitType = normalizeDurationUnit(unit || 'millisecond');
+        const zoneDelta = (value.utcOffset() - this.utcOffset()) * 60_000;
+        let output = 0;
+        switch (unitType) {
+            case 'years': {
+                output = monthDiff(this, value) / 12;
+                break;
+            }
+            case 'quarters': {
+                output = monthDiff(this, value) / 3;
+                break;
+            }
+            case 'months': {
+                output = monthDiff(this, value);
+                break;
+            }
+            case 'weeks': {
+                output = (this.valueOf() - value.valueOf() - zoneDelta) / 604_800_000;
+                break;
+            }
+            case 'days': {
+                output = (this.valueOf() - value.valueOf() - zoneDelta) / 86_400_000;
+                break;
+            }
+            case 'hours': {
+                output = (this.valueOf() - value.valueOf()) / 3_600_000;
+                break;
+            }
+            case 'minutes': {
+                output = (this.valueOf() - value.valueOf()) / 60_000;
+                break;
+            }
+            case 'seconds': {
+                output = (this.valueOf() - value.valueOf()) / 1_000;
+                break;
+            }
+            default: {
+                output = this.valueOf() - value.valueOf();
+            }
+        }
+        return asFloat ? output : Math.floor(Math.abs(output)) * Math.sign(output) || 0;
     }
     fromNow(withoutSuffix?: boolean | undefined): string {
-        return this._date.fromNow(withoutSuffix);
+        return this.from(dateTime({timeZone: this._timeZone, lang: this._locale}), withoutSuffix);
     }
     from(formaInput: DateTimeInput, withoutSuffix?: boolean): string {
-        const value = DateTimeImpl.isDateTime(formaInput) ? formaInput.valueOf() : formaInput;
-        return this._date.from(value, withoutSuffix);
+        if (!this.isValid()) {
+            return INVALID_DATE_STRING;
+        }
+        return fromTo(this, formaInput, this._localeData.relativeTime, withoutSuffix, true);
     }
     locale(): string;
     locale(locale: string): DateTime;
@@ -297,47 +398,81 @@ class DateTimeImpl implements DateTime {
         return this.timeZone(UtcTimeZone, keepLocalTime);
     }
     daysInMonth(): number {
-        return this._date.daysInMonth();
+        return daysInMonth(this._c.year, this._c.month);
     }
 
+    // eslint-disable-next-line complexity
     set(unit: AllUnit | SetObject, amount?: number): DateTime {
-        const dateComponents = tsToObject(this._timestamp, this._offset);
+        if (!this.isValid()) {
+            return this;
+        }
+        const dateComponents = this._c;
         const newComponents = normalizeDateComponents(
             typeof unit === 'object' ? unit : {[unit]: amount},
             normalizeComponent,
         );
 
         const settingWeekStuff =
-            newComponents.weekNumber !== undefined ||
             newComponents.day !== undefined ||
+            newComponents.weekNumber !== undefined ||
             newComponents.isoWeekNumber !== undefined ||
+            newComponents.weekday !== undefined ||
             newComponents.isoWeekday !== undefined;
 
-        const containsYearOrMonthDay =
-            newComponents.year !== undefined ||
-            newComponents.month !== undefined ||
-            newComponents.date !== undefined;
+        const containsDayOfYear = newComponents.dayOfYear !== undefined;
+        const containsYear = newComponents.year !== undefined;
+        const containsMonthOrDate =
+            newComponents.month !== undefined || newComponents.date !== undefined;
+        const containsYearOrMonthDay = containsYear || containsMonthOrDate;
 
-        if (settingWeekStuff && containsYearOrMonthDay) {
+        if (settingWeekStuff && (containsYearOrMonthDay || containsDayOfYear)) {
             throw new Error("Can't mix weekYear/weekNumber units with year/month/day");
+        }
+
+        if (containsDayOfYear && containsMonthOrDate) {
+            throw new Error("Can't mix day of year with month/day");
         }
 
         let mixed;
         if (settingWeekStuff) {
-            let date = dayjs.utc(objToTS({...dateComponents, ...newComponents}));
-            const toDayjsUnit = {
-                weekNumber: 'week',
-                day: 'day',
-                isoWeekNumber: 'isoWeek',
-                isoWeekday: 'isoWeekday',
-            } as const;
-            for (const u of ['weekNumber', 'day', 'isoWeekNumber', 'isoWeekday'] as const) {
-                const v = newComponents[u];
-                if (v !== undefined) {
-                    date = date[toDayjsUnit[u]](v) as dayjs.Dayjs;
-                }
+            const {weekday, weekNumber, isoWeekday, isoWeekNumber, day} = newComponents;
+            const hasLocalWeekData = weekday !== undefined || weekNumber !== undefined;
+            const hasIsoWeekData =
+                isoWeekday !== undefined || isoWeekNumber !== undefined || day !== undefined;
+            if (hasLocalWeekData && hasIsoWeekData) {
+                throw new Error("Can't mix local week with ISO week");
             }
-            mixed = tsToObject(date.valueOf(), 0);
+            const weekInfo = this.weekInfo();
+            if (hasLocalWeekData) {
+                const {minDaysInFirstWeek, startOfWeek} = getLocaleWeekValues(this._localeData);
+                const weekData = {
+                    weekday: (weekday ?? weekInfo.weekday) + 1,
+                    weekNumber: weekNumber ?? weekInfo.weekNumber,
+                    weekYear: weekInfo.weekYear,
+                };
+                mixed = {
+                    ...dateComponents,
+                    ...newComponents,
+                    ...weekToGregorian(weekData, minDaysInFirstWeek, startOfWeek),
+                };
+            } else {
+                const weekData = {
+                    weekday: isoWeekday ?? (day === undefined ? weekInfo.isoWeekday : day || 7),
+                    weekNumber: isoWeekNumber ?? weekInfo.isoWeekNumber,
+                    weekYear: weekInfo.isoWeekYear,
+                };
+                mixed = {...dateComponents, ...newComponents, ...weekToGregorian(weekData, 4, 1)};
+            }
+        } else if (containsDayOfYear) {
+            mixed = {
+                ...dateComponents,
+                ...newComponents,
+                ...uncomputeOrdinal({
+                    ordinal: this.dayOfYear(),
+                    ...dateComponents,
+                    ...newComponents,
+                }),
+            };
         } else {
             mixed = {...dateComponents, ...newComponents};
 
@@ -368,7 +503,7 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('date', value);
         }
-        return this._date.date();
+        return this.isValid() ? this._c.date : NaN;
     }
     month(): number;
     month(value: number): DateTime;
@@ -376,7 +511,7 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('month', value);
         }
-        return this._date.month();
+        return this.isValid() ? this._c.month : NaN;
     }
     quarter(): number;
     quarter(value: number): DateTime;
@@ -384,7 +519,7 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('quarter', value);
         }
-        return this._date.quarter();
+        return this.isValid() ? Math.ceil((this._c.month + 1) / 3) : NaN;
     }
     year(): number;
     year(value: number): DateTime;
@@ -392,7 +527,7 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('year', value);
         }
-        return this._date.year();
+        return this.isValid() ? this._c.year : NaN;
     }
     day(): number;
     day(value: number): DateTime;
@@ -400,17 +535,18 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('day', value);
         }
-        return this._date.day();
+        return this.isValid() ? this.weekInfo().day : NaN;
     }
 
     isoWeekday(): number;
-    isoWeekday(day: number): DateTime;
-    isoWeekday(day?: number): number | DateTime {
-        if (day === undefined) {
-            return this._date.isoWeekday();
+    isoWeekday(value: number): DateTime;
+    isoWeekday(value?: number): number | DateTime {
+        if (typeof value === 'number') {
+            // return this.day(this.day() % 7 ? day : day - 7);
+            return this.set('isoWeekday', value);
         }
 
-        return this.day(this.day() % 7 ? day : day - 7);
+        return this.isValid() ? this.weekInfo().isoWeekday : NaN;
     }
 
     hour(): number;
@@ -419,7 +555,7 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('hour', value);
         }
-        return this._date.hour();
+        return this.isValid() ? this._c.hour : NaN;
     }
     minute(): number;
     minute(value: number): DateTime;
@@ -427,7 +563,7 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('minute', value);
         }
-        return this._date.minute();
+        return this.isValid() ? this._c.minute : NaN;
     }
     second(): number;
     second(value: number): DateTime;
@@ -435,7 +571,7 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('second', value);
         }
-        return this._date.second();
+        return this.isValid() ? this._c.second : NaN;
     }
     millisecond(): number;
     millisecond(value: number): DateTime;
@@ -443,7 +579,7 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('millisecond', value);
         }
-        return this._date.millisecond();
+        return this.isValid() ? this._c.millisecond : NaN;
     }
     week(): number;
     week(value: number): DateTime;
@@ -451,7 +587,7 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('week', value);
         }
-        return this._date.week();
+        return this.isValid() ? this.weekInfo().weekNumber : NaN;
     }
     isoWeek(): number;
     isoWeek(value: number): DateTime;
@@ -459,19 +595,41 @@ class DateTimeImpl implements DateTime {
         if (typeof value === 'number') {
             return this.set('isoWeek', value);
         }
-        return this._date.isoWeek();
+        return this.isValid() ? this.weekInfo().isoWeekNumber : NaN;
     }
-    weekday(): number {
-        // @ts-expect-error get locale object
-        const weekStart = this._date.$locale().weekStart || 0;
-        const day = this.day();
-        const weekday = (day < weekStart ? day + 7 : day) - weekStart;
-        return weekday;
+    weekday(): number;
+    weekday(value: number): DateTime;
+    weekday(value?: number): number | DateTime {
+        if (typeof value === 'number') {
+            return this.set('weekday', value);
+        }
+        return this.isValid() ? this.weekInfo().weekday : NaN;
+    }
+
+    dayOfYear(value: number): DateTime;
+    dayOfYear(): number;
+    dayOfYear(value?: number): number | DateTime {
+        if (typeof value === 'number') {
+            return this.set('dayOfYear', value);
+        }
+        return this.isValid() ? computeOrdinal(this._c) : NaN;
     }
 
     toString(): string {
-        return this._date.toString();
+        return this.toDate().toUTCString();
     }
+    /**
+     * Returns a string representation of this DateTime appropriate for the REPL.
+     * @return {string}
+     */
+    [Symbol.for('nodejs.util.inspect.custom')]() {
+        if (this.isValid()) {
+            return `DateTime { ts: ${this.toISOString()}, zone: ${this.timeZone()}, locale: ${this.locale()} }`;
+        } else {
+            return `DateTime { ${INVALID_DATE_STRING} }`;
+        }
+    }
+
     private addSubtract(amount: DurationInput, unit: DurationUnit | undefined, sign: 1 | -1) {
         if (!this.isValid()) {
             return this;
@@ -519,10 +677,22 @@ class DateTimeImpl implements DateTime {
             locale: this._locale,
         });
     }
+    private weekInfo() {
+        if (!this._weekInfo) {
+            const {startOfWeek, minDaysInFirstWeek} = getLocaleWeekValues(this._localeData);
+            this._weekInfo = gregorianToWeek(this._c, minDaysInFirstWeek, startOfWeek);
+        }
+        return this._weekInfo;
+    }
+}
+
+function getLocaleWeekValues(localeData: {yearStart?: number; weekStart?: number}) {
+    const {weekStart, yearStart} = localeData;
+    return {startOfWeek: weekStart || 7, minDaysInFirstWeek: yearStart || 1};
 }
 
 function absRound(v: number) {
-    const sign = v < 0 ? -1 : 1;
+    const sign = Math.sign(v);
     return Math.round(sign * v) * sign;
 }
 
@@ -537,35 +707,26 @@ function createDateTime({
     offset: number;
     locale: string;
 }): DateTime {
-    let date: dayjs.Dayjs;
-    if (timeZone === 'system') {
-        date = dayjs(ts, {locale});
-    } else {
-        let localOffset = timeZoneOffset('system', ts);
-        let newTs = ts;
-        if (offset !== 0 && localOffset !== offset) {
-            newTs += offset * 60 * 1000;
-            [newTs, localOffset] = fixOffset(newTs, localOffset, 'system');
-        }
-        date = dayjs(newTs, {
-            locale,
-            utc: offset === 0,
-            // @ts-expect-error private fields used by utc and timezone plugins
-            $offset: offset ? offset : undefined,
-            x: {$timezone: timeZone, $localOffset: -localOffset},
-        });
-    }
-
-    return new DateTimeImpl({ts, timeZone, offset, locale, date});
+    const loc = locale || 'en';
+    const localeData = dayjs.Ls[loc] as Locale;
+    const isValid = !isNaN(Number(new Date(ts)));
+    return new DateTimeImpl({ts, timeZone, offset, locale: loc, localeData, isValid});
 }
 
-function getTimestamp(input: DateTimeInput, format?: string, lang?: string) {
-    const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
-
+function getTimestamp(input: DateTimeInput, format?: string, lang?: string, utc = false) {
     let ts: number;
-    if (DateTimeImpl.isDateTime(input) || typeof input === 'number' || input instanceof Date) {
+    if (isDateTime(input) || typeof input === 'number' || input instanceof Date) {
         ts = Number(input);
+    } else if (input === null || input === undefined) {
+        ts = Date.now();
+    } else if (Array.isArray(input)) {
+        ts = getTimestampFromArray(input, utc);
+    } else if (typeof input === 'object') {
+        ts = getTimestampFromObject(input, utc);
+    } else if (utc) {
+        ts = dayjs.utc(input, format, STRICT).valueOf();
     } else {
+        const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
         const localDate = format
             ? dayjs(input, format, locale, STRICT)
             : dayjs(input, undefined, locale);
@@ -579,9 +740,9 @@ function getTimestamp(input: DateTimeInput, format?: string, lang?: string) {
  * Checks if value is DateTime.
  * @param {unknown} value - value to check.
  */
-export const isDateTime = (value: unknown): value is DateTime => {
+export function isDateTime(value: unknown): value is DateTime {
     return DateTimeImpl.isDateTime(value);
-};
+}
 
 /**
  * Creates a DateTime instance.
@@ -621,12 +782,7 @@ export function dateTimeUtc(opt?: {input?: DateTimeInput; format?: FormatInput; 
 
     const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
 
-    let ts: number;
-    if (DateTimeImpl.isDateTime(input) || typeof input === 'number' || input instanceof Date) {
-        ts = Number(input);
-    } else {
-        ts = dayjs.utc(input, format, STRICT).valueOf();
-    }
+    const ts = getTimestamp(input, format, lang, true);
 
     const date = createDateTime({
         ts,

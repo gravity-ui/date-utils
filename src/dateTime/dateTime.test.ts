@@ -214,7 +214,7 @@ describe('DateTime', () => {
         });
 
         it('should work with years >= 0 and < 100 ', () => {
-            const date = dateTime({input: '0001-01-12T00:00:00Z', timeZone: 'Europe/Amsterdam'});
+            let date = dateTime({input: '0001-01-12T00:00:00Z', timeZone: 'Europe/Amsterdam'});
             expect(date.toISOString()).toBe('0001-01-12T00:00:00.000Z');
             expect(date.startOf('s').toISOString()).toBe('0001-01-12T00:00:00.000Z');
             expect(date.startOf('s').valueOf()).toBe(date.valueOf());
@@ -226,6 +226,18 @@ describe('DateTime', () => {
 
             expect(date.isSame(date)).toBe(true);
             expect(date.valueOf()).toBe(date.startOf('ms').valueOf());
+
+            date = dateTime({input: '2023-01-01T00:00:00.000Z', timeZone: 'Europe/Moscow'});
+            const date2 = date.set('y', 2);
+            const date3 = date2.set({h: date2.hour(), m: date2.minute(), s: date2.second()});
+            expect(date3.toISOString()).toBe(date2.toISOString());
+
+            expect(
+                dateTime({
+                    input: '0002-01-01T00:00:00.000Z',
+                    timeZone: 'Europe/Moscow',
+                }).toISOString(),
+            ).toBe('0002-01-01T00:00:00.000Z');
         });
     });
 });
