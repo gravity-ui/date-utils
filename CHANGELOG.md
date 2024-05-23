@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.5.0](https://github.com/gravity-ui/date-utils/compare/v2.4.0...v2.5.0) (2024-05-23)
+
+
+### Features
+
+* **DateTime:** use own format and all dates math, remove unused dayjs plugins ([#62](https://github.com/gravity-ui/date-utils/issues/62)) ([72c210c](https://github.com/gravity-ui/date-utils/commit/72c210c34c94320190a0af01d5fc1f1987a6ae61))
+* **Duration:** add format method ([#60](https://github.com/gravity-ui/date-utils/issues/60)) ([aa0af56](https://github.com/gravity-ui/date-utils/commit/aa0af5689e837bdd8da6eca36b08c22609569092))
+
 ## [2.4.0](https://github.com/gravity-ui/date-utils/compare/v2.3.0...v2.4.0) (2024-04-24)
 
 
