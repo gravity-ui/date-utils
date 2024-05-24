@@ -28,6 +28,7 @@ import {
     tsToObject,
     uncomputeOrdinal,
     weekToGregorian,
+    weeksInWeekYear,
 } from '../utils';
 import type {DateObject} from '../utils';
 
@@ -85,8 +86,14 @@ class DateTimeImpl implements DateTime {
     }
 
     toISOString(keepOffset?: boolean): string {
+        if (!this.isValid()) {
+            // @ts-expect-error it's not a correct value, but moment returns it with the same typings, luxon also returns null, dayjs throws an error.
+            return null;
+        }
         if (keepOffset) {
-            return this.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
+            return new Date(this.valueOf() + this.utcOffset() * 60 * 1000)
+                .toISOString()
+                .replace('Z', this.format('Z'));
         }
         return this.toDate().toISOString();
     }
@@ -273,7 +280,7 @@ class DateTimeImpl implements DateTime {
     }
 
     isSame(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const ts = getTimestamp(input);
+        const [ts] = getTimestamp(input, 'system');
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
@@ -281,7 +288,7 @@ class DateTimeImpl implements DateTime {
     }
 
     isBefore(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const ts = getTimestamp(input);
+        const [ts] = getTimestamp(input, 'system');
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
@@ -291,7 +298,7 @@ class DateTimeImpl implements DateTime {
     }
 
     isAfter(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const ts = getTimestamp(input);
+        const [ts] = getTimestamp(input, 'system');
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
@@ -315,7 +322,7 @@ class DateTimeImpl implements DateTime {
         const value = DateTimeImpl.isDateTime(amount)
             ? amount.timeZone(this._timeZone)
             : createDateTime({
-                  ts: getTimestamp(amount),
+                  ts: getTimestamp(amount, 'system')[0],
                   timeZone: this._timeZone,
                   locale: this._locale,
                   offset: this._offset,
@@ -415,9 +422,11 @@ class DateTimeImpl implements DateTime {
         const settingWeekStuff =
             newComponents.day !== undefined ||
             newComponents.weekNumber !== undefined ||
+            newComponents.weekYear !== undefined ||
             newComponents.isoWeekNumber !== undefined ||
             newComponents.weekday !== undefined ||
-            newComponents.isoWeekday !== undefined;
+            newComponents.isoWeekday !== undefined ||
+            newComponents.isoWeekYear !== undefined;
 
         const containsDayOfYear = newComponents.dayOfYear !== undefined;
         const containsYear = newComponents.year !== undefined;
@@ -435,10 +444,15 @@ class DateTimeImpl implements DateTime {
 
         let mixed;
         if (settingWeekStuff) {
-            const {weekday, weekNumber, isoWeekday, isoWeekNumber, day} = newComponents;
-            const hasLocalWeekData = weekday !== undefined || weekNumber !== undefined;
+            const {weekday, weekNumber, weekYear, isoWeekday, isoWeekNumber, isoWeekYear, day} =
+                newComponents;
+            const hasLocalWeekData =
+                weekday !== undefined || weekNumber !== undefined || weekYear !== undefined;
             const hasIsoWeekData =
-                isoWeekday !== undefined || isoWeekNumber !== undefined || day !== undefined;
+                isoWeekday !== undefined ||
+                isoWeekNumber !== undefined ||
+                isoWeekYear !== undefined ||
+                day !== undefined;
             if (hasLocalWeekData && hasIsoWeekData) {
                 throw new Error("Can't mix local week with ISO week");
             }
@@ -448,7 +462,7 @@ class DateTimeImpl implements DateTime {
                 const weekData = {
                     weekday: (weekday ?? weekInfo.weekday) + 1,
                     weekNumber: weekNumber ?? weekInfo.weekNumber,
-                    weekYear: weekInfo.weekYear,
+                    weekYear: weekYear ?? weekInfo.weekYear,
                 };
                 mixed = {
                     ...dateComponents,
@@ -459,7 +473,7 @@ class DateTimeImpl implements DateTime {
                 const weekData = {
                     weekday: isoWeekday ?? (day === undefined ? weekInfo.isoWeekday : day || 7),
                     weekNumber: isoWeekNumber ?? weekInfo.isoWeekNumber,
-                    weekYear: weekInfo.isoWeekYear,
+                    weekYear: isoWeekYear ?? weekInfo.isoWeekYear,
                 };
                 mixed = {...dateComponents, ...newComponents, ...weekToGregorian(weekData, 4, 1)};
             }
@@ -589,6 +603,18 @@ class DateTimeImpl implements DateTime {
         }
         return this.isValid() ? this.weekInfo().weekNumber : NaN;
     }
+    weekYear(): number;
+    weekYear(value: number): DateTime;
+    weekYear(value?: unknown): number | DateTime {
+        if (typeof value === 'number') {
+            return this.set('weekYear', value);
+        }
+        return this.isValid() ? this.weekInfo().weekYear : NaN;
+    }
+    weeksInYear(): number {
+        const {minDaysInFirstWeek, startOfWeek} = getLocaleWeekValues(this._localeData);
+        return this.isValid() ? weeksInWeekYear(this.year(), minDaysInFirstWeek, startOfWeek) : NaN;
+    }
     isoWeek(): number;
     isoWeek(value: number): DateTime;
     isoWeek(value?: number): number | DateTime {
@@ -596,6 +622,17 @@ class DateTimeImpl implements DateTime {
             return this.set('isoWeek', value);
         }
         return this.isValid() ? this.weekInfo().isoWeekNumber : NaN;
+    }
+    isoWeekYear(): number;
+    isoWeekYear(value: number): DateTime;
+    isoWeekYear(value?: unknown): number | DateTime {
+        if (typeof value === 'number') {
+            return this.set('isoWeekYear', value);
+        }
+        return this.isValid() ? this.weekInfo().isoWeekYear : NaN;
+    }
+    isoWeeksInYear(): number {
+        return this.isValid() ? weeksInWeekYear(this.year(), 4, 1) : NaN;
     }
     weekday(): number;
     weekday(value: number): DateTime;
@@ -616,15 +653,20 @@ class DateTimeImpl implements DateTime {
     }
 
     toString(): string {
-        return this.toDate().toUTCString();
+        return this.isValid() ? this.toDate().toUTCString() : INVALID_DATE_STRING;
     }
+
+    toJSON(): string {
+        return this.toISOString();
+    }
+
     /**
      * Returns a string representation of this DateTime appropriate for the REPL.
      * @return {string}
      */
     [Symbol.for('nodejs.util.inspect.custom')]() {
         if (this.isValid()) {
-            return `DateTime { ts: ${this.toISOString()}, zone: ${this.timeZone()}, locale: ${this.locale()} }`;
+            return `DateTime { ts: ${this.toISOString()}, zone: ${this.timeZone()}, offset: ${this.utcOffset()}, locale: ${this.locale()} }`;
         } else {
             return `DateTime { ${INVALID_DATE_STRING} }`;
         }
@@ -713,16 +755,23 @@ function createDateTime({
     return new DateTimeImpl({ts, timeZone, offset, locale: loc, localeData, isValid});
 }
 
-function getTimestamp(input: DateTimeInput, format?: string, lang?: string, utc = false) {
+function getTimestamp(
+    input: DateTimeInput,
+    timezone: string,
+    format?: string,
+    lang?: string,
+    utc = false,
+): [ts: number, offset: number] {
     let ts: number;
+    let offset: number | undefined;
     if (isDateTime(input) || typeof input === 'number' || input instanceof Date) {
         ts = Number(input);
     } else if (input === null || input === undefined) {
         ts = Date.now();
     } else if (Array.isArray(input)) {
-        ts = getTimestampFromArray(input, utc);
+        [ts, offset] = getTimestampFromArray(input, timezone);
     } else if (typeof input === 'object') {
-        ts = getTimestampFromObject(input, utc);
+        [ts, offset] = getTimestampFromObject(input, timezone);
     } else if (utc) {
         ts = dayjs.utc(input, format, STRICT).valueOf();
     } else {
@@ -733,7 +782,9 @@ function getTimestamp(input: DateTimeInput, format?: string, lang?: string, utc 
 
         ts = localDate.valueOf();
     }
-    return ts;
+
+    offset = offset ?? timeZoneOffset(timezone, ts);
+    return [ts, offset];
 }
 
 /**
@@ -763,9 +814,7 @@ export function dateTime(opt?: {
     const timeZoneOrDefault = normalizeTimeZone(timeZone, settings.getDefaultTimeZone());
     const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
 
-    const ts = getTimestamp(input, format, lang);
-
-    const offset = timeZoneOffset(timeZoneOrDefault, ts);
+    const [ts, offset] = getTimestamp(input, timeZoneOrDefault, format, lang);
 
     const date = createDateTime({
         ts,
@@ -782,7 +831,7 @@ export function dateTimeUtc(opt?: {input?: DateTimeInput; format?: FormatInput; 
 
     const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
 
-    const ts = getTimestamp(input, format, lang, true);
+    const [ts] = getTimestamp(input, UtcTimeZone, format, lang, true);
 
     const date = createDateTime({
         ts,

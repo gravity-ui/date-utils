@@ -56,7 +56,7 @@ export function timeZoneOffset(zone: TimeZone, ts: number) {
     }
 
     if (zone === 'system') {
-        return -date.getTimezoneOffset();
+        return -date.getTimezoneOffset() || 0;
     }
 
     const dtf = getDateTimeFormat('en-US', {

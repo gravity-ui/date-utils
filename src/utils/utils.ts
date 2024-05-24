@@ -163,6 +163,8 @@ const normalizedUnits = {
     dayOfYear: 'dayOfYear',
     dayOfYears: 'dayOfYear',
     DDD: 'dayOfYear',
+    weekyear: 'weekYear',
+    isoweekyear: 'isoWeekYear',
 } as const;
 
 export function normalizeComponent(component: string) {

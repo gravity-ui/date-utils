@@ -8,5 +8,5 @@ export {parse as defaultRelativeParse, isLikeRelative as defaultIsLikeRelative} 
 export {dateTimeParse, isValid, isLikeRelative} from './parser';
 export {getTimeZonesList, guessUserTimeZone, isValidTimeZone, timeZoneOffset} from './timeZone';
 export type {DateTime, DateTimeInput, Duration, DurationInput} from './typings';
-export {UtcTimeZone} from './constants';
+export {UtcTimeZone, HTML5_INPUT_FORMATS} from './constants';
 export {duration, isDuration} from './duration';
