@@ -123,7 +123,7 @@ test('toISOString', () => {
 
     //invalid dates
     date = dateTimeUtc({input: '2017-12-32k'});
-    expect(date.toISOString()).toBe(null); // 'An invalid date to iso string is null'
+    expect(() => date.toISOString()).toThrow(); // 'An invalid date to iso string is null'
 });
 
 test('toISOString without UTC conversion', () => {
@@ -143,7 +143,7 @@ test('toISOString without UTC conversion', () => {
 
     //invalid dates
     date = dateTimeUtc({input: '2017-12-32k'}).utcOffset('+05:30');
-    expect(date.toISOString(true)).toBe(null); // 'An invalid date to iso string is null'
+    expect(() => date.toISOString(true)).toThrow(); // 'An invalid date to iso string is null'
 });
 
 test('long years', () => {

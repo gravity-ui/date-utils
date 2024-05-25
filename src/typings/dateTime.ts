@@ -79,7 +79,7 @@ export interface DateTime {
     endOf(unitOfTime: StartOfUnit): DateTime;
     toDate(): Date;
     toISOString(keepOffset?: boolean): string;
-    toJSON(): string;
+    toJSON(): string | null;
     valueOf(): number;
     unix(): number;
     utc(keepLocalTime?: boolean): DateTime;

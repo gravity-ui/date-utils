@@ -86,10 +86,7 @@ class DateTimeImpl implements DateTime {
     }
 
     toISOString(keepOffset?: boolean): string {
-        if (!this.isValid()) {
-            // @ts-expect-error it's not a correct value, but moment returns it with the same typings, luxon also returns null, dayjs throws an error.
-            return null;
-        }
+        // invalid date throws an error
         if (keepOffset) {
             return new Date(this.valueOf() + this.utcOffset() * 60 * 1000)
                 .toISOString()
@@ -137,6 +134,10 @@ class DateTimeImpl implements DateTime {
     timeZone(timeZone?: string, keepLocalTime?: boolean | undefined): DateTime | string {
         if (timeZone === undefined) {
             return this._timeZone === 'system' ? guessUserTimeZone() : this._timeZone;
+        }
+
+        if (!this.isValid()) {
+            return this;
         }
 
         const zone = normalizeTimeZone(timeZone, settings.getDefaultTimeZone());
@@ -276,7 +277,7 @@ class DateTimeImpl implements DateTime {
     }
 
     valueOf(): number {
-        return this._timestamp;
+        return this.isValid() ? this._timestamp : NaN;
     }
 
     isSame(input?: DateTimeInput, granularity?: DurationUnit): boolean {
@@ -378,7 +379,7 @@ class DateTimeImpl implements DateTime {
     }
     from(formaInput: DateTimeInput, withoutSuffix?: boolean): string {
         if (!this.isValid()) {
-            return INVALID_DATE_STRING;
+            return this._localeData.invalidDate || INVALID_DATE_STRING;
         }
         return fromTo(this, formaInput, this._localeData.relativeTime, withoutSuffix, true);
     }
@@ -387,6 +388,9 @@ class DateTimeImpl implements DateTime {
     locale(locale?: string): DateTime | string {
         if (!locale) {
             return this._locale;
+        }
+        if (!this.isValid()) {
+            return this;
         }
         return createDateTime({
             ts: this.valueOf(),
@@ -399,13 +403,13 @@ class DateTimeImpl implements DateTime {
         return new Date(this.valueOf());
     }
     unix(): number {
-        return Math.floor(this.valueOf() / 1000);
+        return this.isValid() ? Math.floor(this.valueOf() / 1000) : NaN;
     }
     utc(keepLocalTime?: boolean | undefined): DateTime {
         return this.timeZone(UtcTimeZone, keepLocalTime);
     }
     daysInMonth(): number {
-        return daysInMonth(this._c.year, this._c.month);
+        return this.isValid() ? daysInMonth(this._c.year, this._c.month) : NaN;
     }
 
     // eslint-disable-next-line complexity
@@ -653,11 +657,13 @@ class DateTimeImpl implements DateTime {
     }
 
     toString(): string {
-        return this.isValid() ? this.toDate().toUTCString() : INVALID_DATE_STRING;
+        return this.isValid()
+            ? this.toDate().toUTCString()
+            : this._localeData.invalidDate || INVALID_DATE_STRING;
     }
 
-    toJSON(): string {
-        return this.toISOString();
+    toJSON(): string | null {
+        return this.isValid() ? this.toISOString() : null;
     }
 
     /**
