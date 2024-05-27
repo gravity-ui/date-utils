@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.2](https://github.com/gravity-ui/date-utils/compare/v2.5.1...v2.5.2) (2024-05-27)
+
+
+### Bug Fixes
+
+* **DateTime:** add missing formats and show ordinal values without brackets ([#66](https://github.com/gravity-ui/date-utils/issues/66)) ([dd9d942](https://github.com/gravity-ui/date-utils/commit/dd9d9429a831e05bf35892f558b3e1a443ecd6e7))
+
 ## [2.5.1](https://github.com/gravity-ui/date-utils/compare/v2.5.0...v2.5.1) (2024-05-23)
 
 
