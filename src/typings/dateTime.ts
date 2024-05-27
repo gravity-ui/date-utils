@@ -52,7 +52,9 @@ export type AllUnit =
     | 'E'
     | 'dayOfYear'
     | 'dayOfYears'
-    | 'DDD';
+    | 'DDD'
+    | 'weekYear'
+    | 'isoWeekYear';
 
 export type InputObject = Partial<Record<BaseUnit | DateUnit, number>>;
 export type SetObject = Partial<Record<AllUnit, number | string>>;
@@ -77,6 +79,7 @@ export interface DateTime {
     endOf(unitOfTime: StartOfUnit): DateTime;
     toDate(): Date;
     toISOString(keepOffset?: boolean): string;
+    toJSON(): string | null;
     valueOf(): number;
     unix(): number;
     utc(keepLocalTime?: boolean): DateTime;
@@ -102,10 +105,22 @@ export interface DateTime {
     week(): number;
     /** Sets the week of the year according to the locale. */
     week(value: number): DateTime;
+    /** Gets the week-year according to the locale. */
+    weekYear(): number;
+    /** Sets the week-year according to the locale. */
+    weekYear(value: number): DateTime;
+    /** Gets the number of weeks in the year according to locale */
+    weeksInYear(): number;
     /** Gets the ISO week of the year. First week is the week with the first Thursday of the year (i.e. of January) in it.*/
     isoWeek(): number;
     /** Sets the ISO week of the year. */
     isoWeek(value: number): DateTime;
+    /** Gets the ISO week-year. */
+    isoWeekYear(): number;
+    /** Sets the ISO week-year. */
+    isoWeekYear(value: number): DateTime;
+    /** Gets the number of weeks in the year, according to ISO weeks. */
+    isoWeeksInYear(): number;
     /** Gets the day of the year. */
     dayOfYear(): number;
     /** Sets the day of the year. */

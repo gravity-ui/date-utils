@@ -40,7 +40,7 @@ export function expandFormat(
 export const FORMAT_DEFAULT = 'YYYY-MM-DDTHH:mm:ssZ';
 
 const formattingTokens =
-    /(\[[^[]*\])|([Hh]mm(ss)?|Mo|M{1,4}|Do|DDDo|D{1,4}|d{2,4}|do?|w[o|w]?|W[o|W]?|Qo?|N{1,5}|YYYYYY|YYYYY|YYYY|YY|y{2,4}|yo?|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
+    /(\[[^[]*\])|([Hh]mm(ss)?|Mo|M{1,4}|Do|DDDo|D{1,4}|d{2,4}|do?|w[o|w]?|W[o|W]?|Qo?|N{1,5}|Y{4,6}|YY?|y{2,4}|yo?|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
 
 const formatTokenFunctions: Record<
     string,
@@ -57,9 +57,18 @@ export function formatDate(
         if (formatTokenFunctions[match]) {
             return formatTokenFunctions[match](date, locale, expandedFormat);
         }
-        return match.replace(/^\[|\]$/g, '');
+        return removeFormattingTokens(match);
     });
 }
+
+function removeFormattingTokens(input: string) {
+    return input.replace(/^\[([\s\S)]*)\]$/g, '$1');
+}
+
+formatTokenFunctions['Y'] = (date) => {
+    const y = date.year();
+    return y <= 9999 ? zeroPad(y, 4) : '+' + y;
+};
 
 formatTokenFunctions['YY'] = (date) => {
     const y = date.year();
@@ -85,7 +94,8 @@ formatTokenFunctions['MM'] = (date) => {
 };
 
 formatTokenFunctions['Mo'] = (date, locale) => {
-    return `${locale.ordinal?.(date.month() + 1, 'M')}`;
+    // dayjs locales ordinal method returns value inside brackets '[' ']'
+    return removeFormattingTokens(`${locale.ordinal?.(date.month() + 1, 'M')}`);
 };
 
 formatTokenFunctions['MMM'] = (date, locale, format) => {
@@ -119,7 +129,8 @@ formatTokenFunctions['ww'] = (date) => {
 };
 
 formatTokenFunctions['wo'] = (date, locale) => {
-    return `${locale.ordinal?.(date.week(), 'w')}`;
+    // dayjs locales ordinal method returns value inside brackets '[' ']'
+    return removeFormattingTokens(`${locale.ordinal?.(date.week(), 'w')}`);
 };
 
 formatTokenFunctions['W'] = (date) => {
@@ -131,7 +142,8 @@ formatTokenFunctions['WW'] = (date) => {
 };
 
 formatTokenFunctions['Wo'] = (date, locale) => {
-    return `${locale.ordinal?.(date.isoWeek(), 'W')}`;
+    // dayjs locales ordinal method returns value inside brackets '[' ']'
+    return removeFormattingTokens(`${locale.ordinal?.(date.isoWeek(), 'W')}`);
 };
 
 formatTokenFunctions['d'] = (date) => {
@@ -139,7 +151,8 @@ formatTokenFunctions['d'] = (date) => {
 };
 
 formatTokenFunctions['do'] = (date, locale) => {
-    return `${locale.ordinal?.(date.day(), 'd')}`;
+    // dayjs locales ordinal method returns value inside brackets '[' ']'
+    return removeFormattingTokens(`${locale.ordinal?.(date.day(), 'd')}`);
 };
 
 formatTokenFunctions['dd'] = (date, locale, format) => {
@@ -274,7 +287,8 @@ formatTokenFunctions['Q'] = (date) => {
 };
 
 formatTokenFunctions['Qo'] = (date, locale) => {
-    return `${locale.ordinal?.(date.quarter(), 'Q')}`;
+    // dayjs locales ordinal method returns value inside brackets '[' ']'
+    return removeFormattingTokens(`${locale.ordinal?.(date.quarter(), 'Q')}`);
 };
 
 formatTokenFunctions['D'] = (date) => {
@@ -286,7 +300,8 @@ formatTokenFunctions['DD'] = (date) => {
 };
 
 formatTokenFunctions['Do'] = (date, locale) => {
-    return `${locale.ordinal?.(date.date(), 'D')}`;
+    // dayjs locales ordinal method returns value inside brackets '[' ']'
+    return removeFormattingTokens(`${locale.ordinal?.(date.date(), 'D')}`);
 };
 
 formatTokenFunctions['m'] = (date) => {
@@ -378,7 +393,32 @@ formatTokenFunctions['DDDD'] = (date) => {
 };
 
 formatTokenFunctions['DDDo'] = (date, locale) => {
-    return `${locale.ordinal?.(date.dayOfYear(), 'DDD')}`;
+    // dayjs locales ordinal method returns value inside brackets '[' ']'
+    return removeFormattingTokens(`${locale.ordinal?.(date.dayOfYear(), 'DDD')}`);
+};
+
+formatTokenFunctions['gg'] = (date) => {
+    return zeroPad(date.weekYear() % 100, 2);
+};
+
+formatTokenFunctions['gggg'] = (date) => {
+    return zeroPad(date.weekYear(), 4);
+};
+
+formatTokenFunctions['ggggg'] = (date) => {
+    return zeroPad(date.weekYear(), 5);
+};
+
+formatTokenFunctions['GG'] = (date) => {
+    return zeroPad(date.isoWeekYear() % 100, 2);
+};
+
+formatTokenFunctions['GGGG'] = (date) => {
+    return zeroPad(date.isoWeekYear(), 4);
+};
+
+formatTokenFunctions['GGGGG'] = (date) => {
+    return zeroPad(date.isoWeekYear(), 5);
 };
 
 function getShort({

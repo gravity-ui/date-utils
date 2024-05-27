@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 type LocaleLoader = () => Promise<typeof import('dayjs/locale/*.js')>;
 
 export const localeLoaders: Record<string, LocaleLoader> = {

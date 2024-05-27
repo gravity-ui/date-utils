@@ -1,64 +1,53 @@
+import {fixOffset, timeZoneOffset} from '../timeZone';
 import type {InputObject} from '../typings';
-import {normalizeComponent, normalizeDateComponents} from '../utils';
+import {normalizeComponent, normalizeDateComponents, objToTS, tsToObject} from '../utils';
+import type {DateObject} from '../utils';
 
-export function getTimestampFromArray(input: (number | string)[], utc = false) {
+export function getTimestampFromArray(input: (number | string)[], timezone: string) {
     if (input.length === 0) {
-        return Date.now();
+        return getTimestampFromObject({}, timezone);
     }
 
     const dateParts = input.map(Number);
-    let date: Date;
-    const [year, month = 0, day = 1, hours = 0, minutes = 0, seconds = 0, milliseconds = 0] =
+    const [year, month = 0, date = 1, hour = 0, minute = 0, second = 0, millisecond = 0] =
         dateParts;
-    if (utc) {
-        date = new Date(Date.UTC(year, month, day, hours, minutes, seconds, milliseconds));
-    } else {
-        date = new Date(year, month, day, hours, minutes, seconds, milliseconds);
-    }
 
-    if (year >= 0 && year < 100) {
-        if (utc) {
-            date.setUTCFullYear(year, month, day);
-        } else {
-            date.setFullYear(year, month, day);
-        }
-    }
-
-    return date.valueOf();
+    return getTimestampFromObject({year, month, date, hour, minute, second, millisecond}, timezone);
 }
 
-export function getTimestampFromObject(input: InputObject, utc = false) {
-    if (Object.keys(input).length === 0) {
-        return Date.now();
-    }
+const defaultUnitValues = {
+    year: 1,
+    month: 1,
+    date: 1,
+    hour: 0,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+} as const;
+const orderedUnits = ['year', 'month', 'date', 'hour', 'minute', 'second', 'millisecond'] as const;
+
+export function getTimestampFromObject(
+    input: InputObject,
+    timezone: string,
+): [ts: number, offset: number] {
     const normalized = normalizeDateComponents(input, normalizeComponent);
-    normalized.day = normalized.day ?? normalized.date;
-    const hasYear = normalized.year !== undefined;
-    const hasMonth = normalized.month !== undefined;
-    const hasDate = normalized.date !== undefined;
+    normalized.date = normalized.day ?? normalized.date;
 
-    const now = new Date(Date.now());
-    const year = normalized.year ?? utc ? now.getUTCFullYear() : now.getFullYear();
-    let month = normalized.month;
-    if (month === undefined) {
-        if (!hasYear && !hasDate) {
-            month = utc ? now.getUTCMonth() : now.getMonth();
+    const objNow = tsToObject(Date.now(), timeZoneOffset(timezone, Date.now()));
+    let foundFirst = false;
+    for (const unit of orderedUnits) {
+        if (normalized[unit] !== undefined) {
+            foundFirst = true;
+        } else if (foundFirst) {
+            normalized[unit] = defaultUnitValues[unit];
         } else {
-            month = 0;
+            normalized[unit] = objNow[unit];
         }
     }
-    let day = normalized.day;
-    if (day === undefined) {
-        if (!hasYear && !hasMonth) {
-            day = utc ? now.getUTCDate() : now.getDate();
-        } else {
-            day = 1;
-        }
-    }
-    const hours = normalized.hour ?? 0;
-    const minutes = normalized.minute ?? 0;
-    const seconds = normalized.second ?? 0;
-    const milliseconds = normalized.millisecond ?? 0;
-
-    return getTimestampFromArray([year, month, day, hours, minutes, seconds, milliseconds], utc);
+    const [ts, offset] = fixOffset(
+        objToTS(normalized as DateObject),
+        timeZoneOffset(timezone, Date.now()),
+        timezone,
+    );
+    return [ts, offset];
 }
