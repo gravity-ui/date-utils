@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.3](https://github.com/gravity-ui/date-utils/compare/v2.5.2...v2.5.3) (2024-06-10)
+
+
+### Bug Fixes
+
+* **missing type:** added export for DurationUnit type ([#68](https://github.com/gravity-ui/date-utils/issues/68)) ([75bdaef](https://github.com/gravity-ui/date-utils/commit/75bdaef8b0d19270b4bddc42c4e5e27c18f22d9c))
+
 ## [2.5.2](https://github.com/gravity-ui/date-utils/compare/v2.5.1...v2.5.2) (2024-05-27)
 
 
