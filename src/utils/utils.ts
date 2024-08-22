@@ -249,6 +249,12 @@ export function uncomputeOrdinal({year, ordinal}: {year: number; ordinal: number
     return {month, date: day};
 }
 
+export function gregorianToOrdinal(gregData: {year: number; month: number; date: number}) {
+    const {year, month, date} = gregData;
+    const ordinal = computeOrdinal({year, month, date});
+    return {year, ordinal};
+}
+
 export function isoWeekdayToLocal(isoWeekday: number, startOfWeek: number) {
     return ((isoWeekday - startOfWeek + 7) % 7) + 1;
 }
