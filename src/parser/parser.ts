@@ -46,7 +46,7 @@ export const dateTimeParse: DateTimeParser<DateTimeOptionsWhenParsing> = (
     input,
     options,
 ): DateTime | undefined => {
-    if (!input) {
+    if (input === undefined) {
         return undefined;
     }
 
