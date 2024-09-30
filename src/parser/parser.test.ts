@@ -54,6 +54,11 @@ describe('Parser', () => {
         expect(Boolean(date)).toEqual(false);
     });
 
+    it('should return DateTime in case of 0 input arg', () => {
+        const date = dateTimeParse(0)?.toISOString();
+        expect(date).toEqual('1970-01-01T00:00:00.000Z');
+    });
+
     test.each<[string | undefined, string]>([
         ['ru', '07 авг. 2021'],
         ['en', '07 Aug 2021'],
