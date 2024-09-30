@@ -1,3 +1,6 @@
+import dayjs from '../dayjs';
+import type {Locale} from '../settings/types';
+
 const dateTimeFormatCache = new Map<string, Intl.DateTimeFormat>();
 export function getDateTimeFormat(locale: string, options: Intl.DateTimeFormatOptions = {}) {
     const key = JSON.stringify([locale, options]);
@@ -32,4 +35,12 @@ export function getNumberFormat(locale: string, options: Intl.NumberFormatOption
         numberFormatCache.set(key, numberFormat);
     }
     return numberFormat;
+}
+
+export function getLocaleData(locale: string) {
+    const localeData = dayjs.Ls[locale];
+    if (!localeData) {
+        throw new Error(`Locale ${locale} is not loaded`);
+    }
+    return localeData as Locale;
 }

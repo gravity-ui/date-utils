@@ -1,7 +1,5 @@
 import type {Locale, RelativeTime} from '../settings/types';
-import type {BaseUnit, DateTime, DateTimeInput} from '../typings';
-
-import {dateTime} from './dateTime';
+import type {BaseUnit, Duration} from '../typings';
 
 export interface RelativeTimeThreshold {
     l: Exclude<keyof RelativeTime, 'future' | 'past'>;
@@ -40,19 +38,18 @@ const relObj = {
 } satisfies RelativeTime;
 
 export function fromTo(
-    date: DateTime,
-    input: DateTimeInput,
+    duration: Duration,
     loc: Locale['relativeTime'] = relObj,
     withoutSuffix = false,
-    isFrom = true,
 ): string {
     let result = 0;
     let isFuture;
     let out = '';
+
     for (let i = 0; i < thresholds.length; i += 1) {
         let t = thresholds[i];
         if (t.d) {
-            result = isFrom ? date.diff(input, t.d, true) : dateTime({input}).diff(date, t.d, true);
+            result = duration.as(t.d);
         }
         const abs = Math.round(Math.abs(result));
         isFuture = result > 0;
