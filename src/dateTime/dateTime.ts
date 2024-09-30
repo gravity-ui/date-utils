@@ -377,11 +377,49 @@ class DateTimeImpl implements DateTime {
     fromNow(withoutSuffix?: boolean | undefined): string {
         return this.from(dateTime({timeZone: this._timeZone, lang: this._locale}), withoutSuffix);
     }
-    from(formaInput: DateTimeInput, withoutSuffix?: boolean): string {
+    from(fromInput: DateTimeInput, withoutSuffix?: boolean): string {
         if (!this.isValid()) {
             return this._localeData.invalidDate || INVALID_DATE_STRING;
         }
-        return fromTo(this, formaInput, this._localeData.relativeTime, withoutSuffix, true);
+
+        const value = DateTimeImpl.isDateTime(fromInput)
+            ? fromInput.timeZone(this._timeZone)
+            : createDateTime({
+                  ts: getTimestamp(fromInput, 'system', this._locale)[0],
+                  timeZone: this._timeZone,
+                  locale: this._locale,
+                  offset: this._offset,
+              });
+
+        if (!value.isValid()) {
+            return this._localeData.invalidDate || INVALID_DATE_STRING;
+        }
+
+        let a = value;
+        let b: DateTime = this;
+        let switched = false;
+        if (b.isBefore(a)) {
+            a = this;
+            b = value;
+            switched = true;
+        }
+
+        let months = b.month() - a.month() + (b.year() - a.year()) * 12;
+        if (a.add(months, 'months').isAfter(b)) {
+            months--;
+        }
+        let milliseconds = b.valueOf() - a.add(months, 'months').valueOf();
+
+        if (switched) {
+            months = -months;
+            milliseconds = -milliseconds;
+        }
+
+        return fromTo(
+            duration({months, milliseconds}),
+            this._localeData.relativeTime,
+            withoutSuffix,
+        );
     }
     locale(): string;
     locale(locale: string): DateTime;

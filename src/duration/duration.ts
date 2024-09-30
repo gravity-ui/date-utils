@@ -1,7 +1,7 @@
 // Copyright 2019 JS Foundation and other contributors
 // Copyright 2024 YANDEX LLC
 
-import {dateTimeUtc} from '../dateTime';
+import {fromTo} from '../dateTime/relative';
 import {settings} from '../settings';
 import type {
     Duration,
@@ -11,7 +11,7 @@ import type {
     FormatOptions,
 } from '../typings';
 import {normalizeDateComponents, normalizeDurationUnit} from '../utils';
-import {getListFormat, getNumberFormat} from '../utils/locale';
+import {getListFormat, getLocaleData, getNumberFormat} from '../utils/locale';
 
 import {createDuration} from './createDuration';
 import {normalizeValues, orderedUnits, rescale, shiftTo} from './normalize';
@@ -294,8 +294,8 @@ export class DurationImpl implements Duration {
         if (!this.isValid()) {
             return 'Invalid Duration';
         }
-        const now = dateTimeUtc({lang: this._locale});
-        return now.add(this.valueOf(), 'ms').from(now, !withSuffix);
+        const localeData = getLocaleData(this._locale);
+        return fromTo(this, localeData.relativeTime, !withSuffix);
     }
 
     humanizeIntl(
