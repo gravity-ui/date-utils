@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.5.4](https://github.com/gravity-ui/date-utils/compare/v2.5.3...v2.5.4) (2024-09-30)
+
+
+### Bug Fixes
+
+* **dateTime:** calculate ralative time via duration ([#75](https://github.com/gravity-ui/date-utils/issues/75)) ([8b8d132](https://github.com/gravity-ui/date-utils/commit/8b8d1325d82e3b498523beba536484b6501f856a))
+* **dateTimeParse:** parse 0 as valid dateTime ([#74](https://github.com/gravity-ui/date-utils/issues/74)) ([8df988e](https://github.com/gravity-ui/date-utils/commit/8df988e39248d0a3a4411cfcf50261f5045da1be))
+
 ## [2.5.3](https://github.com/gravity-ui/date-utils/compare/v2.5.2...v2.5.3) (2024-06-10)
 
 
