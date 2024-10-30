@@ -782,6 +782,29 @@ function absRound(v: number) {
     return Math.round(sign * v) * sign;
 }
 
+function valueOf(o: unknown): number {
+    if (o === null || o === undefined) {
+        return NaN;
+    }
+
+    if (typeof o === 'string') {
+        return NaN;
+    }
+
+    if (typeof o === 'number' || typeof o === 'bigint') {
+        return Number(o);
+    }
+
+    if (typeof o === 'object') {
+        const v = o.valueOf();
+        if (typeof v === 'number' || typeof v === 'bigint') {
+            return Number(v);
+        }
+    }
+
+    return NaN;
+}
+
 function createDateTime({
     ts,
     timeZone,
@@ -808,7 +831,12 @@ function getTimestamp(
 ): [ts: number, offset: number] {
     let ts: number;
     let offset: number | undefined;
-    if (isDateTime(input) || typeof input === 'number' || input instanceof Date) {
+    if (
+        isDateTime(input) ||
+        typeof input === 'number' ||
+        input instanceof Date ||
+        !isNaN(valueOf(input))
+    ) {
         ts = Number(input);
     } else if (input === null || input === undefined) {
         ts = Date.now();
