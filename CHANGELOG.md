@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.5.5](https://github.com/gravity-ui/date-utils/compare/v2.5.4...v2.5.5) (2024-10-30)
+
+
+### Bug Fixes
+
+* DateTimeImpl  should work with any instances of type DateTime ([#79](https://github.com/gravity-ui/date-utils/issues/79)) ([b552c5f](https://github.com/gravity-ui/date-utils/commit/b552c5fe470a017332f8c17d4b17e820ec999fba))
+* isValid should not throw ([#78](https://github.com/gravity-ui/date-utils/issues/78)) ([f819783](https://github.com/gravity-ui/date-utils/commit/f8197836e46960d3a8800192cf13575b373afd77))
+
 ## [2.5.4](https://github.com/gravity-ui/date-utils/compare/v2.5.3...v2.5.4) (2024-09-30)
 
 
