@@ -25,9 +25,12 @@ const parseInput: DateTimeParser<DateTimeOptionsWhenParsing> = (
     }
 
     const {format, lang} = options || {};
-    const date = dateTime({input, format, lang, timeZone: options?.timeZone});
-
-    return date.isValid() ? date : undefined;
+    try {
+        const date = dateTime({input, format, lang, timeZone: options?.timeZone});
+        return date.isValid() ? date : undefined;
+    } catch {
+        return undefined;
+    }
 };
 
 /**
@@ -61,15 +64,19 @@ export const dateTimeParse: DateTimeParser<DateTimeOptionsWhenParsing> = (
  * @param value value to parse.
  */
 export function isValid(value?: string | DateTime): boolean {
-    if (isDateTime(value)) {
-        return value.isValid();
-    }
+    try {
+        if (isDateTime(value)) {
+            return value.isValid();
+        }
 
-    const date = dateTimeParse(value, {allowRelative: true});
+        const date = dateTimeParse(value, {allowRelative: true});
 
-    if (!date) {
+        if (!date) {
+            return false;
+        }
+
+        return date.isValid();
+    } catch {
         return false;
     }
-
-    return date.isValid();
 }

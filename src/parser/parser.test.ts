@@ -104,8 +104,10 @@ describe('custom parser', () => {
 });
 
 describe('isValid', () => {
-    it('should return false when invalid date text', () => {
+    it('should return false on invalid input', () => {
         expect(isValid('asd')).toBe(false);
+        // @ts-expect-error
+        expect(isValid({invalid: true})).toBe(false);
     });
     it('should return true when valid date text', () => {
         expect(isValid('now-1h')).toBe(true);
