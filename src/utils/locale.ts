@@ -44,3 +44,8 @@ export function getLocaleData(locale: string) {
     }
     return localeData as Locale;
 }
+
+export function getLocaleWeekValues(localeData: {yearStart?: number; weekStart?: number}) {
+    const {weekStart, yearStart} = localeData;
+    return {startOfWeek: weekStart || 7, minDaysInFirstWeek: yearStart || 1};
+}

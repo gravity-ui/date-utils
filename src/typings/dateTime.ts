@@ -56,7 +56,21 @@ export type AllUnit =
     | 'weekYear'
     | 'isoWeekYear';
 
-export type InputObject = Partial<Record<BaseUnit | DateUnit, number>>;
+export type InputObject = Partial<
+    Record<
+        | BaseUnit
+        | DateUnit
+        | WeekUnit
+        | 'weekday'
+        | 'weekdays'
+        | 'e'
+        | 'dayOfYear'
+        | 'dayOfYears'
+        | 'DDD'
+        | 'weekYear',
+        number
+    >
+>;
 export type SetObject = Partial<Record<AllUnit, number | string>>;
 
 export interface DateTime {

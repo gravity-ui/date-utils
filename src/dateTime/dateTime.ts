@@ -31,9 +31,11 @@ import {
     weeksInWeekYear,
 } from '../utils';
 import type {DateObject} from '../utils';
+import {getLocaleData, getLocaleWeekValues} from '../utils/locale';
 
 import {formatDate} from './format';
 import {getTimestampFromArray, getTimestampFromObject} from './parse';
+import {parseDateString} from './regexParse';
 import {fromTo} from './relative';
 
 const IS_DATE_TIME = Symbol('isDateTime');
@@ -281,7 +283,7 @@ class DateTimeImpl implements DateTime {
     }
 
     isSame(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const [ts] = getTimestamp(input, 'system');
+        const [ts] = getTimestamp(input, 'system', this._locale);
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
@@ -289,7 +291,7 @@ class DateTimeImpl implements DateTime {
     }
 
     isBefore(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const [ts] = getTimestamp(input, 'system');
+        const [ts] = getTimestamp(input, 'system', this._locale);
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
@@ -299,7 +301,7 @@ class DateTimeImpl implements DateTime {
     }
 
     isAfter(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const [ts] = getTimestamp(input, 'system');
+        const [ts] = getTimestamp(input, 'system', this._locale);
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
@@ -323,7 +325,7 @@ class DateTimeImpl implements DateTime {
         const value = DateTimeImpl.isDateTime(amount)
             ? amount.timeZone(this._timeZone)
             : createDateTime({
-                  ts: getTimestamp(amount, 'system')[0],
+                  ts: getTimestamp(amount, 'system', this._locale)[0],
                   timeZone: this._timeZone,
                   locale: this._locale,
                   offset: this._offset,
@@ -772,11 +774,6 @@ class DateTimeImpl implements DateTime {
     }
 }
 
-function getLocaleWeekValues(localeData: {yearStart?: number; weekStart?: number}) {
-    const {weekStart, yearStart} = localeData;
-    return {startOfWeek: weekStart || 7, minDaysInFirstWeek: yearStart || 1};
-}
-
 function absRound(v: number) {
     const sign = Math.sign(v);
     return Math.round(sign * v) * sign;
@@ -817,20 +814,27 @@ function createDateTime({
     locale: string;
 }): DateTime {
     const loc = locale || 'en';
-    const localeData = dayjs.Ls[loc] as Locale;
+    const localeData = getLocaleData(loc);
     const isValid = !isNaN(Number(new Date(ts)));
-    return new DateTimeImpl({ts, timeZone, offset, locale: loc, localeData, isValid});
+    return new DateTimeImpl({
+        ts,
+        timeZone,
+        offset,
+        locale: loc,
+        localeData,
+        isValid,
+    });
 }
 
 function getTimestamp(
     input: DateTimeInput,
     timezone: string,
+    locale: string,
     format?: string,
-    lang?: string,
-    utc = false,
+    fixedOffset?: number,
 ): [ts: number, offset: number] {
     let ts: number;
-    let offset: number | undefined;
+    let offset = fixedOffset;
     if (
         isDateTime(input) ||
         typeof input === 'number' ||
@@ -841,18 +845,35 @@ function getTimestamp(
     } else if (input === null || input === undefined) {
         ts = Date.now();
     } else if (Array.isArray(input)) {
-        [ts, offset] = getTimestampFromArray(input, timezone);
+        [ts, offset] = getTimestampFromArray(input, timezone, fixedOffset);
     } else if (typeof input === 'object') {
-        [ts, offset] = getTimestampFromObject(input, timezone);
-    } else if (utc) {
-        ts = dayjs.utc(input, format, STRICT).valueOf();
-    } else {
-        const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
+        [ts, offset] = getTimestampFromObject(input, timezone, fixedOffset);
+    } else if (format === undefined) {
+        const [dateObject, timezoneOrOffset] = parseDateString(input);
+        if (Object.keys(dateObject).length === 0) {
+            return [NaN, NaN];
+        }
+        [ts] = getTimestampFromObject(
+            dateObject,
+            typeof timezoneOrOffset === 'string' ? timezoneOrOffset : 'system',
+            typeof timezoneOrOffset === 'number' ? timezoneOrOffset : fixedOffset,
+        );
+        if (
+            fixedOffset !== undefined &&
+            timezoneOrOffset !== null &&
+            timezoneOrOffset !== fixedOffset
+        ) {
+            ts -= fixedOffset * 60 * 1000;
+        }
+    } else if (fixedOffset === undefined) {
         const localDate = format
             ? dayjs(input, format, locale, STRICT)
             : dayjs(input, undefined, locale);
 
         ts = localDate.valueOf();
+    } else {
+        ts = dayjs.utc(input, format, STRICT).valueOf();
+        ts -= fixedOffset * 60 * 1000;
     }
 
     offset = offset ?? timeZoneOffset(timezone, ts);
@@ -886,7 +907,7 @@ export function dateTime(opt?: {
     const timeZoneOrDefault = normalizeTimeZone(timeZone, settings.getDefaultTimeZone());
     const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
 
-    const [ts, offset] = getTimestamp(input, timeZoneOrDefault, format, lang);
+    const [ts, offset] = getTimestamp(input, timeZoneOrDefault, locale, format);
 
     const date = createDateTime({
         ts,
@@ -898,17 +919,30 @@ export function dateTime(opt?: {
     return date;
 }
 
-export function dateTimeUtc(opt?: {input?: DateTimeInput; format?: FormatInput; lang?: string}) {
-    const {input, format, lang} = opt || {};
+/**
+ * Creates a DateTime instance with fixed offset.
+ * @param [opt]
+ * @param {DateTimeInput=} [opt.input] - input to parse.
+ * @param {string=} [opt.format] - strict {@link https://dayjs.gitee.io/docs/en/display/format format} for parsing user's input.
+ * @param {number=} [opt.offset=0] - specified offset.
+ * @param {string=} [opt.lang] - specified locale.
+ */
+export function dateTimeUtc(opt?: {
+    input?: DateTimeInput;
+    format?: FormatInput;
+    lang?: string;
+    offset?: number;
+}): DateTime {
+    const {input, format, lang, offset = 0} = opt || {};
 
     const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
 
-    const [ts] = getTimestamp(input, UtcTimeZone, format, lang, true);
+    const [ts] = getTimestamp(input, UtcTimeZone, locale, format, offset);
 
     const date = createDateTime({
         ts,
         timeZone: UtcTimeZone,
-        offset: 0,
+        offset,
         locale,
     });
 
