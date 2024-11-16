@@ -81,6 +81,8 @@ const orderedOrdinalUnits = [
     'millisecond',
 ] as const;
 
+type NormalizedInput = Partial<Record<ReturnType<typeof normalizeComponent>, number>>;
+
 export function getTimestampFromObject(
     input: InputObject,
     timezone: string,
@@ -177,11 +179,14 @@ interface WeekData {
     weekday: number;
 }
 function isValidWeekData(
-    weekData: any,
+    weekData: NormalizedInput,
     minDaysInFirstWeek = 4,
     startOfWeek = 1,
 ): weekData is WeekData {
     return (
+        weekData.weekYear !== undefined &&
+        weekData.weekNumber !== undefined &&
+        weekData.weekday !== undefined &&
         Number.isInteger(weekData.weekYear) &&
         Number.isInteger(weekData.weekNumber) &&
         weekData.weekNumber >= 1 &&
@@ -198,8 +203,10 @@ interface OrdinalData {
     dayOfYear: number;
 }
 
-function isValidOrdinalData(ordinalData: any): ordinalData is OrdinalData {
+function isValidOrdinalData(ordinalData: NormalizedInput): ordinalData is OrdinalData {
     return (
+        ordinalData.year !== undefined &&
+        ordinalData.dayOfYear !== undefined &&
         Number.isInteger(ordinalData.year) &&
         Number.isInteger(ordinalData.dayOfYear) &&
         ordinalData.dayOfYear >= 1 &&
@@ -213,8 +220,11 @@ interface DateData {
     date: number;
 }
 
-function isValidDateData(dateData: any): dateData is DateData {
+function isValidDateData(dateData: NormalizedInput): dateData is DateData {
     return (
+        dateData.year !== undefined &&
+        dateData.month !== undefined &&
+        dateData.date !== undefined &&
         Number.isInteger(dateData.year) &&
         Number.isInteger(dateData.month) &&
         dateData.month >= 0 &&
@@ -232,8 +242,12 @@ interface TimeData {
     millisecond: number;
 }
 
-function isValidTimeData(timeData: any): timeData is TimeData {
+function isValidTimeData(timeData: NormalizedInput): timeData is TimeData {
     return (
+        timeData.hour !== undefined &&
+        timeData.minute !== undefined &&
+        timeData.second !== undefined &&
+        timeData.millisecond !== undefined &&
         Number.isInteger(timeData.hour) &&
         Number.isInteger(timeData.minute) &&
         Number.isInteger(timeData.second) &&

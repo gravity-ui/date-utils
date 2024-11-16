@@ -194,7 +194,7 @@ function extractISOWeekData(match: RegExpExecArray, cursor: number): PartialResu
 function extractISOOrdinalData(match: RegExpExecArray, cursor: number): PartialResult {
     const item = {
         year: parseInteger(match[cursor]),
-        ordinal: parseInteger(match[cursor + 1], 1),
+        dayOfYear: parseInteger(match[cursor + 1], 1),
     };
 
     return [item, null, cursor + 2];
@@ -298,7 +298,10 @@ function stringsToDateObject(
     secondStr: string | undefined,
 ) {
     const res: ExtractedDateObject = {
-        year: yearStr.length === 2 ? parseInteger(yearStr) : parseInteger(yearStr),
+        year:
+            yearStr.length === 2
+                ? fullYearFromTwoDigitYear(parseInteger(yearStr))
+                : parseInteger(yearStr),
         month:
             monthStr.length > 3
                 ? English.monthsLong.indexOf(monthStr)
@@ -317,6 +320,14 @@ function stringsToDateObject(
     }
 
     return res;
+}
+function fullYearFromTwoDigitYear(year: number | undefined) {
+    if (!year || year > 99) {
+        return year;
+    }
+
+    // TODO: add two digit cutoff year to settings
+    return year > 49 ? 1900 + year : 2000 + year;
 }
 
 export function parseISODate(s: string) {
