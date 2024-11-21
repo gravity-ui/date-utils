@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.6](https://github.com/gravity-ui/date-utils/compare/v2.5.5...v2.5.6) (2024-11-21)
+
+
+### Bug Fixes
+
+* **expandFormat:** use short localized format from formats object ([#82](https://github.com/gravity-ui/date-utils/issues/82)) ([4df8e6e](https://github.com/gravity-ui/date-utils/commit/4df8e6ea086aa910f0c42d139e7e301c474ae1fe))
+
 ## [2.5.5](https://github.com/gravity-ui/date-utils/compare/v2.5.4...v2.5.5) (2024-10-30)
 
 
