@@ -4,37 +4,44 @@ import type {Locale, LongDateFormat} from '../settings/types';
 import {parseZoneInfo} from '../timeZone';
 import type {DateTime} from '../typings';
 
-function getShortLocalizedFormatFromLongLocalizedFormat(formatBis: string) {
-    return formatBis.replace(
+function getShortLocalizedFormatFromLongLocalizedFormat(format: string) {
+    return format.replace(
         /(\[[^\]]+])|(MMMM|MM|DD|dddd)/g,
         (_: string, escapeSequence: string, localizedFormat: string) =>
             escapeSequence || localizedFormat.slice(1),
     );
 }
 
+const localizedFormattingTokens = /(\[[^\]]*])|(LTS?|l{1,4}|L{1,4})/g;
 export function expandFormat(
     format: string,
     formats: LongDateFormat = settings.getLocaleData().formats ?? englishFormats,
 ) {
-    return format.replace(
-        /(\[[^\]]*])|(LTS?|l{1,4}|L{1,4})/g,
-        (_: string, escapeSequence: string, localizedFormat: keyof LongDateFormat) => {
-            if (localizedFormat) {
-                if (localizedFormat in englishFormats) {
+    let result = format;
+    for (let i = 0; i < 5; i++) {
+        const expandedFormat = result.replace(
+            localizedFormattingTokens,
+            (_: string, escapeSequence: string, localizedFormat: keyof LongDateFormat) => {
+                if (localizedFormat) {
+                    const LongLocalizedFormat =
+                        localizedFormat.toUpperCase() as keyof typeof englishFormats;
                     return (
                         formats[localizedFormat] ||
-                        englishFormats[localizedFormat as keyof typeof englishFormats]
+                        englishFormats[localizedFormat as keyof typeof englishFormats] ||
+                        getShortLocalizedFormatFromLongLocalizedFormat(
+                            formats[LongLocalizedFormat] || englishFormats[LongLocalizedFormat],
+                        )
                     );
                 }
-                const LongLocalizedFormat =
-                    localizedFormat.toUpperCase() as keyof typeof englishFormats;
-                return getShortLocalizedFormatFromLongLocalizedFormat(
-                    formats[LongLocalizedFormat] || englishFormats[LongLocalizedFormat],
-                );
-            }
-            return escapeSequence;
-        },
-    );
+                return escapeSequence;
+            },
+        );
+        if (expandedFormat === result) {
+            break;
+        }
+        result = expandedFormat;
+    }
+    return result;
 }
 
 export const FORMAT_DEFAULT = 'YYYY-MM-DDTHH:mm:ssZ';
