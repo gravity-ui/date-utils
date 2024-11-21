@@ -1,6 +1,7 @@
-import {HTML5_INPUT_FORMATS} from '../../constants';
+import {HTML5_INPUT_FORMATS, englishFormats} from '../../constants';
 import {settings} from '../../settings';
 import {dateTime, dateTimeUtc} from '../dateTime';
+import {expandFormat} from '../format';
 
 afterEach(() => {
     settings.updateLocale({weekStart: 1, yearStart: 1});
@@ -341,4 +342,28 @@ test('Y token', () => {
     expect(dateTime({input: [1]}).format('Y')).toBe('0001'); // 'format 1 with Y'
     expect(dateTime({input: [9999]}).format('Y')).toBe('9999'); // 'format 9999 with Y'
     expect(dateTime({input: [10000]}).format('Y')).toBe('+10000'); // 'format 10000 with Y'
+});
+
+test('expand format', () => {
+    expect(expandFormat('[L]', englishFormats)).toBe('[L]');
+    expect(expandFormat('L', englishFormats)).toBe(englishFormats.L);
+    expect(expandFormat('LL', englishFormats)).toBe(englishFormats.LL);
+    expect(expandFormat('LLL', englishFormats)).toBe(englishFormats.LLL);
+    expect(expandFormat('LLLL', englishFormats)).toBe(englishFormats.LLLL);
+    expect(expandFormat('LT', englishFormats)).toBe(englishFormats.LT);
+    expect(expandFormat('LTS', englishFormats)).toBe(englishFormats.LTS);
+    expect(expandFormat('[L]L', englishFormats)).toBe(`[L]${englishFormats.L}`);
+    expect(expandFormat('[L]T', englishFormats)).toBe(`[L]T`);
+    expect(expandFormat('l', englishFormats)).toBe('M/D/YYYY');
+    expect(expandFormat('ll', englishFormats)).toBe('MMM D, YYYY');
+    expect(expandFormat('lll', englishFormats)).toBe('MMM D, YYYY h:mm A');
+    expect(expandFormat('llll', englishFormats)).toBe('ddd, MMM D, YYYY h:mm A');
+    expect(expandFormat('l', {...englishFormats, l: 'short format'})).toBe('short format');
+    expect(expandFormat('ll', {...englishFormats, ll: 'short format'})).toBe('short format');
+    expect(expandFormat('lll', {...englishFormats, lll: 'short format'})).toBe('short format');
+    expect(expandFormat('llll', {...englishFormats, llll: 'short format'})).toBe('short format');
+    expect(expandFormat('llll', {...englishFormats, l: 'L', ll: 'l', lll: 'll', llll: 'lll'})).toBe(
+        englishFormats.L,
+    );
+    expect(expandFormat('l', {...englishFormats, l: 'l'})).toBe('l');
 });
