@@ -160,9 +160,9 @@ const normalizedUnits = {
     weekday: 'weekday',
     weekdays: 'weekday',
     e: 'weekday',
-    dayOfYear: 'dayOfYear',
-    dayOfYears: 'dayOfYear',
-    DDD: 'dayOfYear',
+    dayofyear: 'dayOfYear',
+    dayofyears: 'dayOfYear',
+    ddd: 'dayOfYear',
     weekyear: 'weekYear',
     isoweekyear: 'isoWeekYear',
 } as const;
@@ -243,10 +243,20 @@ export function computeOrdinal({year, month, date}: {year: number; month: number
 }
 
 export function uncomputeOrdinal({year, ordinal}: {year: number; ordinal: number}) {
-    const table = isLeapYear(year) ? leapLadder : nonLeapLadder,
-        month = table.findIndex((i) => i < ordinal),
-        day = ordinal - table[month];
-    return {month, date: day};
+    const table = isLeapYear(year) ? leapLadder : nonLeapLadder;
+    for (let i = table.length; i > 0; i--) {
+        const month = i - 1;
+        if (table[month] < ordinal) {
+            return {month, date: ordinal - table[month]};
+        }
+    }
+    return {month: 0, date: ordinal};
+}
+
+export function gregorianToOrdinal(gregData: {year: number; month: number; date: number}) {
+    const {year, month, date} = gregData;
+    const ordinal = computeOrdinal({year, month, date});
+    return {year, ordinal};
 }
 
 export function isoWeekdayToLocal(isoWeekday: number, startOfWeek: number) {
