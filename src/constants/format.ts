@@ -1,14 +1,14 @@
-import type {LongDateFormat} from '../settings/types';
+import type {LongDateFormat} from '../locale/types';
 
 export const DEFAULT_SYSTEM_DATE_FORMAT = 'YYYY-MM-DD';
 export const INVALID_DATE_STRING = 'Invalid Date';
 export const englishFormats = {
-    LTS: 'h:mm:ss A',
-    LT: 'h:mm A',
+    LTS: 'h:mm:ss a',
+    LT: 'h:mm a',
     L: 'MM/DD/YYYY',
     LL: 'MMMM D, YYYY',
-    LLL: 'MMMM D, YYYY h:mm A',
-    LLLL: 'dddd, MMMM D, YYYY h:mm A',
+    LLL: 'MMMM D, YYYY h:mm a',
+    LLLL: 'dddd, MMMM D, YYYY h:mm a',
 } as const satisfies LongDateFormat;
 
 export const HTML5_INPUT_FORMATS = {

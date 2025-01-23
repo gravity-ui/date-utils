@@ -1,3 +1,5 @@
+import '../locale/ru';
+
 import {dateTime, guessUserTimeZone} from './index';
 import type {DateTime} from './index';
 
@@ -60,7 +62,7 @@ describe('Public API', () => {
         expect(date.locale('ru').format('LTS')).toBe('0:00:00');
     });
 
-    it('timezones abbrevations are suported', () => {
+    it('timezones abbreviations are supported', () => {
         const dateWithTimezone = dateTime({input: '2000-02-02', timeZone: 'Europe/London'}).locale(
             'en',
         );

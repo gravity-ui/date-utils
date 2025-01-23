@@ -1,3 +1,4 @@
+import {settings} from '..';
 import type {DateTime} from '../typings';
 
 export type CompareStringsOptions = {
@@ -388,4 +389,26 @@ export function monthDiff(a: DateTime, b: DateTime): number {
 
     //check for negative zero, return zero if negative zero
     return -(wholeMonthDiff + adjust) || 0;
+}
+
+export function fullYearFromTwoDigitYear<T extends number | undefined>(year: T) {
+    if (!year || year > 99) {
+        return year;
+    }
+    return year > settings.getTwoDigitCutoffYear() ? 1900 + year : 2000 + year;
+}
+
+export function parseMilliseconds(str: string | undefined | null) {
+    return str === null || str === undefined
+        ? undefined
+        : Math.floor(parseFloat(`0.${str}`) * 1000);
+}
+
+export function signedOffset(offsetHours: string, offsetMinutes: string) {
+    const hours = parseInt(offsetHours, 10);
+    const sign = hours < 0 || Object.is(hours, -0) ? -1 : 1;
+    const minutes = parseInt(offsetMinutes, 10) || 0;
+    const offset = (hours || 0) * 60 + sign * minutes;
+
+    return offset;
 }

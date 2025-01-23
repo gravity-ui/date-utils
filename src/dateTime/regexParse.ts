@@ -3,9 +3,11 @@
 
 import {UtcTimeZone} from '../constants';
 import * as English from '../locale/english';
+import {fullYearFromTwoDigitYear, parseMilliseconds, signedOffset} from '../utils';
 import type {DateObject} from '../utils';
 
 interface ExtractedDateObject extends Partial<DateObject> {
+    dayOfYear?: number;
     weekYear?: number;
     weekNumber?: number;
     weekday?: number;
@@ -275,19 +277,6 @@ function parseInteger(str: string | undefined | null, defaultValue?: number) {
     return str ? parseInt(str, 10) : defaultValue;
 }
 
-function parseMilliseconds(str: string | undefined | null) {
-    return str ? Math.floor(parseFloat(`0.${str}`) * 1000) : undefined;
-}
-
-function signedOffset(offsetHours: string, offsetMinutes: string) {
-    const hours = parseInt(offsetHours, 10);
-    const sign = hours < 0 || Object.is(hours, -0) ? -1 : 1;
-    const minutes = parseInt(offsetMinutes, 10) || 0;
-    const offset = (hours || 0) * 60 + sign * minutes;
-
-    return offset;
-}
-
 function stringsToDateObject(
     weekdayStr: string | undefined,
     yearStr: string,
@@ -320,14 +309,6 @@ function stringsToDateObject(
     }
 
     return res;
-}
-function fullYearFromTwoDigitYear(year: number | undefined) {
-    if (!year || year > 99) {
-        return year;
-    }
-
-    // TODO: add two digit cutoff year to settings
-    return year > 49 ? 1900 + year : 2000 + year;
 }
 
 export function parseISODate(s: string) {

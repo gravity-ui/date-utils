@@ -1,4 +1,4 @@
-import type {Locale, RelativeTime} from '../settings/types';
+import type {RelativeTime} from '../locale/types';
 import type {BaseUnit, Duration} from '../typings';
 
 export interface RelativeTimeThreshold {
@@ -39,7 +39,7 @@ const relObj = {
 
 export function fromTo(
     duration: Duration,
-    loc: Locale['relativeTime'] = relObj,
+    loc: RelativeTime = relObj,
     withoutSuffix = false,
 ): string {
     let result = 0;
@@ -59,6 +59,7 @@ export function fromTo(
             if (typeof format === 'string') {
                 out = format.replace('%d', `${abs}`);
             } else {
+                // @ts-expect-error
                 out = format(abs, withoutSuffix, t.l, isFuture);
             }
             break;

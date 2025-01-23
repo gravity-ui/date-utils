@@ -2,12 +2,12 @@ import {settings} from '../../settings';
 import {dateTime} from '../dateTime';
 
 afterEach(() => {
-    settings.updateLocale({weekStart: 1, yearStart: 1});
+    settings.setDefaultWeekSettings(null);
 });
 
 test('iso weekday', () => {
     for (let i = 0; i < 7; ++i) {
-        settings.updateLocale({weekStart: i, yearStart: 1 + i});
+        settings.setDefaultWeekSettings({firstDay: i + 1, minimalDays: 1 + i, weekend: [6, 7]});
         expect(dateTime({input: [1985, 1, 4]}).isoWeekday()).toBe(1); //   'Feb  4 1985 is Monday    -- 1st day'
         expect(dateTime({input: [2029, 8, 18]}).isoWeekday()).toBe(2); //  'Sep 18 2029 is Tuesday   -- 2nd day'
         expect(dateTime({input: [2013, 3, 24]}).isoWeekday()).toBe(3); //  'Apr 24 2013 is Wednesday -- 3rd day'
@@ -54,7 +54,7 @@ test('iso weekday setter', () => {
 });
 
 test('weekday first day of week Sunday', () => {
-    settings.updateLocale({weekStart: 0, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 7, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [1985, 1, 3]}).weekday()).toBe(0); // 'Feb  3 1985 is Sunday    -- 0th day'
     expect(dateTime({input: [2029, 8, 17]}).weekday()).toBe(1); // 'Sep 17 2029 is Monday    -- 1st day'
     expect(dateTime({input: [2013, 3, 23]}).weekday()).toBe(2); // 'Apr 23 2013 is Tuesday   -- 2nd day'
@@ -65,7 +65,7 @@ test('weekday first day of week Sunday', () => {
 });
 
 test('weekday first day of week Monday', () => {
-    settings.updateLocale({weekStart: 1, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 1, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [1985, 1, 4]}).weekday()).toBe(0); // 'Feb  4 1985 is Monday    -- 0th day'
     expect(dateTime({input: [2029, 8, 18]}).weekday()).toBe(1); // 'Sep 18 2029 is Tuesday   -- 1st day'
     expect(dateTime({input: [2013, 3, 24]}).weekday()).toBe(2); // 'Apr 24 2013 is Wednesday -- 2nd day'
@@ -76,7 +76,7 @@ test('weekday first day of week Monday', () => {
 });
 
 test('weekday first day of week Tuesday', () => {
-    settings.updateLocale({weekStart: 2, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 2, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [1985, 1, 5]}).weekday()).toBe(0); // 'Feb  5 1985 is Tuesday   -- 0th day'
     expect(dateTime({input: [2029, 8, 19]}).weekday()).toBe(1); // 'Sep 19 2029 is Wednesday -- 1st day'
     expect(dateTime({input: [2013, 3, 25]}).weekday()).toBe(2); // 'Apr 25 2013 is Thursday  -- 2nd day'
@@ -87,7 +87,7 @@ test('weekday first day of week Tuesday', () => {
 });
 
 test('weekday first day of week Wednesday', () => {
-    settings.updateLocale({weekStart: 3, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 3, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [1985, 1, 6]}).weekday()).toBe(0); // 'Feb  6 1985 is Wednesday -- 0th day'
     expect(dateTime({input: [2029, 8, 20]}).weekday()).toBe(1); // 'Sep 20 2029 is Thursday  -- 1st day'
     expect(dateTime({input: [2013, 3, 26]}).weekday()).toBe(2); // 'Apr 26 2013 is Friday    -- 2nd day'
@@ -98,7 +98,7 @@ test('weekday first day of week Wednesday', () => {
 });
 
 test('weekday first day of week Thursday', () => {
-    settings.updateLocale({weekStart: 4, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 4, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [1985, 1, 7]}).weekday()).toBe(0); // 'Feb  7 1985 is Thursday  -- 0th day'
     expect(dateTime({input: [2029, 8, 21]}).weekday()).toBe(1); // 'Sep 21 2029 is Friday    -- 1st day'
     expect(dateTime({input: [2013, 3, 27]}).weekday()).toBe(2); // 'Apr 27 2013 is Saturday  -- 2nd day'
@@ -109,7 +109,7 @@ test('weekday first day of week Thursday', () => {
 });
 
 test('weekday first day of week Friday', () => {
-    settings.updateLocale({weekStart: 5, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 5, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [1985, 1, 8]}).weekday()).toBe(0); // 'Feb  8 1985 is Friday    -- 0th day'
     expect(dateTime({input: [2029, 8, 22]}).weekday()).toBe(1); // 'Sep 22 2029 is Saturday  -- 1st day'
     expect(dateTime({input: [2013, 3, 28]}).weekday()).toBe(2); // 'Apr 28 2013 is Sunday    -- 2nd day'
@@ -120,7 +120,7 @@ test('weekday first day of week Friday', () => {
 });
 
 test('weekday first day of week Saturday', () => {
-    settings.updateLocale({weekStart: 6, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 6, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [1985, 1, 9]}).weekday()).toBe(0); // 'Feb  9 1985 is Saturday  -- 0th day'
     expect(dateTime({input: [2029, 8, 23]}).weekday()).toBe(1); // 'Sep 23 2029 is Sunday    -- 1st day'
     expect(dateTime({input: [2013, 3, 29]}).weekday()).toBe(2); // 'Apr 29 2013 is Monday    -- 2nd day'

@@ -2,7 +2,7 @@
 // Copyright 2024 YANDEX LLC
 
 import {duration} from '..';
-import {settings} from '../../settings';
+import '../../../locale/ru';
 
 const dur = () =>
     duration({
@@ -173,7 +173,6 @@ test('Duration#humanize with suffix', () => {
 });
 
 test('Duration#humanize ru language', async () => {
-    await settings.loadLocale('ru');
     expect(duration({seconds: 44}, {lang: 'ru'}).humanize(true)).toBe('через несколько секунд');
     expect(duration({seconds: -44}, {lang: 'ru'}).humanize(true)).toBe('несколько секунд назад');
     expect(duration({seconds: +44}, {lang: 'ru'}).humanize(true)).toBe('через несколько секунд');
@@ -296,6 +295,5 @@ test('Duration#format rounds down', () => {
 });
 
 test('Duration#format localizes the numbers', async () => {
-    await settings.loadLocale('bn');
     expect(dur().locale('bn').format('yy:MM:dd:h:mm:ss.SSS')).toBe('০১:০২:১০:৪:০৫:০৬.০০৭');
 });

@@ -1,6 +1,6 @@
 import {UtcTimeZone} from '../constants';
+import {getDateTimeFormat} from '../locale/cache';
 import type {TimeZone} from '../typings';
-import {getDateTimeFormat} from '../utils/locale';
 
 /**
  * Returns the user's time zone.
@@ -11,8 +11,6 @@ export const guessUserTimeZone = () => Intl.DateTimeFormat().resolvedOptions().t
 /**
  * Returns all time zones.
  */
-// remove when Intl definition is extended
-// @ts-expect-error https://github.com/microsoft/TypeScript/issues/49231
 export const getTimeZonesList = (): string[] => Intl.supportedValuesOf?.('timeZone') || [];
 
 const validTimeZones: Record<TimeZone, boolean> = {};

@@ -2,7 +2,9 @@
 // Copyright 2024 YANDEX LLC
 
 import {fromTo} from '../dateTime/relative';
-import {settings} from '../settings';
+import {getListFormat, getNumberFormat} from '../locale/cache';
+import {LocaleImpl} from '../locale/locale';
+import type {Locale} from '../locale/types';
 import type {
     Duration,
     DurationInput,
@@ -11,7 +13,6 @@ import type {
     FormatOptions,
 } from '../typings';
 import {normalizeDateComponents, normalizeDurationUnit} from '../utils';
-import {getListFormat, getLocaleData, getNumberFormat} from '../utils/locale';
 
 import {createDuration} from './createDuration';
 import {normalizeValues, orderedUnits, rescale, shiftTo} from './normalize';
@@ -29,12 +30,12 @@ export class DurationImpl implements Duration {
 
     [IS_DURATION] = true;
     private _values: DurationValues;
-    private _locale: string;
+    private _locale: Locale;
     private _isValid: boolean;
 
     constructor(options: {values: DurationValues; locale?: string; isValid?: boolean}) {
         this._values = options.values;
-        this._locale = options.locale || settings.getLocale();
+        this._locale = new LocaleImpl(options.locale);
         this._isValid = options.isValid || true;
     }
 
@@ -55,7 +56,7 @@ export class DurationImpl implements Duration {
             ...this._values,
             ...normalizeDateComponents(values, normalizeDurationUnit),
         };
-        return new DurationImpl({values: newValues, locale: this._locale});
+        return new DurationImpl({values: newValues, locale: this._locale.locale});
     }
 
     as(unit: DurationUnit): number {
@@ -171,7 +172,7 @@ export class DurationImpl implements Duration {
             newValues[k] = (newValues[k] || 0) + value;
         }
 
-        return new DurationImpl({values: newValues, locale: this._locale});
+        return new DurationImpl({values: newValues, locale: this._locale.locale});
     }
 
     subtract(amount: DurationInput, unit?: DurationUnit | undefined): Duration {
@@ -185,7 +186,7 @@ export class DurationImpl implements Duration {
             values[key as keyof DurationValues] = value ? -value : 0;
         }
 
-        return new DurationImpl({values, locale: this._locale});
+        return new DurationImpl({values, locale: this._locale.locale});
     }
 
     normalize(options?: {roundUp?: boolean}): Duration {
@@ -194,7 +195,7 @@ export class DurationImpl implements Duration {
         }
         return new DurationImpl({
             values: normalizeValues(this._values, options),
-            locale: this._locale,
+            locale: this._locale.locale,
         });
     }
 
@@ -205,7 +206,7 @@ export class DurationImpl implements Duration {
         const normalizedUnits = units.map((u) => normalizeDurationUnit(u));
         return new DurationImpl({
             values: shiftTo(this._values, normalizedUnits, options),
-            locale: this._locale,
+            locale: this._locale.locale,
         });
     }
 
@@ -215,7 +216,7 @@ export class DurationImpl implements Duration {
         }
         return new DurationImpl({
             values: rescale(this._values, options),
-            locale: this._locale,
+            locale: this._locale.locale,
         });
     }
 
@@ -294,8 +295,7 @@ export class DurationImpl implements Duration {
         if (!this.isValid()) {
             return 'Invalid Duration';
         }
-        const localeData = getLocaleData(this._locale);
-        return fromTo(this, localeData.relativeTime, !withSuffix);
+        return fromTo(this, this._locale.relativeTime, !withSuffix);
     }
 
     humanizeIntl(
@@ -313,7 +313,7 @@ export class DurationImpl implements Duration {
                 if (val === undefined) {
                     return null;
                 }
-                return getNumberFormat(this._locale, {
+                return getNumberFormat(this._locale.locale, {
                     style: 'unit',
                     unitDisplay: 'long',
                     ...options,
@@ -322,7 +322,7 @@ export class DurationImpl implements Duration {
             })
             .filter(Boolean) as string[];
 
-        return getListFormat(this._locale, {
+        return getListFormat(this._locale.locale, {
             type: 'conjunction',
             style: options.listStyle || 'narrow',
         }).format(l);
@@ -366,7 +366,7 @@ export class DurationImpl implements Duration {
                 const val = dur.get(token.unit);
 
                 if (useIntlFormatter) {
-                    const formatter = getNumberFormat(this._locale, {
+                    const formatter = getNumberFormat(this._locale.locale, {
                         useGrouping: false,
                         ...other,
                         minimumIntegerDigits: token.padTo,
@@ -392,7 +392,7 @@ export class DurationImpl implements Duration {
     locale(locale: string): Duration;
     locale(locale?: string): string | Duration {
         if (!locale) {
-            return this._locale;
+            return this._locale.locale;
         }
         return new DurationImpl({values: this._values, locale});
     }

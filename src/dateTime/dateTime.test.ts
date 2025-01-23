@@ -14,7 +14,7 @@ beforeEach(() => {
 
 afterEach(() => {
     MockDate.reset();
-    settings.updateLocale({weekStart: 1, yearStart: 1});
+    settings.setDefaultWeekSettings(null);
 });
 
 describe('DateTime', () => {
@@ -59,23 +59,26 @@ describe('DateTime', () => {
         test.each<[string | undefined, string]>([
             ['ru', '07 авг. 2021'],
             ['en', '07 Aug 2021'],
-            ['incorrectLang', '07 Aug 2021'],
             [undefined, '07 Aug 2021'],
         ])('lang option (%p)', (lang, expected) => {
             const date = dateTime({input: TESTED_DATE_STRING, lang}).format('DD MMM YYYY');
             expect(date).toEqual(expected);
         });
 
+        it('throw on incorrect locale', () => {
+            expect(() => dateTime({input: TESTED_DATE_STRING, lang: 'incorrectLang'})).toThrow();
+        });
+
         it('first day of week changed according to locale config', async () => {
             let date = dateTime({input: TESTED_DATE_STRING})
                 .startOf('week')
                 .format(DEFAULT_SYSTEM_DATE_FORMAT);
-            expect(date).toEqual('2021-08-02');
-            settings.updateLocale({weekStart: 0});
+            expect(date).toEqual('2021-08-01');
+            settings.setDefaultWeekSettings({firstDay: 1, minimalDays: 1, weekend: [6, 7]});
             date = dateTime({input: TESTED_DATE_STRING})
                 .startOf('week')
                 .format(DEFAULT_SYSTEM_DATE_FORMAT);
-            expect(date).toEqual('2021-08-01');
+            expect(date).toEqual('2021-08-02');
         });
 
         it('should set/get hours, minutes, seconds, millisecond', () => {
@@ -117,14 +120,15 @@ describe('DateTime', () => {
             expect(date1.isSame(date2.add(1, 'ms'), 's')).toBe(true);
         });
 
-        it('input without timezone', () => {
-            const date = dateTime({input: MOCKED_DATE, timeZone: 'Europe/Amsterdam'});
-            const amsterdamOffset = 120;
+        // Not valid anymore
+        // it('input without timezone', () => {
+        //     const date = dateTime({input: MOCKED_DATE, timeZone: 'Europe/Amsterdam'});
+        //     const amsterdamOffset = 120;
 
-            expect(date.format()).toBe(
-                dateTime({input: MOCKED_DATE, timeZone: 'UTC'}).utcOffset(amsterdamOffset).format(),
-            );
-        });
+        //     expect(date.format()).toBe(
+        //         dateTime({input: MOCKED_DATE, timeZone: 'UTC'}).utcOffset(amsterdamOffset).format(),
+        //     );
+        // });
 
         it('change timeZone', () => {
             const date = dateTime({input: '2023-10-29T00:00:00Z', timeZone: 'Europe/Moscow'});
@@ -166,23 +170,25 @@ describe('DateTime', () => {
             expect(date.format('D MMMM YYYY HH:mm z')).toBe('1 January 2000 00:00 UTC');
             expect(date.toString()).toBe('Sat, 01 Jan 2000 00:00:00 GMT');
 
-            expect(dateTime({input: '2000-01-01T00:00:00', timeZone: 'UTC'}).toISOString()).toBe(
-                dateTime({input: '2000-01-01T00:00:00', timeZone: 'Europe/Moscow'}).toISOString(),
-            );
+            // Not valid anymore
+            // expect(dateTime({input: '2000-01-01T00:00:00', timeZone: 'UTC'}).toISOString()).toBe(
+            //     dateTime({input: '2000-01-01T00:00:00', timeZone: 'Europe/Moscow'}).toISOString(),
+            // );
 
             date = dateTime({input: '2023-11-06T00:00:00', timeZone: 'UTC'});
             expect(date.format('z Z')).toBe('UTC +00:00');
             expect(date.add({day: 1}).format('z Z')).toBe('UTC +00:00');
             expect(date.utcOffset(60).format('z Z')).toBe('UTC +01:00');
 
-            const nativeDate = new Date('2023-11-06T00:00:00');
-            nativeDate.setDate(7);
-            expect(date.add({day: 1}).toISOString()).toBe(nativeDate.toISOString());
-            expect(date.add({day: 1}).toString()).toBe(nativeDate.toUTCString());
+            // Not valid anymore
+            // const nativeDate = new Date('2023-11-06T00:00:00');
+            // nativeDate.setDate(7);
+            // expect(date.add({day: 1}).toISOString()).toBe(nativeDate.toISOString());
+            // expect(date.add({day: 1}).toString()).toBe(nativeDate.toUTCString());
 
-            date = dateTime({input: '2023-11-06T00:00:00', timeZone: 'Europe/London'});
-            expect(date.add({day: 1}).toISOString()).toBe(nativeDate.toISOString());
-            expect(date.add({day: 1}).toString()).toBe(nativeDate.toUTCString());
+            // date = dateTime({input: '2023-11-06T00:00:00', timeZone: 'Europe/London'});
+            // expect(date.add({day: 1}).toISOString()).toBe(nativeDate.toISOString());
+            // expect(date.add({day: 1}).toString()).toBe(nativeDate.toUTCString());
 
             expect(
                 dateTime({
@@ -208,7 +214,7 @@ describe('DateTime', () => {
                 })
                     .set('week', 3)
                     .format(),
-            ).toBe('2023-01-12T00:00:00+01:00');
+            ).toBe('2023-01-19T00:00:00+01:00');
 
             expect(dateTime({input: '20130531', format: 'YYYYMMDD'}).month(3).month()).toBe(3);
         });

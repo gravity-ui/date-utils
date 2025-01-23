@@ -1,10 +1,10 @@
-import {HTML5_INPUT_FORMATS, englishFormats} from '../../constants';
+import {HTML5_INPUT_FORMATS, UtcTimeZone, englishFormats} from '../../constants';
 import {settings} from '../../settings';
-import {dateTime, dateTimeUtc} from '../dateTime';
+import {dateTime} from '../dateTime';
 import {expandFormat} from '../format';
 
 afterEach(() => {
-    settings.updateLocale({weekStart: 1, yearStart: 1});
+    settings.setDefaultWeekSettings(null);
 });
 
 test('format using constants', () => {
@@ -41,16 +41,16 @@ test('format escape brackets', () => {
 });
 
 test('handle negative years', () => {
-    expect(dateTimeUtc().year(-1).format('YY')).toBe('-01'); // 'YY with negative year'
-    expect(dateTimeUtc().year(-1).format('YYYY')).toBe('-0001'); // 'YYYY with negative year'
-    expect(dateTimeUtc().year(-12).format('YY')).toBe('-12'); // 'YY with negative year'
-    expect(dateTimeUtc().year(-12).format('YYYY')).toBe('-0012'); // 'YYYY with negative year'
-    expect(dateTimeUtc().year(-123).format('YY')).toBe('-23'); // 'YY with negative year'
-    expect(dateTimeUtc().year(-123).format('YYYY')).toBe('-0123'); // 'YYYY with negative year'
-    expect(dateTimeUtc().year(-1234).format('YY')).toBe('-34'); // 'YY with negative year'
-    expect(dateTimeUtc().year(-1234).format('YYYY')).toBe('-1234'); // 'YYYY with negative year'
-    expect(dateTimeUtc().year(-12345).format('YY')).toBe('-45'); // 'YY with negative year'
-    expect(dateTimeUtc().year(-12345).format('YYYY')).toBe('-12345'); // 'YYYY with negative year'
+    expect(dateTime().year(-1).format('YY')).toBe('-01'); // 'YY with negative year'
+    expect(dateTime().year(-1).format('YYYY')).toBe('-0001'); // 'YYYY with negative year'
+    expect(dateTime().year(-12).format('YY')).toBe('-12'); // 'YY with negative year'
+    expect(dateTime().year(-12).format('YYYY')).toBe('-0012'); // 'YYYY with negative year'
+    expect(dateTime().year(-123).format('YY')).toBe('-23'); // 'YY with negative year'
+    expect(dateTime().year(-123).format('YYYY')).toBe('-0123'); // 'YYYY with negative year'
+    expect(dateTime().year(-1234).format('YY')).toBe('-34'); // 'YY with negative year'
+    expect(dateTime().year(-1234).format('YYYY')).toBe('-1234'); // 'YYYY with negative year'
+    expect(dateTime().year(-12345).format('YY')).toBe('-45'); // 'YY with negative year'
+    expect(dateTime().year(-12345).format('YYYY')).toBe('-12345'); // 'YYYY with negative year'
 });
 
 test('format milliseconds', () => {
@@ -96,7 +96,7 @@ test('default format', () => {
 
 test('default UTC format', () => {
     const isoRegex = /\d{4}.\d\d.\d\dT\d\d.\d\d.\d\dZ/;
-    expect(isoRegex.exec(dateTimeUtc().format())).toBeTruthy();
+    expect(isoRegex.exec(dateTime({timeZone: UtcTimeZone}).format())).toBeTruthy();
 });
 
 test('toJSON', () => {
@@ -108,27 +108,29 @@ test('toJSON', () => {
 });
 
 test('toISOString', () => {
-    let date = dateTimeUtc({input: '2012-10-09T20:30:40.678'});
+    let date = dateTime({input: '2012-10-09T20:30:40.678', timeZone: UtcTimeZone});
 
     expect(date.toISOString()).toBe('2012-10-09T20:30:40.678Z'); // 'should output ISO8601 on dateTimeParse.fn.toISOString'
 
     // big years
-    date = dateTimeUtc({input: [20123, 9, 9, 20, 30, 40, 678]});
+    date = dateTime({input: [20123, 9, 9, 20, 30, 40, 678], timeZone: UtcTimeZone});
     expect(date.toISOString()).toBe('+020123-10-09T20:30:40.678Z'); // 'ISO8601 format on big positive year'
     // negative years
-    date = dateTimeUtc({input: [-1, 9, 9, 20, 30, 40, 678]});
+    date = dateTime({input: [-1, 9, 9, 20, 30, 40, 678], timeZone: UtcTimeZone});
     expect(date.toISOString()).toBe('-000001-10-09T20:30:40.678Z'); // 'ISO8601 format on negative year'
     // big negative years
-    date = dateTimeUtc({input: [-20123, 9, 9, 20, 30, 40, 678]});
+    date = dateTime({input: [-20123, 9, 9, 20, 30, 40, 678], timeZone: UtcTimeZone});
     expect(date.toISOString()).toBe('-020123-10-09T20:30:40.678Z'); // 'ISO8601 format on big negative year'
 
     //invalid dates
-    date = dateTimeUtc({input: '2017-12-32k'});
+    date = dateTime({input: '2017-12-32k', timeZone: UtcTimeZone});
     expect(() => date.toISOString()).toThrow(); // 'An invalid date to iso string is null'
 });
 
 test('toISOString without UTC conversion', () => {
-    let date = dateTimeUtc({input: '2016-12-31T19:53:45.678'}).utcOffset('+05:30');
+    let date = dateTime({input: '2016-12-31T19:53:45.678', timeZone: UtcTimeZone}).utcOffset(
+        '+05:30',
+    );
 
     expect(date.toISOString(true)).toBe('2017-01-01T01:23:45.678+05:30'); // 'should output ISO8601 on dateTimeParse.fn.toISOString'
 
@@ -143,18 +145,18 @@ test('toISOString without UTC conversion', () => {
     expect(date.toISOString(true)).toBe('-020123-01-01T01:23:45.678+05:30'); // 'ISO8601 format on big negative year'
 
     //invalid dates
-    date = dateTimeUtc({input: '2017-12-32k'}).utcOffset('+05:30');
+    date = dateTime({input: '2017-12-32k', timeZone: UtcTimeZone}).utcOffset('+05:30');
     expect(() => date.toISOString(true)).toThrow(); // 'An invalid date to iso string is null'
 });
 
 test('long years', () => {
-    expect(dateTimeUtc().year(2).format('YYYYYY')).toBe('+000002'); // 'small year with YYYYYY'
-    expect(dateTimeUtc().year(2012).format('YYYYYY')).toBe('+002012'); // 'regular year with YYYYYY'
-    expect(dateTimeUtc().year(20123).format('YYYYYY')).toBe('+020123'); // 'big year with YYYYYY'
+    expect(dateTime().year(2).format('YYYYYY')).toBe('+000002'); // 'small year with YYYYYY'
+    expect(dateTime().year(2012).format('YYYYYY')).toBe('+002012'); // 'regular year with YYYYYY'
+    expect(dateTime().year(20123).format('YYYYYY')).toBe('+020123'); // 'big year with YYYYYY'
 
-    expect(dateTimeUtc().year(-1).format('YYYYYY')).toBe('-000001'); // 'small negative year with YYYYYY'
-    expect(dateTimeUtc().year(-2012).format('YYYYYY')).toBe('-002012'); // 'negative year with YYYYYY'
-    expect(dateTimeUtc().year(-20123).format('YYYYYY')).toBe('-020123'); // 'big negative year with YYYYYY'
+    expect(dateTime().year(-1).format('YYYYYY')).toBe('-000001'); // 'small negative year with YYYYYY'
+    expect(dateTime().year(-2012).format('YYYYYY')).toBe('-002012'); // 'negative year with YYYYYY'
+    expect(dateTime().year(-20123).format('YYYYYY')).toBe('-020123'); // 'big negative year with YYYYYY'
 });
 
 test('toISOString() when 0 year', () => {
@@ -235,7 +237,7 @@ test.each<[string, string]>([
     ['0404-12-31', '0404-53'],
     ['0405-12-31', '0405-52'],
 ])('week year formats, (%j)', (input, expected) => {
-    settings.updateLocale({yearStart: 4});
+    settings.setDefaultWeekSettings({firstDay: 1, minimalDays: 4, weekend: [6, 7]});
     const weekYear = expected.split('-')[0];
     const date = dateTime({input, format: 'YYYY-MM-DD'});
     expect(date.format('ggggg')).toBe('0' + weekYear);
@@ -254,7 +256,7 @@ test('iso weekday formats', () => {
 });
 
 test('weekday formats', () => {
-    settings.updateLocale({weekStart: 3});
+    settings.setDefaultWeekSettings({firstDay: 3, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [1985, 1, 6]}).format('e')).toBe('0'); // 'Feb  6 1985 is Wednesday -- 0th day'
     expect(dateTime({input: [2029, 8, 20]}).format('e')).toBe('1'); // 'Sep 20 2029 is Thursday  -- 1st day'
     expect(dateTime({input: [2013, 3, 26]}).format('e')).toBe('2'); // 'Apr 26 2013 is Friday    -- 2nd day'
@@ -356,8 +358,8 @@ test('expand format', () => {
     expect(expandFormat('[L]T', englishFormats)).toBe(`[L]T`);
     expect(expandFormat('l', englishFormats)).toBe('M/D/YYYY');
     expect(expandFormat('ll', englishFormats)).toBe('MMM D, YYYY');
-    expect(expandFormat('lll', englishFormats)).toBe('MMM D, YYYY h:mm A');
-    expect(expandFormat('llll', englishFormats)).toBe('ddd, MMM D, YYYY h:mm A');
+    expect(expandFormat('lll', englishFormats)).toBe('MMM D, YYYY h:mm a');
+    expect(expandFormat('llll', englishFormats)).toBe('ddd, MMM D, YYYY h:mm a');
     expect(expandFormat('l', {...englishFormats, l: 'short format'})).toBe('short format');
     expect(expandFormat('ll', {...englishFormats, ll: 'short format'})).toBe('short format');
     expect(expandFormat('lll', {...englishFormats, lll: 'short format'})).toBe('short format');

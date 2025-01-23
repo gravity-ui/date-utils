@@ -1,3 +1,4 @@
+import type {Locale} from '../locale/types';
 import {fixOffset, timeZoneOffset} from '../timeZone';
 import type {InputObject} from '../typings';
 import {
@@ -14,15 +15,15 @@ import {
     weeksInWeekYear,
 } from '../utils';
 import type {DateObject} from '../utils';
-import {getLocaleData, getLocaleWeekValues} from '../utils/locale';
 
 export function getTimestampFromArray(
     input: (number | string)[],
     timezone: string,
+    locale: Locale,
     offset?: number,
 ) {
     if (input.length === 0) {
-        return getTimestampFromObject({}, timezone, offset);
+        return getTimestampFromObject({}, timezone, locale, offset);
     }
 
     const dateParts = input.map(Number);
@@ -32,6 +33,7 @@ export function getTimestampFromArray(
     return getTimestampFromObject(
         {year, month, date, hour, minute, second, millisecond},
         timezone,
+        locale,
         offset,
     );
 }
@@ -86,6 +88,7 @@ type NormalizedInput = Partial<Record<ReturnType<typeof normalizeComponent>, num
 export function getTimestampFromObject(
     input: InputObject,
     timezone: string,
+    locale: Locale,
     offset?: number,
 ): [ts: number, offset: number] {
     let normalized = normalizeDateComponents(input, normalizeComponent);
@@ -114,18 +117,17 @@ export function getTimestampFromObject(
     let objNow: DateObject & typeof normalized = tsToObject(Date.now(), likelyOffset);
 
     if (useWeekData) {
-        const localeData = getLocaleData('en'); // TODO: locale
-        const {minDaysInFirstWeek, startOfWeek} = getLocaleWeekValues(localeData);
-        objNow = {...objNow, ...gregorianToWeek(objNow, minDaysInFirstWeek, startOfWeek)};
+        const {minimalDays, firstDay} = locale.weekInfo();
+        objNow = {...objNow, ...gregorianToWeek(objNow, minimalDays, firstDay)};
         setDefaultValues(normalized, objNow, orderedWeekUnits, defaultWeekUnitValues);
 
-        if (!isValidWeekData(normalized, minDaysInFirstWeek, startOfWeek)) {
+        if (!isValidWeekData(normalized, minimalDays, firstDay)) {
             return [NaN, NaN];
         }
 
         normalized = {
             ...normalized,
-            ...weekToGregorian(normalized, minDaysInFirstWeek, startOfWeek),
+            ...weekToGregorian(normalized, minimalDays, firstDay),
         };
     } else if (containsDayOfYear) {
         objNow = {...objNow, ...gregorianToOrdinal(objNow)};

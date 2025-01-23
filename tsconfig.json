@@ -2,7 +2,7 @@
   "extends": "@gravity-ui/tsconfig/tsconfig",
   "compilerOptions": {
     "noEmit": true,
-    "target": "es5",
+    "target": "ES2022",
     "allowJs": false,
     "module": "ESNext",
     "moduleResolution": "Node10",

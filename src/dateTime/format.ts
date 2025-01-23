@@ -1,6 +1,11 @@
+/**
+ * Format of the string is based on Unicode Technical Standard #35: https://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
+ *
+ */
+
 import {englishFormats} from '../constants';
+import type {Locale, LongDateFormat} from '../locale/types';
 import {settings} from '../settings';
-import type {Locale, LongDateFormat} from '../settings/types';
 import {parseZoneInfo} from '../timeZone';
 import type {DateTime} from '../typings';
 
@@ -15,7 +20,7 @@ function getShortLocalizedFormatFromLongLocalizedFormat(format: string) {
 const localizedFormattingTokens = /(\[[^\]]*])|(LTS?|l{1,4}|L{1,4})/g;
 export function expandFormat(
     format: string,
-    formats: LongDateFormat = settings.getLocaleData().formats ?? englishFormats,
+    formats: LongDateFormat = settings.getDefaultLocaleOptions().longDateFormat ?? englishFormats,
 ) {
     let result = format;
     for (let i = 0; i < 5; i++) {
@@ -46,7 +51,7 @@ export function expandFormat(
 
 export const FORMAT_DEFAULT = 'YYYY-MM-DDTHH:mm:ssZ';
 
-const formattingTokens =
+export const formattingTokens =
     /(\[[^[]*\])|([Hh]mm(ss)?|Mo|M{1,4}|Do|DDDo|D{1,4}|d{2,4}|do?|w[o|w]?|W[o|W]?|Qo?|N{1,5}|Y{4,6}|YY?|y{2,4}|yo?|gg(ggg?)?|GG(GGG?)?|e|E|a|A|hh?|HH?|kk?|mm?|ss?|S{1,9}|x|X|zz?|ZZ?|.)/g;
 
 const formatTokenFunctions: Record<
@@ -54,12 +59,8 @@ const formatTokenFunctions: Record<
     (date: DateTime, locale: Locale, format: string) => string
 > = {};
 
-export function formatDate(
-    date: DateTime,
-    format = FORMAT_DEFAULT,
-    locale = settings.getLocaleData(),
-) {
-    const expandedFormat = expandFormat(format, locale.formats);
+export function formatDate(date: DateTime, format = FORMAT_DEFAULT, locale: Locale) {
+    const expandedFormat = expandFormat(format, locale.longDateFormat);
     return expandedFormat.replace(formattingTokens, (match: string) => {
         if (formatTokenFunctions[match]) {
             return formatTokenFunctions[match](date, locale, expandedFormat);
@@ -68,7 +69,7 @@ export function formatDate(
     });
 }
 
-function removeFormattingTokens(input: string) {
+export function removeFormattingTokens(input: string) {
     return input.replace(/^\[([\s\S)]*)\]$/g, '$1');
 }
 
@@ -101,30 +102,17 @@ formatTokenFunctions['MM'] = (date) => {
 };
 
 formatTokenFunctions['Mo'] = (date, locale) => {
-    // dayjs locales ordinal method returns value inside brackets '[' ']'
-    return removeFormattingTokens(`${locale.ordinal?.(date.month() + 1, 'M')}`);
+    return locale.ordinal(date.month() + 1, 'month');
 };
 
-formatTokenFunctions['MMM'] = (date, locale, format) => {
+formatTokenFunctions['MMM'] = (date, locale, _format) => {
     const month = date.month();
-    return getShort({
-        date,
-        format,
-        data: locale.monthsShort,
-        index: month,
-        fullData: locale.months,
-        maxLength: 3,
-    });
+    return locale.months('short')[month];
 };
 
-formatTokenFunctions['MMMM'] = (date, locale, format) => {
+formatTokenFunctions['MMMM'] = (date, locale, _format) => {
     const month = date.month();
-    return getShort({
-        date,
-        format,
-        data: locale.months,
-        index: month,
-    });
+    return locale.months('long')[month];
 };
 
 formatTokenFunctions['w'] = (date) => {
@@ -136,8 +124,7 @@ formatTokenFunctions['ww'] = (date) => {
 };
 
 formatTokenFunctions['wo'] = (date, locale) => {
-    // dayjs locales ordinal method returns value inside brackets '[' ']'
-    return removeFormattingTokens(`${locale.ordinal?.(date.week(), 'w')}`);
+    return locale.ordinal(date.week(), 'weekNumber');
 };
 
 formatTokenFunctions['W'] = (date) => {
@@ -149,8 +136,7 @@ formatTokenFunctions['WW'] = (date) => {
 };
 
 formatTokenFunctions['Wo'] = (date, locale) => {
-    // dayjs locales ordinal method returns value inside brackets '[' ']'
-    return removeFormattingTokens(`${locale.ordinal?.(date.isoWeek(), 'W')}`);
+    return locale.ordinal(date.isoWeek(), 'weekNumber');
 };
 
 formatTokenFunctions['d'] = (date) => {
@@ -158,42 +144,22 @@ formatTokenFunctions['d'] = (date) => {
 };
 
 formatTokenFunctions['do'] = (date, locale) => {
-    // dayjs locales ordinal method returns value inside brackets '[' ']'
-    return removeFormattingTokens(`${locale.ordinal?.(date.day(), 'd')}`);
+    return locale.ordinal(date.day(), 'weekday');
 };
 
-formatTokenFunctions['dd'] = (date, locale, format) => {
+formatTokenFunctions['dd'] = (date, locale, _format) => {
     const day = date.day();
-    return getShort({
-        date,
-        format,
-        data: locale.weekdaysMin,
-        index: day,
-        fullData: locale.weekdays,
-        maxLength: 2,
-    });
+    return locale.weekdays('narrow')[day];
 };
 
-formatTokenFunctions['ddd'] = (date, locale, format) => {
+formatTokenFunctions['ddd'] = (date, locale, _format) => {
     const day = date.day();
-    return getShort({
-        date,
-        format,
-        data: locale.weekdaysShort,
-        index: day,
-        fullData: locale.weekdays,
-        maxLength: 3,
-    });
+    return locale.weekdays('short')[day];
 };
 
-formatTokenFunctions['dddd'] = (date, locale, format) => {
+formatTokenFunctions['dddd'] = (date, locale, _format) => {
     const day = date.day();
-    return getShort({
-        date,
-        format,
-        data: locale.weekdays,
-        index: day,
-    });
+    return locale.weekdays('long')[day];
 };
 
 formatTokenFunctions['e'] = (date) => {
@@ -252,19 +218,12 @@ formatTokenFunctions['Hmmss'] = (date) => {
     return `${date.hour()}${zeroPad(date.minute(), 2)}${zeroPad(date.second(), 2)}`;
 };
 
-function meridiem(hour: number, _minute: number, isLowercase: boolean) {
-    const m = hour < 12 ? 'AM' : 'PM';
-    return isLowercase ? m.toLowerCase() : m;
-}
-
 formatTokenFunctions['a'] = (date, locale) => {
-    const func = locale.meridiem || meridiem;
-    return func(date.hour(), date.minute(), true);
+    return locale.meridiem(date.hour(), 'short');
 };
 
 formatTokenFunctions['A'] = (date, locale) => {
-    const func = locale.meridiem || meridiem;
-    return func(date.hour(), date.minute(), false);
+    return locale.meridiem(date.hour(), 'long');
 };
 
 formatTokenFunctions['Z'] = (date) => {
@@ -294,8 +253,7 @@ formatTokenFunctions['Q'] = (date) => {
 };
 
 formatTokenFunctions['Qo'] = (date, locale) => {
-    // dayjs locales ordinal method returns value inside brackets '[' ']'
-    return removeFormattingTokens(`${locale.ordinal?.(date.quarter(), 'Q')}`);
+    return locale.ordinal(date.quarter(), 'quarter');
 };
 
 formatTokenFunctions['D'] = (date) => {
@@ -307,8 +265,7 @@ formatTokenFunctions['DD'] = (date) => {
 };
 
 formatTokenFunctions['Do'] = (date, locale) => {
-    // dayjs locales ordinal method returns value inside brackets '[' ']'
-    return removeFormattingTokens(`${locale.ordinal?.(date.date(), 'D')}`);
+    return locale.ordinal(date.date(), 'date');
 };
 
 formatTokenFunctions['m'] = (date) => {
@@ -400,8 +357,7 @@ formatTokenFunctions['DDDD'] = (date) => {
 };
 
 formatTokenFunctions['DDDo'] = (date, locale) => {
-    // dayjs locales ordinal method returns value inside brackets '[' ']'
-    return removeFormattingTokens(`${locale.ordinal?.(date.dayOfYear(), 'DDD')}`);
+    return locale.ordinal(date.dayOfYear(), 'dayOfYear');
 };
 
 formatTokenFunctions['gg'] = (date) => {
@@ -427,40 +383,6 @@ formatTokenFunctions['GGGG'] = (date) => {
 formatTokenFunctions['GGGGG'] = (date) => {
     return zeroPad(date.isoWeekYear(), 5);
 };
-
-function getShort({
-    date,
-    format,
-    data,
-    index,
-    fullData,
-    maxLength,
-}: {
-    date: DateTime;
-    format: string;
-    data?: string[] | ((date: DateTime, format: string) => string);
-    index: number;
-    fullData?: string[] | ((date: DateTime, format: string) => string);
-    maxLength?: number;
-}) {
-    let value = '';
-    if (data) {
-        value = typeof data === 'function' ? data(date, format) : data[index];
-    }
-
-    if (!value && fullData) {
-        value = typeof fullData === 'function' ? fullData(date, format) : fullData[index];
-        if (value) {
-            value = value.slice(0, maxLength);
-        }
-    }
-
-    if (value) {
-        return value;
-    }
-
-    throw new Error('Invalid locale data');
-}
 
 function zeroPad(number: number, targetLength: number, forceSign = false) {
     const absNumber = String(Math.abs(number));

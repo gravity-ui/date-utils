@@ -1,8 +1,8 @@
 import {settings} from '../../settings';
-import {dateTime, dateTimeUtc} from '../dateTime';
+import {dateTime} from '../dateTime';
 
 afterEach(() => {
-    settings.updateLocale({weekStart: 1, yearStart: 1});
+    settings.setDefaultWeekSettings(null);
 });
 
 test('iso week year', () => {
@@ -30,7 +30,7 @@ test('iso week year', () => {
 
 test('week year', () => {
     // Some examples taken from https://en.wikipedia.org/wiki/ISO_week
-    settings.updateLocale({weekStart: 1, yearStart: 4}); // like iso
+    settings.setDefaultWeekSettings({firstDay: 1, minimalDays: 4, weekend: [6, 7]}); // like iso
     expect(dateTime({input: [2005, 0, 1]}).weekYear()).toBe(2004);
     expect(dateTime({input: [2005, 0, 2]}).weekYear()).toBe(2004);
     expect(dateTime({input: [2005, 0, 3]}).weekYear()).toBe(2005);
@@ -51,7 +51,7 @@ test('week year', () => {
     expect(dateTime({input: [2010, 0, 3]}).weekYear()).toBe(2009);
     expect(dateTime({input: [2010, 0, 4]}).weekYear()).toBe(2010);
 
-    settings.updateLocale({weekStart: 1, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 1, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [2004, 11, 26]}).weekYear()).toBe(2004);
     expect(dateTime({input: [2004, 11, 27]}).weekYear()).toBe(2005);
     expect(dateTime({input: [2005, 11, 25]}).weekYear()).toBe(2005);
@@ -67,7 +67,7 @@ test('week year', () => {
 });
 
 test('week numbers 2012/2013', () => {
-    settings.updateLocale({weekStart: 6, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 6, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: '2012-12-28', format: 'YYYY-MM-DD'}).week()).toBe(52);
     expect(dateTime({input: '2012-12-29', format: 'YYYY-MM-DD'}).week()).toBe(1);
     expect(dateTime({input: '2013-01-01', format: 'YYYY-MM-DD'}).week()).toBe(1);
@@ -78,7 +78,7 @@ test('week numbers 2012/2013', () => {
 });
 
 test('weeks numbers dow:1 doy:4', () => {
-    settings.updateLocale({weekStart: 1, yearStart: 4});
+    settings.setDefaultWeekSettings({firstDay: 1, minimalDays: 4, weekend: [6, 7]});
     expect(dateTime({input: [2012, 0, 1]}).week()).toBe(52); // 'Jan  1 2012 should be week 52'
     expect(dateTime({input: [2012, 0, 2]}).week()).toBe(1); // 'Jan  2 2012 should be week 1'
     expect(dateTime({input: [2012, 0, 8]}).week()).toBe(1); // 'Jan  8 2012 should be week 1'
@@ -122,7 +122,7 @@ test('weeks numbers dow:1 doy:4', () => {
 });
 
 test('weeks numbers dow:6 doy:12', () => {
-    settings.updateLocale({weekStart: 6, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 6, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [2011, 11, 31]}).week()).toBe(1); // 'Dec 31 2011 should be week 1'
     expect(dateTime({input: [2012, 0, 6]}).week()).toBe(1); // 'Jan  6 2012 should be week 1'
     expect(dateTime({input: [2012, 0, 7]}).week()).toBe(2); // 'Jan  7 2012 should be week 2'
@@ -164,7 +164,7 @@ test('weeks numbers dow:6 doy:12', () => {
 });
 
 test('weeks numbers dow:1 doy:7', () => {
-    settings.updateLocale({weekStart: 1, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 1, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [2011, 11, 26]}).week()).toBe(1); // 'Dec 26 2011 should be week 1'
     expect(dateTime({input: [2012, 0, 1]}).week()).toBe(1); // 'Jan  1 2012 should be week 1'
     expect(dateTime({input: [2012, 0, 2]}).week()).toBe(2); // 'Jan  2 2012 should be week 2'
@@ -208,7 +208,7 @@ test('weeks numbers dow:1 doy:7', () => {
 });
 
 test('weeks numbers dow:0 doy:6', () => {
-    settings.updateLocale({weekStart: 0, yearStart: 1});
+    settings.setDefaultWeekSettings({firstDay: 7, minimalDays: 1, weekend: [6, 7]});
     expect(dateTime({input: [2012, 0, 1]}).week()).toBe(1); // 'Jan  1 2012 should be week 1'
     expect(dateTime({input: [2012, 0, 7]}).week()).toBe(1); // 'Jan  7 2012 should be week 1'
     expect(dateTime({input: [2012, 0, 8]}).week()).toBe(2); // 'Jan  8 2012 should be week 2'
@@ -254,10 +254,14 @@ test('weeks numbers dow:0 doy:6', () => {
 test('week year setter works', () => {
     for (let year = 2000; year <= 2020; year += 1) {
         expect(
-            dateTimeUtc({input: '2012-12-31T00:00:00.000Z'}).isoWeekYear(year).isoWeekYear(),
+            dateTime({input: '2012-12-31T00:00:00.000Z', setTimezone: true})
+                .isoWeekYear(year)
+                .isoWeekYear(),
         ).toBe(year);
-        expect(dateTimeUtc({input: '2012-12-31T00:00:00.000Z'}).weekYear(year).weekYear()).toBe(
-            year,
-        );
+        expect(
+            dateTime({input: '2012-12-31T00:00:00.000Z', setTimezone: true})
+                .weekYear(year)
+                .weekYear(),
+        ).toBe(year);
     }
 });

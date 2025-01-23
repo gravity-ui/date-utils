@@ -51,7 +51,7 @@ describe('Parser', () => {
 
     it('should return undefined in case of using format arg and input does not corresponding to this format', () => {
         const date = dateTimeParse('2021', {format: 'YYYY-MM-DD'});
-        expect(Boolean(date)).toEqual(false);
+        expect(date).toEqual(undefined);
     });
 
     it('should return DateTime in case of 0 input arg', () => {
@@ -59,10 +59,10 @@ describe('Parser', () => {
         expect(date).toEqual('1970-01-01T00:00:00.000Z');
     });
 
-    test.each<[string | undefined, string]>([
+    test.each<[string | undefined, string | undefined]>([
         ['ru', '07 авг. 2021'],
         ['en', '07 Aug 2021'],
-        ['incorrectLang', '07 Aug 2021'],
+        ['incorrectLang', undefined],
         [undefined, '07 Aug 2021'],
     ])('lang option (%p)', (lang, expected) => {
         const date = dateTimeParse(TESTED_DATE_STRING, {lang})?.format('DD MMM YYYY');

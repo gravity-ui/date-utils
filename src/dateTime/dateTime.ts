@@ -1,8 +1,8 @@
-import {INVALID_DATE_STRING, STRICT, UtcTimeZone} from '../constants';
-import dayjs from '../dayjs';
+import {INVALID_DATE_STRING, UtcTimeZone} from '../constants';
 import {duration} from '../duration';
+import {LocaleImpl} from '../locale/locale';
+import type {Locale} from '../locale/types';
 import {settings} from '../settings';
-import type {Locale} from '../settings/types';
 import {fixOffset, guessUserTimeZone, normalizeTimeZone, timeZoneOffset} from '../timeZone';
 import type {
     AllUnit,
@@ -31,9 +31,9 @@ import {
     weeksInWeekYear,
 } from '../utils';
 import type {DateObject} from '../utils';
-import {getLocaleData, getLocaleWeekValues} from '../utils/locale';
 
 import {formatDate} from './format';
+import {parseDateStringWithFormat} from './formatParse';
 import {getTimestampFromArray, getTimestampFromObject} from './parse';
 import {parseDateString} from './regexParse';
 import {fromTo} from './relative';
@@ -49,42 +49,39 @@ class DateTimeImpl implements DateTime {
     [IS_DATE_TIME]: boolean;
 
     private _timestamp: number;
-    private _timeZone: string;
+    private _timezone: string;
     private _offset: number;
-    private _locale: string;
     private _c: DateObject;
     private _weekInfo: ReturnType<typeof gregorianToWeek> | null = null;
-    private _localeData: Locale;
+    private _locale: Locale;
     private _isValid: boolean;
 
     constructor(opt: {
         ts: number;
-        timeZone: TimeZone;
+        timezone: TimeZone;
         offset: number;
-        locale: string;
-        localeData: Locale;
+        locale: Locale;
         isValid: boolean;
     }) {
         this[IS_DATE_TIME] = true;
 
         this._timestamp = opt.ts;
-        this._locale = opt.locale;
-        this._timeZone = opt.timeZone;
+        this._timezone = opt.timezone;
         this._offset = opt.offset;
         this._c = tsToObject(opt.ts, opt.offset);
-        this._localeData = opt.localeData;
+        this._locale = opt.locale;
         this._isValid = opt.isValid;
     }
 
     format(formatInput?: FormatInput): string {
         if (!this.isValid()) {
-            return this._localeData.invalidDate || INVALID_DATE_STRING;
+            return INVALID_DATE_STRING; // this._locale.invalidDate || INVALID_DATE_STRING;
         }
 
         if (formatInput === undefined && this._offset === 0) {
             return this.format('YYYY-MM-DDTHH:mm:ss[Z]');
         }
-        return formatDate(this, formatInput, this._localeData);
+        return formatDate(this, formatInput, this._locale);
     }
 
     toISOString(keepOffset?: boolean): string {
@@ -122,7 +119,7 @@ class DateTimeImpl implements DateTime {
             }
             return createDateTime({
                 ts,
-                timeZone: UtcTimeZone,
+                timezone: UtcTimeZone,
                 offset: newOffset,
                 locale: this._locale,
             });
@@ -135,7 +132,7 @@ class DateTimeImpl implements DateTime {
     timeZone(timeZone: string, keepLocalTime?: boolean | undefined): DateTime;
     timeZone(timeZone?: string, keepLocalTime?: boolean | undefined): DateTime | string {
         if (timeZone === undefined) {
-            return this._timeZone === 'system' ? guessUserTimeZone() : this._timeZone;
+            return this._timezone === 'system' ? guessUserTimeZone() : this._timezone;
         }
 
         if (!this.isValid()) {
@@ -150,7 +147,7 @@ class DateTimeImpl implements DateTime {
             [ts, offset] = fixOffset(ts, offset, zone);
         }
 
-        return createDateTime({ts, timeZone: zone, offset, locale: this._locale});
+        return createDateTime({ts, timezone: zone, offset, locale: this._locale});
     }
 
     add(amount: DurationInput, unit?: DurationUnit): DateTime {
@@ -283,7 +280,7 @@ class DateTimeImpl implements DateTime {
     }
 
     isSame(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const [ts] = getTimestamp(input, 'system', this._locale);
+        const [ts] = getTimestamp({input, timezone: 'system', locale: this._locale});
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
@@ -291,7 +288,7 @@ class DateTimeImpl implements DateTime {
     }
 
     isBefore(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const [ts] = getTimestamp(input, 'system', this._locale);
+        const [ts] = getTimestamp({input, timezone: 'system', locale: this._locale});
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
@@ -301,7 +298,7 @@ class DateTimeImpl implements DateTime {
     }
 
     isAfter(input?: DateTimeInput, granularity?: DurationUnit): boolean {
-        const [ts] = getTimestamp(input, 'system', this._locale);
+        const [ts] = getTimestamp({input, timezone: 'system', locale: this._locale});
         if (!this.isValid() || isNaN(ts)) {
             return false;
         }
@@ -323,10 +320,10 @@ class DateTimeImpl implements DateTime {
             return NaN;
         }
         const value = DateTimeImpl.isDateTime(amount)
-            ? amount.timeZone(this._timeZone)
+            ? amount.timeZone(this._timezone)
             : createDateTime({
-                  ts: getTimestamp(amount, 'system', this._locale)[0],
-                  timeZone: this._timeZone,
+                  ts: getTimestamp({input: amount, timezone: 'system', locale: this._locale})[0],
+                  timezone: this._timezone,
                   locale: this._locale,
                   offset: this._offset,
               });
@@ -377,24 +374,27 @@ class DateTimeImpl implements DateTime {
         return asFloat ? output : Math.floor(Math.abs(output)) * Math.sign(output) || 0;
     }
     fromNow(withoutSuffix?: boolean | undefined): string {
-        return this.from(dateTime({timeZone: this._timeZone, lang: this._locale}), withoutSuffix);
+        return this.from(
+            dateTime({timeZone: this._timezone, lang: this._locale.locale}),
+            withoutSuffix,
+        );
     }
     from(fromInput: DateTimeInput, withoutSuffix?: boolean): string {
         if (!this.isValid()) {
-            return this._localeData.invalidDate || INVALID_DATE_STRING;
+            return INVALID_DATE_STRING; // this._localeData.invalidDate || INVALID_DATE_STRING;
         }
 
         const value = DateTimeImpl.isDateTime(fromInput)
-            ? fromInput.timeZone(this._timeZone)
+            ? fromInput.timeZone(this._timezone)
             : createDateTime({
-                  ts: getTimestamp(fromInput, 'system', this._locale)[0],
-                  timeZone: this._timeZone,
+                  ts: getTimestamp({input: fromInput, timezone: 'system', locale: this._locale})[0],
+                  timezone: this._timezone,
                   locale: this._locale,
                   offset: this._offset,
               });
 
         if (!value.isValid()) {
-            return this._localeData.invalidDate || INVALID_DATE_STRING;
+            return INVALID_DATE_STRING; // this._localeData.invalidDate || INVALID_DATE_STRING;
         }
 
         let a = value;
@@ -417,26 +417,22 @@ class DateTimeImpl implements DateTime {
             milliseconds = -milliseconds;
         }
 
-        return fromTo(
-            duration({months, milliseconds}),
-            this._localeData.relativeTime,
-            withoutSuffix,
-        );
+        return fromTo(duration({months, milliseconds}), this._locale.relativeTime, withoutSuffix);
     }
     locale(): string;
     locale(locale: string): DateTime;
     locale(locale?: string): DateTime | string {
         if (!locale) {
-            return this._locale;
+            return this._locale.locale;
         }
         if (!this.isValid()) {
             return this;
         }
         return createDateTime({
             ts: this.valueOf(),
-            timeZone: this._timeZone,
+            timezone: this._timezone,
             offset: this._offset,
-            locale: dayjs.locale(locale, undefined, true),
+            locale: new LocaleImpl(locale),
         });
     }
     toDate(): Date {
@@ -452,7 +448,6 @@ class DateTimeImpl implements DateTime {
         return this.isValid() ? daysInMonth(this._c.year, this._c.month) : NaN;
     }
 
-    // eslint-disable-next-line complexity
     set(unit: AllUnit | SetObject, amount?: number): DateTime {
         if (!this.isValid()) {
             return this;
@@ -462,6 +457,10 @@ class DateTimeImpl implements DateTime {
             typeof unit === 'object' ? unit : {[unit]: amount},
             normalizeComponent,
         );
+
+        if (newComponents.quarter) {
+            newComponents.month = newComponents.quarter * 3 - 1;
+        }
 
         const settingWeekStuff =
             newComponents.day !== undefined ||
@@ -502,7 +501,7 @@ class DateTimeImpl implements DateTime {
             }
             const weekInfo = this.weekInfo();
             if (hasLocalWeekData) {
-                const {minDaysInFirstWeek, startOfWeek} = getLocaleWeekValues(this._localeData);
+                const {minimalDays, firstDay} = this._locale.weekInfo();
                 const weekData = {
                     weekday: (weekday ?? weekInfo.weekday) + 1,
                     weekNumber: weekNumber ?? weekInfo.weekNumber,
@@ -511,7 +510,7 @@ class DateTimeImpl implements DateTime {
                 mixed = {
                     ...dateComponents,
                     ...newComponents,
-                    ...weekToGregorian(weekData, minDaysInFirstWeek, startOfWeek),
+                    ...weekToGregorian(weekData, minimalDays, firstDay),
                 };
             } else {
                 const weekData = {
@@ -541,15 +540,15 @@ class DateTimeImpl implements DateTime {
 
         let ts = objToTS(mixed);
         let offset = this._offset;
-        if (this._timeZone === UtcTimeZone) {
+        if (this._timezone === UtcTimeZone) {
             ts -= offset * 60 * 1000;
         } else {
-            [ts, offset] = fixOffset(ts, offset, this._timeZone);
+            [ts, offset] = fixOffset(ts, offset, this._timezone);
         }
 
         return createDateTime({
             ts,
-            timeZone: this._timeZone,
+            timezone: this._timezone,
             offset,
             locale: this._locale,
         });
@@ -656,8 +655,8 @@ class DateTimeImpl implements DateTime {
         return this.isValid() ? this.weekInfo().weekYear : NaN;
     }
     weeksInYear(): number {
-        const {minDaysInFirstWeek, startOfWeek} = getLocaleWeekValues(this._localeData);
-        return this.isValid() ? weeksInWeekYear(this.year(), minDaysInFirstWeek, startOfWeek) : NaN;
+        const {minimalDays, firstDay} = this._locale.weekInfo();
+        return this.isValid() ? weeksInWeekYear(this.year(), minimalDays, firstDay) : NaN;
     }
     isoWeek(): number;
     isoWeek(value: number): DateTime;
@@ -697,9 +696,7 @@ class DateTimeImpl implements DateTime {
     }
 
     toString(): string {
-        return this.isValid()
-            ? this.toDate().toUTCString()
-            : this._localeData.invalidDate || INVALID_DATE_STRING;
+        return this.isValid() ? this.toDate().toUTCString() : INVALID_DATE_STRING; // this._localeData.invalidDate || INVALID_DATE_STRING;
     }
 
     toJSON(): string | null {
@@ -723,7 +720,7 @@ class DateTimeImpl implements DateTime {
             return this;
         }
 
-        const timeZone = this._timeZone;
+        const timezone = this._timezone;
         let ts = this.valueOf();
         let offset = this._offset;
 
@@ -744,31 +741,31 @@ class DateTimeImpl implements DateTime {
                 Math.min(dateComponents.date, daysInMonth(dateComponents.year, month)) +
                 sign * daysInput;
             ts = objToTS({...dateComponents, month, date});
-            if (timeZone === UtcTimeZone) {
+            if (timezone === UtcTimeZone) {
                 ts -= offset * 60 * 1000;
             } else {
-                [ts, offset] = fixOffset(ts, offset, timeZone);
+                [ts, offset] = fixOffset(ts, offset, timezone);
             }
         }
 
         if (milliseconds) {
             ts += sign * milliseconds;
-            if (timeZone !== UtcTimeZone) {
-                offset = timeZoneOffset(timeZone, ts);
+            if (timezone !== UtcTimeZone) {
+                offset = timeZoneOffset(timezone, ts);
             }
         }
 
         return createDateTime({
             ts,
-            timeZone,
+            timezone,
             offset,
             locale: this._locale,
         });
     }
     private weekInfo() {
         if (!this._weekInfo) {
-            const {startOfWeek, minDaysInFirstWeek} = getLocaleWeekValues(this._localeData);
-            this._weekInfo = gregorianToWeek(this._c, minDaysInFirstWeek, startOfWeek);
+            const {minimalDays, firstDay} = this._locale.weekInfo();
+            this._weekInfo = gregorianToWeek(this._c, minimalDays, firstDay);
         }
         return this._weekInfo;
     }
@@ -804,37 +801,46 @@ function valueOf(o: unknown): number {
 
 function createDateTime({
     ts,
-    timeZone,
+    timezone,
     offset,
     locale,
 }: {
     ts: number;
-    timeZone: string;
+    timezone: string;
     offset: number;
-    locale: string;
+    locale: Locale;
 }): DateTime {
-    const loc = locale || 'en';
-    const localeData = getLocaleData(loc);
     const isValid = !isNaN(Number(new Date(ts)));
     return new DateTimeImpl({
         ts,
-        timeZone,
+        timezone,
         offset,
-        locale: loc,
-        localeData,
+        locale,
         isValid,
     });
 }
 
-function getTimestamp(
-    input: DateTimeInput,
-    timezone: string,
-    locale: string,
-    format?: string,
-    fixedOffset?: number,
-): [ts: number, offset: number] {
+function getTimestamp({
+    input,
+    timezone,
+    locale,
+    format,
+    fixedOffset,
+    setTimezone,
+}: {
+    input: DateTimeInput;
+    timezone?: string;
+    locale: Locale;
+    format?: string;
+    fixedOffset?: number;
+    setTimezone?: boolean;
+}): [ts: number, offset: number, timezone: string] {
     let ts: number;
     let offset = fixedOffset;
+    let resolvedTimezone =
+        typeof fixedOffset === 'number'
+            ? UtcTimeZone
+            : normalizeTimeZone(timezone, settings.getDefaultTimeZone());
     if (
         isDateTime(input) ||
         typeof input === 'number' ||
@@ -845,19 +851,36 @@ function getTimestamp(
     } else if (input === null || input === undefined) {
         ts = Date.now();
     } else if (Array.isArray(input)) {
-        [ts, offset] = getTimestampFromArray(input, timezone, fixedOffset);
+        [ts, offset] = getTimestampFromArray(input, resolvedTimezone, locale, fixedOffset);
     } else if (typeof input === 'object') {
-        [ts, offset] = getTimestampFromObject(input, timezone, fixedOffset);
-    } else if (format === undefined) {
-        const [dateObject, timezoneOrOffset] = parseDateString(input);
+        [ts, offset] = getTimestampFromObject(input, resolvedTimezone, locale, fixedOffset);
+    } else {
+        const [dateObject, timezoneOrOffset] = format
+            ? parseDateStringWithFormat(input, format, locale)
+            : parseDateString(input);
         if (Object.keys(dateObject).length === 0) {
-            return [NaN, NaN];
+            return [NaN, NaN, 'system'];
         }
         [ts] = getTimestampFromObject(
             dateObject,
-            typeof timezoneOrOffset === 'string' ? timezoneOrOffset : 'system',
+            typeof timezoneOrOffset === 'string' ? timezoneOrOffset : resolvedTimezone,
+            locale,
             typeof timezoneOrOffset === 'number' ? timezoneOrOffset : fixedOffset,
         );
+
+        if (
+            setTimezone &&
+            timezoneOrOffset !== null &&
+            timezone === undefined &&
+            fixedOffset === undefined
+        ) {
+            if (typeof timezoneOrOffset === 'number') {
+                resolvedTimezone = UtcTimeZone;
+                offset = timezoneOrOffset;
+            } else if (typeof timezoneOrOffset === 'string') {
+                resolvedTimezone = timezoneOrOffset;
+            }
+        }
         if (
             fixedOffset !== undefined &&
             timezoneOrOffset !== null &&
@@ -865,19 +888,10 @@ function getTimestamp(
         ) {
             ts -= fixedOffset * 60 * 1000;
         }
-    } else if (fixedOffset === undefined) {
-        const localDate = format
-            ? dayjs(input, format, locale, STRICT)
-            : dayjs(input, undefined, locale);
-
-        ts = localDate.valueOf();
-    } else {
-        ts = dayjs.utc(input, format, STRICT).valueOf();
-        ts -= fixedOffset * 60 * 1000;
     }
 
-    offset = offset ?? timeZoneOffset(timezone, ts);
-    return [ts, offset];
+    offset = offset ?? timeZoneOffset(resolvedTimezone, ts);
+    return [ts, offset, resolvedTimezone];
 }
 
 /**
@@ -894,54 +908,34 @@ export function isDateTime(value: unknown): value is DateTime {
  * @param {DateTimeInput=} opt.input - input to parse.
  * @param {string=} opt.format - strict {@link https://dayjs.gitee.io/docs/en/display/format format} for parsing user's input.
  * @param {string=} opt.timeZone - specified {@link https://dayjs.gitee.io/docs/en/timezone/timezone time zone}.
+ * @param {number=} opt.offset - set offset to date, if specified timezone will be set to UTC.
+ * @param {boolean=} opt.setTimezone - if the input contains timezone/offset information, it will be set to created date.
  * @param {string=} opt.lang - specified locale.
  */
 export function dateTime(opt?: {
     input?: DateTimeInput;
     format?: FormatInput;
+    offset?: number;
     timeZone?: TimeZone;
     lang?: string;
+    setTimezone?: boolean;
 }): DateTime {
-    const {input, format, timeZone, lang} = opt || {};
+    const {input, format, timeZone, setTimezone, offset: fixedOffset, lang} = opt || {};
 
-    const timeZoneOrDefault = normalizeTimeZone(timeZone, settings.getDefaultTimeZone());
-    const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
+    const locale = new LocaleImpl(lang);
 
-    const [ts, offset] = getTimestamp(input, timeZoneOrDefault, locale, format);
-
-    const date = createDateTime({
-        ts,
-        timeZone: timeZoneOrDefault,
-        offset,
+    const [ts, offset, timezone] = getTimestamp({
+        input,
+        timezone: timeZone,
+        fixedOffset,
         locale,
+        format,
+        setTimezone,
     });
 
-    return date;
-}
-
-/**
- * Creates a DateTime instance with fixed offset.
- * @param [opt]
- * @param {DateTimeInput=} [opt.input] - input to parse.
- * @param {string=} [opt.format] - strict {@link https://dayjs.gitee.io/docs/en/display/format format} for parsing user's input.
- * @param {number=} [opt.offset=0] - specified offset.
- * @param {string=} [opt.lang] - specified locale.
- */
-export function dateTimeUtc(opt?: {
-    input?: DateTimeInput;
-    format?: FormatInput;
-    lang?: string;
-    offset?: number;
-}): DateTime {
-    const {input, format, lang, offset = 0} = opt || {};
-
-    const locale = dayjs.locale(lang || settings.getLocale(), undefined, true);
-
-    const [ts] = getTimestamp(input, UtcTimeZone, locale, format, offset);
-
     const date = createDateTime({
         ts,
-        timeZone: UtcTimeZone,
+        timezone,
         offset,
         locale,
     });
