@@ -4,3 +4,11 @@
 node_modules
 build
 coverage
+
+# Artifacts
+dist
+dist-docs
+docs/diplodoc/pages/api
+storybook-static
+.cache
+.tmp
