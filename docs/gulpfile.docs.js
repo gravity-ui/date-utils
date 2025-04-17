@@ -25,7 +25,10 @@ function reload(cb) {
 }
 
 function watchFiles() {
-    watch(['./diplodoc/**/*', './src/**/*', '../src/**/*'], series(build, reload));
+    const watcher = watch(['./diplodoc/**/*', './src/**/*', '../src/**/*']);
+    watcher.on('change', function () {
+        series(build, reload)();
+    });
 }
 
 exports.default = series(build, parallel(serve, watchFiles));
