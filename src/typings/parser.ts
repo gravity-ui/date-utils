@@ -2,12 +2,6 @@
 // Copyright 2021 YANDEX LLC
 
 import type {DateTimeOptions} from './common';
-import type {DateTime, DateTimeInput} from './dateTime';
-
-export type DateTimeParser<T extends DateTimeOptions = DateTimeOptions> = (
-    value?: DateTimeInput,
-    options?: T,
-) => DateTime | undefined;
 
 export interface DateTimeOptionsWhenParsing extends DateTimeOptions {
     /**
