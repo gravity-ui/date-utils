@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: npm run docs:deps || echo "::error::Install deps failed" >&2
       - name: Upload logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ failure() }}
         with:
           name: build-error.log
