@@ -9,6 +9,5 @@ coverage
 dist
 dist-docs
 docs/diplodoc/pages/api
-storybook-static
 .cache
 .tmp
