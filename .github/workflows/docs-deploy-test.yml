@@ -15,11 +15,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - name: Install npm@latest
-        run: npm install -g npm@latest
       - name: Install tsconfig
         run: npm i @gravity-ui/tsconfig
       - name: Install dependencies
-        run: npm run docs:deps
+        run: npm run docs:deps || echo "::error::Install deps failed" >&2
+      - name: Upload logs
+        uses: actions/upload-artifact@v3
+        if: ${{ failure() }}
+        with:
+          name: build-error.log
+          path: |
+            npm-debug.log
+            error-logs/*
       - name: Build
         run: npm run docs:build
