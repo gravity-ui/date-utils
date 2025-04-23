@@ -2,6 +2,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const docsDir = path.resolve(process.cwd(), '../dist-docs');
+
+if (!fs.existsSync(docsDir)) {
+    console.error('Docs directory not found:', docsDir);
+    process.exit(1);
+}
+
 const styleToAdd = `
     <style type="text/css">
         .yfm a code {
