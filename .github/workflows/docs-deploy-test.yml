@@ -17,6 +17,8 @@ jobs:
           cache: npm
       - name: Install tsconfig
         run: npm i @gravity-ui/tsconfig
+      - name: Clear npm cache
+        run: npm cache clean --force
       - name: Install dependencies
         run: npm run docs:deps
       - name: Build
