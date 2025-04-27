@@ -18,14 +18,6 @@ jobs:
       - name: Install tsconfig
         run: npm i @gravity-ui/tsconfig
       - name: Install dependencies
-        run: npm run docs:deps || echo "::error::Install deps failed" >&2
-      - name: Upload logs
-        uses: actions/upload-artifact@v4
-        if: ${{ failure() }}
-        with:
-          name: build-error.log
-          path: |
-            npm-debug.log
-            error-logs/*
+        run: npm run docs:deps
       - name: Build
         run: npm run docs:build

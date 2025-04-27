@@ -2,7 +2,7 @@
   "entryPoints": ["./src/**/*.ts"],
   "entryFileName": "overview.md",
   "out": "./diplodoc/pages/api",
-  "plugin": ["typedoc-plugin-markdown"],
+  "plugin": ["typedoc-plugin-markdown", "./plugins/remove-technical-headers.js"],
   "readme": "none",
   "tableColumnSettings": {
     "hideInherited": true,
