@@ -1,0 +1,7 @@
+allowHTML: true
+staticContent: true
+addSystemMeta: true
+lang: en
+langs:
+  - en
+search: true

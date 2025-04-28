@@ -20,7 +20,10 @@
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "updateLocales": "node scripts/updateLocales.js",
-    "prepare": "husky"
+    "prepare": "husky",
+    "docs:deps": "cd ./docs && npm ci",
+    "docs:dev": "cd ./docs && npm run docs:dev",
+    "docs:build": "cd ./docs && npm run docs:build"
   },
   "files": [
     "build"
