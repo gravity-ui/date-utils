@@ -1,0 +1,591 @@
+
+        <!DOCTYPE html>
+        <html lang="en" dir="ltr">
+            <head>
+                <meta charset="utf-8">
+                <base href="../../../../" />
+                <meta name="generator" content="Diplodoc Platform v4.57.19"  />
+
+                
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title></title>
+                <style type="text/css">
+                    body {
+                        height: 100vh;
+                    }
+                </style>
+                <link type="text/css" rel="stylesheet" href="_bundle/vendor.css" />
+<link type="text/css" rel="stylesheet" href="_bundle/app.css" />
+                
+            
+    <style type="text/css">
+        .yfm a code {
+            color: inherit !important;
+            background-color: unset !important;
+        }
+    </style>
+
+</head>
+            <body class="g-root g-root_theme_light">
+                <div id="root"><div class="App"><div class="g-root g-root_theme_light pc-page-constructor"><div class="pc-page-constructor__wrapper"><div class="pc-layout"><div class="pc-Grid pc-navigation pc-navigation_with-border pc-layout__navigation"><div class="container-fluid "><div class="row"><div class="col"><nav><div class="pc-desktop-navigation__wrapper"><div class="pc-desktop-navigation__left"><a class="pc-logo pc-desktop-navigation__logo" href="/date-utils" title="Date Utils"><picture><img class="pc-logo__icon" alt="Logo icon" src="https://storage.yandexcloud.net/gravity-ui-assets/gravity-logo-light.svg"/></picture><span class="pc-logo__text">Date Utils</span></a></div><div class="pc-desktop-navigation__navigation-container"><div class="pc-overflow-scroller__container"><div class="pc-overflow-scroller pc-desktop-navigation__navigation"><div class="pc-overflow-scroller__wrapper" style="left:0"><ul class="pc-desktop-navigation__links"><li class="pc-navigation-item pc-navigation-item_menu-layout_desktop pc-desktop-navigation__item"><a href="https://github.com/gravity-ui/date-utils" title="Github ➚" class="pc-navigation-link pc-navigation-item__content pc-navigation-item__content_type_link" type="link" target="_blank" rel="noopener noreferrer"><span class="pc-content-wrapper__text">Github ➚</span></a></li></ul></div></div></div></div><div class="pc-desktop-navigation__right"><div class="pc-desktop-navigation__mobile-navigation-container"><div class="pc-overflow-scroller__container"><div class="pc-overflow-scroller pc-desktop-navigation__mobile-navigation"><div class="pc-overflow-scroller__wrapper" style="left:0"><ul class="pc-desktop-navigation__mobile-buttons"><li class="pc-navigation-item pc-navigation-item_menu-layout_dropdown pc-desktop-navigation__item"><div class="dc-search-suggest__wrapper Suggest"><a href="#" hidden="" aria-hidden="true"></a><span class="g-text-input g-text-input_view_normal g-text-input_size_l g-text-input_pin_round-round g-text-input_has-end-content dc-search-input__input dc-search-suggest Suggest__input"><span class="g-text-input__content"><input role="combobox" aria-autocomplete="list" aria-controls="dc-popup-39" aria-expanded="false" class="g-text-input__control g-text-input__control_type_input" id="dc-39-input" placeholder="Search" autoComplete="off" value=""/><div class="g-text-input__additional-content g-text-input__additional-content_placement_end"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" class="g-icon Suggest__end" fill="currentColor" stroke="none" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M11.5 7a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-.82 4.74a6 6 0 1 1 1.06-1.06l2.79 2.79a.75.75 0 1 1-1.06 1.06z" clip-rule="evenodd"></path></svg></svg></div></span></span></div></li></ul></div></div></div></div><button type="button" aria-label="Button label" class="pc-control pc-control_size_l pc-control_theme_primary pc-mobile-menu-button"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" class="g-icon" fill="currentColor" stroke="none" data-qa="icon-test-id" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M1.25 3.25A.75.75 0 0 1 2 2.5h12A.75.75 0 0 1 14 4H2a.75.75 0 0 1-.75-.75m0 4.75A.75.75 0 0 1 2 7.25h12a.75.75 0 0 1 0 1.5H2A.75.75 0 0 1 1.25 8M2 12a.75.75 0 0 0 0 1.5h12a.75.75 0 0 0 0-1.5z" clip-rule="evenodd"></path></svg></svg></button><ul class="pc-desktop-navigation__buttons"><li class="pc-navigation-item pc-navigation-item_menu-layout_desktop pc-desktop-navigation__item"><div class="dc-search-suggest__wrapper Suggest"><a href="#" hidden="" aria-hidden="true"></a><span class="g-text-input g-text-input_view_normal g-text-input_size_l g-text-input_pin_round-round g-text-input_has-end-content dc-search-input__input dc-search-suggest Suggest__input"><span class="g-text-input__content"><input role="combobox" aria-autocomplete="list" aria-controls="dc-popup-40" aria-expanded="false" class="g-text-input__control g-text-input__control_type_input" id="dc-40-input" placeholder="Search" autoComplete="off" value=""/><div class="g-text-input__additional-content g-text-input__additional-content_placement_end"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" class="g-icon Suggest__end" fill="currentColor" stroke="none" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M11.5 7a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-.82 4.74a6 6 0 1 1 1.06-1.06l2.79 2.79a.75.75 0 1 1-1.06 1.06z" clip-rule="evenodd"></path></svg></svg></div></span></span></div></li><li class="pc-navigation-item pc-navigation-item_menu-layout_desktop pc-desktop-navigation__item"><div class="dc-controls Controls"><div class="g-popover Control"><div class="g-popover__handler"><button aria-label="Settings" class="g-button g-button_view_flat-secondary g-button_size_l g-button_pin_round-round dc-control" type="button"><span class="g-button__icon"><span class="g-button__icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M7.199 2H8.8a.2.2 0 0 1 .2.2c0 1.808 1.958 2.939 3.524 2.034a.2.2 0 0 1 .271.073l.802 1.388a.2.2 0 0 1-.073.272c-1.566.904-1.566 3.164 0 4.069a.2.2 0 0 1 .073.271l-.802 1.388a.2.2 0 0 1-.271.073C10.958 10.863 9 11.993 9 13.8a.2.2 0 0 1-.199.2H7.2a.2.2 0 0 1-.2-.2c0-1.808-1.958-2.938-3.524-2.034a.2.2 0 0 1-.272-.073l-.8-1.388a.2.2 0 0 1 .072-.271c1.566-.905 1.566-3.165 0-4.07a.2.2 0 0 1-.073-.27l.801-1.389a.2.2 0 0 1 .272-.072C5.042 5.138 7 4.007 7 2.199c0-.11.089-.199.199-.199M5.5 2.2c0-.94.76-1.7 1.699-1.7H8.8c.94 0 1.7.76 1.7 1.7a.85.85 0 0 0 1.274.735 1.7 1.7 0 0 1 2.32.622l.802 1.388c.469.813.19 1.851-.622 2.32a.85.85 0 0 0 0 1.472 1.7 1.7 0 0 1 .622 2.32l-.802 1.388a1.7 1.7 0 0 1-2.32.622.85.85 0 0 0-1.274.735c0 .939-.76 1.7-1.699 1.7H7.2a1.7 1.7 0 0 1-1.699-1.7.85.85 0 0 0-1.274-.735 1.7 1.7 0 0 1-2.32-.622l-.802-1.388a1.7 1.7 0 0 1 .622-2.32.85.85 0 0 0 0-1.471 1.7 1.7 0 0 1-.622-2.32l.801-1.389a1.7 1.7 0 0 1 2.32-.622A.85.85 0 0 0 5.5 2.2m4 5.8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0" clip-rule="evenodd"></path></svg></span></span></button></div></div></div></li></ul></div></div></nav></div></div></div></div><main class="pc-layout__content"><div class="pc-Grid"><div class="container-fluid "><div class="row pc-constructor-row"><div class="col"><div class="col col-reset pc-block-base pc-block-base_reset-paddings pc-block-base_indentTop_0 pc-block-base_indentBottom_0 pc-constructor-block pc-constructor-block_type_page"><div class="Layout Layout_full-header"><div class="Layout__body"><div class="Layout__content"><div class="dc-doc-layout dc-doc-page"><div class="dc-doc-layout__mobile-only"></div><div class="dc-doc-layout__left"><div class="dc-doc-layout__toc"><nav class="dc-toc"><div class="dc-toc__top" id="g-uniq-20"><a href="index.html" class="dc-toc__top-header dc-toc__top-header_link" data-router-shallow="true"></a></div><div class="dc-toc__content"><ul class="dc-toc__list" aria-labelledby="g-uniq-20"><li id="b697588c-b007-4ce3-8be0-52cc86eb23ee" class="dc-toc__list-item dc-toc__list-item_main"><a href="pages/overview.html" target="_self" class="dc-toc-item__link" data-router-shallow="true"><div class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block"><span>Overview<!-- --> </span></div></a></li><li id="385d8013-4e86-4c7d-89b0-f3a6953de6c2" class="dc-toc__list-item dc-toc__list-item_main"><a href="pages/get-started.html" target="_self" class="dc-toc-item__link" data-router-shallow="true"><div class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block"><span>Get started<!-- --> </span></div></a></li><li id="96e302f3-6f66-48b1-9501-b63705e45dd4" class="dc-toc__list-item dc-toc__list-item_main dc-toc__list-item_opened"><button class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block" aria-expanded="true" aria-label="Drop-down list API"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="dc-toggle-arrow dc-toggle-arrow_type_horizontal dc-toggle-arrow_open dc-toggle-arrow_thin dc-toc-item__icon"><path fill="currentColor" fill-rule="evenodd" d="M5.47 13.03a.75.75 0 0 1 0-1.06L9.44 8 5.47 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0" clip-rule="evenodd"></path></svg><span>API<!-- --> </span></button><ul class="dc-toc__list" aria-labelledby="g-uniq-20"><li id="0f0ec472-6067-4e5c-b19d-cc4bdcb86b23" class="dc-toc__list-item"><a href="pages/api/overview.html" target="_self" class="dc-toc-item__link" data-router-shallow="true"><div class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block"><span>Overview<!-- --> </span></div></a></li><li id="f7e4addf-3a45-426b-9872-7a9f8efc4158" class="dc-toc__list-item"><button class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block" aria-expanded="false" aria-label="Drop-down list DateTime"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="dc-toggle-arrow dc-toggle-arrow_type_horizontal dc-toggle-arrow_thin dc-toc-item__icon"><path fill="currentColor" fill-rule="evenodd" d="M5.47 13.03a.75.75 0 0 1 0-1.06L9.44 8 5.47 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0" clip-rule="evenodd"></path></svg><span>DateTime<!-- --> </span></button></li><li id="9d2edd32-5530-491c-812f-201bb1b314ce" class="dc-toc__list-item dc-toc__list-item_opened"><button class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block" aria-expanded="true" aria-label="Drop-down list Duration"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="dc-toggle-arrow dc-toggle-arrow_type_horizontal dc-toggle-arrow_open dc-toggle-arrow_thin dc-toc-item__icon"><path fill="currentColor" fill-rule="evenodd" d="M5.47 13.03a.75.75 0 0 1 0-1.06L9.44 8 5.47 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0" clip-rule="evenodd"></path></svg><span>Duration<!-- --> </span></button><ul class="dc-toc__list" aria-labelledby="g-uniq-20"><li id="840acb0d-af12-4555-8970-a29a952f293f" class="dc-toc__list-item"><a href="pages/api/Duration/overview.html" target="_self" class="dc-toc-item__link" data-router-shallow="true"><div class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block"><span>Overview<!-- --> </span></div></a></li><li id="cf37a043-627a-42c3-9d92-89551a6dc54b" class="dc-toc__list-item dc-toc__list-item_active"><a href="pages/api/Duration/interfaces/Duration.html" target="_self" class="dc-toc-item__link" aria-current="true" data-router-shallow="true"><div class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text_active dc-toc-item__text-block"><span>Duration<!-- --> </span></div></a></li><li id="2159bd99-05b4-4bc1-a0ad-c348515007d0" class="dc-toc__list-item"><a href="pages/api/Duration/type-aliases/DurationInput.html" target="_self" class="dc-toc-item__link" data-router-shallow="true"><div class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block"><span>DurationInput<!-- --> </span></div></a></li><li id="add73ed0-3533-45cd-8445-711ac8e25815" class="dc-toc__list-item"><a href="pages/api/Duration/type-aliases/DurationInputObject.html" target="_self" class="dc-toc-item__link" data-router-shallow="true"><div class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block"><span>DurationInputObject<!-- --> </span></div></a></li><li id="1334a663-d051-4703-8e37-ad5982cb4217" class="dc-toc__list-item"><a href="pages/api/Duration/type-aliases/DurationUnit.html" target="_self" class="dc-toc-item__link" data-router-shallow="true"><div class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block"><span>DurationUnit<!-- --> </span></div></a></li><li id="9ce20b63-8a75-4fd8-ab4d-231c234419ef" class="dc-toc__list-item"><a href="pages/api/Duration/type-aliases/FormatOptions.html" target="_self" class="dc-toc-item__link" data-router-shallow="true"><div class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block"><span>FormatOptions<!-- --> </span></div></a></li></ul></li><li id="d6b34c7c-1de9-4e51-a67d-509ab43f5dc7" class="dc-toc__list-item"><button class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block" aria-expanded="false" aria-label="Drop-down list Settings"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="dc-toggle-arrow dc-toggle-arrow_type_horizontal dc-toggle-arrow_thin dc-toc-item__icon"><path fill="currentColor" fill-rule="evenodd" d="M5.47 13.03a.75.75 0 0 1 0-1.06L9.44 8 5.47 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0" clip-rule="evenodd"></path></svg><span>Settings<!-- --> </span></button></li><li id="52ba0308-3bd6-4cd7-981e-cba0e0a946c0" class="dc-toc__list-item"><button class="dc-toc-item__text dc-toc-item__text_clicable dc-toc-item__text-block" aria-expanded="false" aria-label="Drop-down list Utilities"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" class="dc-toggle-arrow dc-toggle-arrow_type_horizontal dc-toggle-arrow_thin dc-toc-item__icon"><path fill="currentColor" fill-rule="evenodd" d="M5.47 13.03a.75.75 0 0 1 0-1.06L9.44 8 5.47 4.03a.75.75 0 0 1 1.06-1.06l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 0 1-1.06 0" clip-rule="evenodd"></path></svg><span>Utilities<!-- --> </span></button></li></ul></li></ul></div><div class="dc-toc__bottom"></div></nav></div></div><div class="dc-doc-layout__right"><div class="dc-doc-page__aside"><div class="dc-subnavigation__wrapper"><div class="dc-subnavigation dc-subnavigation_visible"><button class="dc-subnavigation__mini-toc-button" type="button"><div class="dc-subnavigation__icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M4.5 3h7A1.5 1.5 0 0 1 13 4.5v7a1.5 1.5 0 0 1-1.5 1.5h-7A1.5 1.5 0 0 1 3 11.5v-7A1.5 1.5 0 0 1 4.5 3m-3 1.5a3 3 0 0 1 3-3h7a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-7a3 3 0 0 1-3-3zm4.75.75a1 1 0 1 1-2 0 1 1 0 0 1 2 0m1 0A.75.75 0 0 1 8 4.5h2.75a.75.75 0 0 1 0 1.5H8a.75.75 0 0 1-.75-.75M5.25 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2m1 1.75a1 1 0 1 1-2 0 1 1 0 0 1 2 0M8 7.25a.75.75 0 0 0 0 1.5h2.75a.75.75 0 0 0 0-1.5zm-.75 3.5A.75.75 0 0 1 8 10h2.75a.75.75 0 0 1 0 1.5H8a.75.75 0 0 1-.75-.75" clip-rule="evenodd"></path></svg></div><span class="dc-subnavigation__title dc-subnavigation__title_single"></span></button><button class="g-button g-button_view_flat g-button_size_xl g-button_pin_round-round dc-subnavigation__share-button dc-share-button" type="button"><span class="g-button__icon"><span class="g-button__icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M9 9v2.665a.335.335 0 0 0 .55.257l4.72-3.934a.635.635 0 0 0 0-.976L9.55 3.078a.335.335 0 0 0-.55.257V6H7.5c-1.584 0-3.182.571-4.241 1.692-.9.951-1.549 2.446-1.31 4.723.65-1.026 1.365-1.837 2.201-2.413C5.198 9.279 6.323 9 7.5 9zm-3 1.731c-1.162.396-2.165 1.337-3.151 3.106-.223.4-.64.663-1.098.663-.552 0-1.04-.376-1.143-.917C-.598 7.237 3.678 4.5 7.499 4.5V3.335a1.835 1.835 0 0 1 3.01-1.41l4.722 3.935a2.135 2.135 0 0 1 0 3.28l-4.721 3.935a1.835 1.835 0 0 1-3.01-1.41V10.5c-.533 0-1.03.07-1.5.231" clip-rule="evenodd"></path></svg></span></span></button></div><div class="dc-subnavigation__mini-toc"><nav class="dc-mini-toc" aria-label="Article navigation"><h2 class="dc-mini-toc__title">In this article<!-- -->:</h2><ul class="dc-mini-toc__sections" aria-label="Current article contents"><li data-hash="pages/api/Duration/interfaces/Duration.html#methods" class="dc-mini-toc__section"><a href="pages/api/Duration/interfaces/Duration.html#methods" class="dc-mini-toc__section-link" data-router-shallow="true">Methods</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#add" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#add" class="dc-mini-toc__section-link" data-router-shallow="true">add()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#as" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#as" class="dc-mini-toc__section-link" data-router-shallow="true">as()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#asdays" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#asdays" class="dc-mini-toc__section-link" data-router-shallow="true">asDays()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#ashours" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#ashours" class="dc-mini-toc__section-link" data-router-shallow="true">asHours()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#asmilliseconds" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#asmilliseconds" class="dc-mini-toc__section-link" data-router-shallow="true">asMilliseconds()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#asminutes" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#asminutes" class="dc-mini-toc__section-link" data-router-shallow="true">asMinutes()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#asmonths" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#asmonths" class="dc-mini-toc__section-link" data-router-shallow="true">asMonths()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#asquarters" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#asquarters" class="dc-mini-toc__section-link" data-router-shallow="true">asQuarters()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#asseconds" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#asseconds" class="dc-mini-toc__section-link" data-router-shallow="true">asSeconds()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#asweeks" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#asweeks" class="dc-mini-toc__section-link" data-router-shallow="true">asWeeks()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#asyears" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#asyears" class="dc-mini-toc__section-link" data-router-shallow="true">asYears()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#days" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#days" class="dc-mini-toc__section-link" data-router-shallow="true">days()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#format" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#format" class="dc-mini-toc__section-link" data-router-shallow="true">format()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#get" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#get" class="dc-mini-toc__section-link" data-router-shallow="true">get()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#hours" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#hours" class="dc-mini-toc__section-link" data-router-shallow="true">hours()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#humanize" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#humanize" class="dc-mini-toc__section-link" data-router-shallow="true">humanize()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#humanizeintl" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#humanizeintl" class="dc-mini-toc__section-link" data-router-shallow="true">humanizeIntl()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#isvalid" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#isvalid" class="dc-mini-toc__section-link" data-router-shallow="true">isValid()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#locale" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#locale" class="dc-mini-toc__section-link" data-router-shallow="true">locale()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#milliseconds" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#milliseconds" class="dc-mini-toc__section-link" data-router-shallow="true">milliseconds()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#minutes" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#minutes" class="dc-mini-toc__section-link" data-router-shallow="true">minutes()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#months" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#months" class="dc-mini-toc__section-link" data-router-shallow="true">months()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#negate" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#negate" class="dc-mini-toc__section-link" data-router-shallow="true">negate()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#normalize" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#normalize" class="dc-mini-toc__section-link" data-router-shallow="true">normalize()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#quarters" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#quarters" class="dc-mini-toc__section-link" data-router-shallow="true">quarters()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#rescale" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#rescale" class="dc-mini-toc__section-link" data-router-shallow="true">rescale()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#seconds" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#seconds" class="dc-mini-toc__section-link" data-router-shallow="true">seconds()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#set" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#set" class="dc-mini-toc__section-link" data-router-shallow="true">set()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#shiftto" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#shiftto" class="dc-mini-toc__section-link" data-router-shallow="true">shiftTo()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#subtract" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#subtract" class="dc-mini-toc__section-link" data-router-shallow="true">subtract()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#toisostring" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#toisostring" class="dc-mini-toc__section-link" data-router-shallow="true">toISOString()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#tojson" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#tojson" class="dc-mini-toc__section-link" data-router-shallow="true">toJSON()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#toobject" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#toobject" class="dc-mini-toc__section-link" data-router-shallow="true">toObject()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#weeks" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#weeks" class="dc-mini-toc__section-link" data-router-shallow="true">weeks()</a></li><li data-hash="pages/api/Duration/interfaces/Duration.html#years" class="dc-mini-toc__section dc-mini-toc__section_child"><a href="pages/api/Duration/interfaces/Duration.html#years" class="dc-mini-toc__section-link" data-router-shallow="true">years()</a></li></ul><div class="dc-mini-toc__bottom"></div></nav></div></div></div></div><div class="dc-doc-layout__center"><div class="dc-doc-page__controls"><div class="dc-controls"><button aria-label="Reading mode" class="g-button g-button_view_flat-secondary g-button_size_m g-button_pin_round-round dc-control dc-controls__control" type="button"><span class="g-button__icon"><span class="g-button__icon-inner"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M4.5 3A1.5 1.5 0 0 0 3 4.5v1.75a.75.75 0 0 1-1.5 0V4.5a3 3 0 0 1 3-3h1.75a.75.75 0 0 1 0 1.5zM9 2.25a.75.75 0 0 1 .75-.75h1.75a3 3 0 0 1 3 3v1.75a.75.75 0 0 1-1.5 0V4.5A1.5 1.5 0 0 0 11.5 3H9.75A.75.75 0 0 1 9 2.25M2.25 9a.75.75 0 0 1 .75.75v1.75A1.5 1.5 0 0 0 4.5 13h1.75a.75.75 0 0 1 0 1.5H4.5a3 3 0 0 1-3-3V9.75A.75.75 0 0 1 2.25 9m11.5 0a.75.75 0 0 1 .75.75v1.75a3 3 0 0 1-3 3H9.75a.75.75 0 0 1 0-1.5h1.75a1.5 1.5 0 0 0 1.5-1.5V9.75a.75.75 0 0 1 .75-.75" clip-rule="evenodd"></path></svg></span></span></button></div></div><div class="dc-doc-page__main"><main class="dc-doc-page__content"><div class="dc-doc-page__page-contributors"></div><div class="dc-doc-page__content-mini-toc yfm"><ul><li><a href="pages/api/Duration/interfaces/Duration.html#methods">Methods</a><ul><li><a href="pages/api/Duration/interfaces/Duration.html#add">add()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#as">as()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#asdays">asDays()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#ashours">asHours()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#asmilliseconds">asMilliseconds()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#asminutes">asMinutes()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#asmonths">asMonths()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#asquarters">asQuarters()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#asseconds">asSeconds()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#asweeks">asWeeks()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#asyears">asYears()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#days">days()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#format">format()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#get">get()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#hours">hours()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#humanize">humanize()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#humanizeintl">humanizeIntl()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#isvalid">isValid()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#locale">locale()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#milliseconds">milliseconds()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#minutes">minutes()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#months">months()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#negate">negate()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#normalize">normalize()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#quarters">quarters()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#rescale">rescale()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#seconds">seconds()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#set">set()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#shiftto">shiftTo()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#subtract">subtract()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#toisostring">toISOString()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#tojson">toJSON()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#toobject">toObject()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#weeks">weeks()</a></li><li><a href="pages/api/Duration/interfaces/Duration.html#years">years()</a></li></ul></li></ul></div><div class="dc-doc-page__body dc-doc-page__body_text-size_m yfm"><p><a href="pages/api/overview.html">API</a> / <a href="pages/api/Duration/overview.html">Duration</a> / Duration</p>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L13" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:13</a></p>
+<h2 id="methods"><a href="pages/api/Duration/interfaces/Duration.html#methods" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">Methods</span></a>Methods</h2>
+<h3 id="add"><a href="pages/api/Duration/interfaces/Duration.html#add" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">add()</span></a>add()</h3>
+<blockquote>
+<p><strong>add</strong>(<code>amount</code>, <code>unit?</code>): <code>Duration</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L69" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:69</a></p>
+<p>Make this Duration longer by the specified amount. Return a newly-constructed Duration.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td><a href="pages/api/Duration/type-aliases/DurationInput.html"><code>DurationInput</code></a></td>
+</tr>
+<tr>
+<td><code>unit?</code></td>
+<td><a href="pages/api/Duration/type-aliases/DurationUnit.html"><code>DurationUnit</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>Duration</code></p>
+<hr />
+<h3 id="as"><a href="pages/api/Duration/interfaces/Duration.html#as" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">as()</span></a>as()</h3>
+<blockquote>
+<p><strong>as</strong>(<code>unit</code>): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L15" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:15</a></p>
+<p>Return the length of the duration in the specified unit.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unit</code></td>
+<td><a href="pages/api/Duration/type-aliases/DurationUnit.html"><code>DurationUnit</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="asdays"><a href="pages/api/Duration/interfaces/Duration.html#asdays" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">asDays()</span></a>asDays()</h3>
+<blockquote>
+<p><strong>asDays</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L46" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:46</a></p>
+<p>Return the length of the duration in the days.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="ashours"><a href="pages/api/Duration/interfaces/Duration.html#ashours" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">asHours()</span></a>asHours()</h3>
+<blockquote>
+<p><strong>asHours</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L41" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:41</a></p>
+<p>Return the length of the duration in the hours.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="asmilliseconds"><a href="pages/api/Duration/interfaces/Duration.html#asmilliseconds" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">asMilliseconds()</span></a>asMilliseconds()</h3>
+<blockquote>
+<p><strong>asMilliseconds</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L26" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:26</a></p>
+<p>Return the length of the duration in the milliseconds.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="asminutes"><a href="pages/api/Duration/interfaces/Duration.html#asminutes" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">asMinutes()</span></a>asMinutes()</h3>
+<blockquote>
+<p><strong>asMinutes</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L36" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:36</a></p>
+<p>Return the length of the duration in the minutes.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="asmonths"><a href="pages/api/Duration/interfaces/Duration.html#asmonths" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">asMonths()</span></a>asMonths()</h3>
+<blockquote>
+<p><strong>asMonths</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L56" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:56</a></p>
+<p>Return the length of the duration in the months.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="asquarters"><a href="pages/api/Duration/interfaces/Duration.html#asquarters" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">asQuarters()</span></a>asQuarters()</h3>
+<blockquote>
+<p><strong>asQuarters</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L61" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:61</a></p>
+<p>Return the length of the duration in the quarters.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="asseconds"><a href="pages/api/Duration/interfaces/Duration.html#asseconds" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">asSeconds()</span></a>asSeconds()</h3>
+<blockquote>
+<p><strong>asSeconds</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L31" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:31</a></p>
+<p>Return the length of the duration in the seconds.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="asweeks"><a href="pages/api/Duration/interfaces/Duration.html#asweeks" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">asWeeks()</span></a>asWeeks()</h3>
+<blockquote>
+<p><strong>asWeeks</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L51" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:51</a></p>
+<p>Return the length of the duration in the weeks.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="asyears"><a href="pages/api/Duration/interfaces/Duration.html#asyears" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">asYears()</span></a>asYears()</h3>
+<blockquote>
+<p><strong>asYears</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L66" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:66</a></p>
+<p>Return the length of the duration in the years.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="days"><a href="pages/api/Duration/interfaces/Duration.html#days" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">days()</span></a>days()</h3>
+<blockquote>
+<p><strong>days</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L44" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:44</a></p>
+<p>Get the days.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="format"><a href="pages/api/Duration/interfaces/Duration.html#format" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">format()</span></a>format()</h3>
+<blockquote>
+<p><strong>format</strong>(<code>formatInput</code>, <code>options?</code>): <code>string</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L102" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:102</a></p>
+<p>Returns a string representation of this Duration formatted according to the specified format string.<br />
+Used tokens are S for milliseconds, s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months, and y for years.<br />
+Add padding by repeating the token, e.g. 'yy' pads the years to two digits, "hhhh" pads the hours to four digits.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>formatInput</code></td>
+<td><code>string</code></td>
+</tr>
+<tr>
+<td><code>options?</code></td>
+<td><a href="pages/api/Duration/type-aliases/FormatOptions.html"><code>FormatOptions</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>string</code></p>
+<hr />
+<h3 id="get"><a href="pages/api/Duration/interfaces/Duration.html#get" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">get()</span></a>get()</h3>
+<blockquote>
+<p><strong>get</strong>(<code>unit</code>): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L18" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:18</a></p>
+<p>Get the value of unit.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unit</code></td>
+<td><a href="pages/api/Duration/type-aliases/DurationUnit.html"><code>DurationUnit</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="hours"><a href="pages/api/Duration/interfaces/Duration.html#hours" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">hours()</span></a>hours()</h3>
+<blockquote>
+<p><strong>hours</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L39" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:39</a></p>
+<p>Get the hours.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="humanize"><a href="pages/api/Duration/interfaces/Duration.html#humanize" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">humanize()</span></a>humanize()</h3>
+<blockquote>
+<p><strong>humanize</strong>(<code>withSuffix?</code>): <code>string</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L90" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:90</a></p>
+<p>Returns a string representation of a Duration in <code>dateTime.from</code> format.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>withSuffix?</code></td>
+<td><code>boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>string</code></p>
+<hr />
+<h3 id="humanizeintl"><a href="pages/api/Duration/interfaces/Duration.html#humanizeintl" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">humanizeIntl()</span></a>humanizeIntl()</h3>
+<blockquote>
+<p><strong>humanizeIntl</strong>(<code>options?</code>): <code>string</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L93" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:93</a></p>
+<p>Returns a string representation of a Duration with all units included.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>options?</code></td>
+<td>{ <code>listStyle?</code>: <code>"long"</code> | <code>"short"</code> | <code>"narrow"</code>; <code>unitDisplay?</code>: <code>"long"</code> | <code>"short"</code> | <code>"narrow"</code>; }</td>
+</tr>
+<tr>
+<td><code>options.listStyle?</code></td>
+<td><code>"long"</code> | <code>"short"</code> | <code>"narrow"</code></td>
+</tr>
+<tr>
+<td><code>options.unitDisplay?</code></td>
+<td><code>"long"</code> | <code>"short"</code> | <code>"narrow"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>string</code></p>
+<hr />
+<h3 id="isvalid"><a href="pages/api/Duration/interfaces/Duration.html#isvalid" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">isValid()</span></a>isValid()</h3>
+<blockquote>
+<p><strong>isValid</strong>(): <code>boolean</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L113" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:113</a></p>
+<p>Returns</p>
+<p><code>boolean</code></p>
+<hr />
+<h3 id="locale"><a href="pages/api/Duration/interfaces/Duration.html#locale" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">locale()</span></a>locale()</h3>
+<p>Call Signature</p>
+<blockquote>
+<p><strong>locale</strong>(): <code>string</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L77" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:77</a></p>
+<p>Returns</p>
+<p><code>string</code></p>
+<p>Call Signature</p>
+<blockquote>
+<p><strong>locale</strong>(<code>locale</code>): <code>Duration</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L78" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:78</a></p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>locale</code></td>
+<td><code>string</code></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>Duration</code></p>
+<hr />
+<h3 id="milliseconds"><a href="pages/api/Duration/interfaces/Duration.html#milliseconds" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">milliseconds()</span></a>milliseconds()</h3>
+<blockquote>
+<p><strong>milliseconds</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L24" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:24</a></p>
+<p>Get the milliseconds.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="minutes"><a href="pages/api/Duration/interfaces/Duration.html#minutes" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">minutes()</span></a>minutes()</h3>
+<blockquote>
+<p><strong>minutes</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L34" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:34</a></p>
+<p>Get the minutes.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="months"><a href="pages/api/Duration/interfaces/Duration.html#months" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">months()</span></a>months()</h3>
+<blockquote>
+<p><strong>months</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L54" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:54</a></p>
+<p>Get the months.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="negate"><a href="pages/api/Duration/interfaces/Duration.html#negate" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">negate()</span></a>negate()</h3>
+<blockquote>
+<p><strong>negate</strong>(): <code>Duration</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L75" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:75</a></p>
+<p>Return the negative of this Duration.</p>
+<p>Returns</p>
+<p><code>Duration</code></p>
+<hr />
+<h3 id="normalize"><a href="pages/api/Duration/interfaces/Duration.html#normalize" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">normalize()</span></a>normalize()</h3>
+<blockquote>
+<p><strong>normalize</strong>(<code>options?</code>): <code>Duration</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L105" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:105</a></p>
+<p>Reduce this Duration to its canonical representation in its current units.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>options?</code></td>
+<td>{ <code>roundUp?</code>: <code>boolean</code>; }</td>
+</tr>
+<tr>
+<td><code>options.roundUp?</code></td>
+<td><code>boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>Duration</code></p>
+<hr />
+<h3 id="quarters"><a href="pages/api/Duration/interfaces/Duration.html#quarters" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">quarters()</span></a>quarters()</h3>
+<blockquote>
+<p><strong>quarters</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L59" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:59</a></p>
+<p>Get the quarters.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="rescale"><a href="pages/api/Duration/interfaces/Duration.html#rescale" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">rescale()</span></a>rescale()</h3>
+<blockquote>
+<p><strong>rescale</strong>(<code>options?</code>): <code>Duration</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L111" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:111</a></p>
+<p>Rescale units to its largest representation</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>options?</code></td>
+<td>{ <code>roundUp?</code>: <code>boolean</code>; }</td>
+</tr>
+<tr>
+<td><code>options.roundUp?</code></td>
+<td><code>boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>Duration</code></p>
+<hr />
+<h3 id="seconds"><a href="pages/api/Duration/interfaces/Duration.html#seconds" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">seconds()</span></a>seconds()</h3>
+<blockquote>
+<p><strong>seconds</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L29" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:29</a></p>
+<p>Get the seconds.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="set"><a href="pages/api/Duration/interfaces/Duration.html#set" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">set()</span></a>set()</h3>
+<blockquote>
+<p><strong>set</strong>(<code>values</code>): <code>Duration</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L21" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:21</a></p>
+<p>Set the values of specified units. Return a newly-constructed Duration.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>values</code></td>
+<td><code>Partial</code></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>Duration</code></p>
+<hr />
+<h3 id="shiftto"><a href="pages/api/Duration/interfaces/Duration.html#shiftto" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">shiftTo()</span></a>shiftTo()</h3>
+<blockquote>
+<p><strong>shiftTo</strong>(<code>units</code>, <code>options?</code>): <code>Duration</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L108" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:108</a></p>
+<p>Convert this Duration into its representation in a different set of units.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>units</code></td>
+<td><a href="pages/api/Duration/type-aliases/DurationUnit.html"><code>DurationUnit</code></a>[]</td>
+</tr>
+<tr>
+<td><code>options?</code></td>
+<td>{ <code>roundUp?</code>: <code>boolean</code>; }</td>
+</tr>
+<tr>
+<td><code>options.roundUp?</code></td>
+<td><code>boolean</code></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>Duration</code></p>
+<hr />
+<h3 id="subtract"><a href="pages/api/Duration/interfaces/Duration.html#subtract" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">subtract()</span></a>subtract()</h3>
+<blockquote>
+<p><strong>subtract</strong>(<code>amount</code>, <code>unit?</code>): <code>Duration</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L72" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:72</a></p>
+<p>Make this Duration shorter by the specified amount. Return a newly-constructed Duration.</p>
+<p>Parameters</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code></td>
+<td><a href="pages/api/Duration/type-aliases/DurationInput.html"><code>DurationInput</code></a></td>
+</tr>
+<tr>
+<td><code>unit?</code></td>
+<td><a href="pages/api/Duration/type-aliases/DurationUnit.html"><code>DurationUnit</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Returns</p>
+<p><code>Duration</code></p>
+<hr />
+<h3 id="toisostring"><a href="pages/api/Duration/interfaces/Duration.html#toisostring" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">toISOString()</span></a>toISOString()</h3>
+<blockquote>
+<p><strong>toISOString</strong>(): <code>string</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L81" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:81</a></p>
+<p>Returns an ISO 8601-compliant string representation of this Duration.</p>
+<p>Returns</p>
+<p><code>string</code></p>
+<hr />
+<h3 id="tojson"><a href="pages/api/Duration/interfaces/Duration.html#tojson" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">toJSON()</span></a>toJSON()</h3>
+<blockquote>
+<p><strong>toJSON</strong>(): <code>string</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L84" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:84</a></p>
+<p>Returns an ISO 8601 representation of this Duration appropriate for use in JSON.</p>
+<p>Returns</p>
+<p><code>string</code></p>
+<hr />
+<h3 id="toobject"><a href="pages/api/Duration/interfaces/Duration.html#toobject" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">toObject()</span></a>toObject()</h3>
+<blockquote>
+<p><strong>toObject</strong>(): <code>Partial</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L87" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:87</a></p>
+<p>Returns a JavaScript object with this Duration's values.</p>
+<p>Returns</p>
+<p><code>Partial</code></p>
+<hr />
+<h3 id="weeks"><a href="pages/api/Duration/interfaces/Duration.html#weeks" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">weeks()</span></a>weeks()</h3>
+<blockquote>
+<p><strong>weeks</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L49" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:49</a></p>
+<p>Get the weeks.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+<hr />
+<h3 id="years"><a href="pages/api/Duration/interfaces/Duration.html#years" class="yfm-anchor" aria-hidden="true"><span class="visually-hidden" data-no-index="true">years()</span></a>years()</h3>
+<blockquote>
+<p><strong>years</strong>(): <code>number</code></p>
+</blockquote>
+<p>Defined in: <a href="https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L64" target="_blank" rel="noreferrer noopener">src/typings/duration.ts:64</a></p>
+<p>Get the years.</p>
+<p>Returns</p>
+<p><code>number</code></p>
+</div></main><div class="dc-nav-toc-panel dc-doc-page__toc-nav-panel"><div class="dc-nav-toc-panel__content"><div class="dc-nav-toc-panel__control dc-nav-toc-panel__control_left"><div class="dc-nav-toc-panel__control-hint">Previous</div><div class="dc-nav-toc-panel__control-text"><a href="pages/api/Duration/overview.html" target="_self" class="dc-nav-toc-panel__link" data-router-shallow="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M14.75 8a.75.75 0 0 1-.75.75H3.81l2.72 2.72a.75.75 0 1 1-1.06 1.06l-4-4a.75.75 0 0 1 0-1.06l4-4a.75.75 0 0 1 1.06 1.06L3.81 7.25H14a.75.75 0 0 1 .75.75" clip-rule="evenodd"></path></svg><div class="dc-nav-toc-panel__control-name">Overview</div></a></div></div><div class="dc-nav-toc-panel__control dc-nav-toc-panel__control_right"><div class="dc-nav-toc-panel__control-hint">Next</div><div class="dc-nav-toc-panel__control-text"><a href="pages/api/Duration/type-aliases/DurationInput.html" target="_self" class="dc-nav-toc-panel__link" data-router-shallow="true"><div class="dc-nav-toc-panel__control-name">DurationInput</div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M1.25 8A.75.75 0 0 1 2 7.25h10.19L9.47 4.53a.75.75 0 0 1 1.06-1.06l4 4a.75.75 0 0 1 0 1.06l-4 4a.75.75 0 1 1-1.06-1.06l2.72-2.72H2A.75.75 0 0 1 1.25 8" clip-rule="evenodd"></path></svg></a></div></div></div></div></div><div class="dc-doc-layout__desktop-only"></div></div></div></div></div></div></div></div></div></div></div></main></div></div></div></div></div>
+                <script type="application/json" id="diplodoc-state">
+                    {"data":{"meta":{"metadata":[{"name":"generator","content":"Diplodoc Platform v4.57.19"}]},"assets":[],"headings":[{"title":"Methods","href":"pages/api/Duration/interfaces/Duration.html#methods","level":2,"items":[{"title":"add()","href":"pages/api/Duration/interfaces/Duration.html#add","level":3},{"title":"as()","href":"pages/api/Duration/interfaces/Duration.html#as","level":3},{"title":"asDays()","href":"pages/api/Duration/interfaces/Duration.html#asdays","level":3},{"title":"asHours()","href":"pages/api/Duration/interfaces/Duration.html#ashours","level":3},{"title":"asMilliseconds()","href":"pages/api/Duration/interfaces/Duration.html#asmilliseconds","level":3},{"title":"asMinutes()","href":"pages/api/Duration/interfaces/Duration.html#asminutes","level":3},{"title":"asMonths()","href":"pages/api/Duration/interfaces/Duration.html#asmonths","level":3},{"title":"asQuarters()","href":"pages/api/Duration/interfaces/Duration.html#asquarters","level":3},{"title":"asSeconds()","href":"pages/api/Duration/interfaces/Duration.html#asseconds","level":3},{"title":"asWeeks()","href":"pages/api/Duration/interfaces/Duration.html#asweeks","level":3},{"title":"asYears()","href":"pages/api/Duration/interfaces/Duration.html#asyears","level":3},{"title":"days()","href":"pages/api/Duration/interfaces/Duration.html#days","level":3},{"title":"format()","href":"pages/api/Duration/interfaces/Duration.html#format","level":3},{"title":"get()","href":"pages/api/Duration/interfaces/Duration.html#get","level":3},{"title":"hours()","href":"pages/api/Duration/interfaces/Duration.html#hours","level":3},{"title":"humanize()","href":"pages/api/Duration/interfaces/Duration.html#humanize","level":3},{"title":"humanizeIntl()","href":"pages/api/Duration/interfaces/Duration.html#humanizeintl","level":3},{"title":"isValid()","href":"pages/api/Duration/interfaces/Duration.html#isvalid","level":3},{"title":"locale()","href":"pages/api/Duration/interfaces/Duration.html#locale","level":3},{"title":"milliseconds()","href":"pages/api/Duration/interfaces/Duration.html#milliseconds","level":3},{"title":"minutes()","href":"pages/api/Duration/interfaces/Duration.html#minutes","level":3},{"title":"months()","href":"pages/api/Duration/interfaces/Duration.html#months","level":3},{"title":"negate()","href":"pages/api/Duration/interfaces/Duration.html#negate","level":3},{"title":"normalize()","href":"pages/api/Duration/interfaces/Duration.html#normalize","level":3},{"title":"quarters()","href":"pages/api/Duration/interfaces/Duration.html#quarters","level":3},{"title":"rescale()","href":"pages/api/Duration/interfaces/Duration.html#rescale","level":3},{"title":"seconds()","href":"pages/api/Duration/interfaces/Duration.html#seconds","level":3},{"title":"set()","href":"pages/api/Duration/interfaces/Duration.html#set","level":3},{"title":"shiftTo()","href":"pages/api/Duration/interfaces/Duration.html#shiftto","level":3},{"title":"subtract()","href":"pages/api/Duration/interfaces/Duration.html#subtract","level":3},{"title":"toISOString()","href":"pages/api/Duration/interfaces/Duration.html#toisostring","level":3},{"title":"toJSON()","href":"pages/api/Duration/interfaces/Duration.html#tojson","level":3},{"title":"toObject()","href":"pages/api/Duration/interfaces/Duration.html#toobject","level":3},{"title":"weeks()","href":"pages/api/Duration/interfaces/Duration.html#weeks","level":3},{"title":"years()","href":"pages/api/Duration/interfaces/Duration.html#years","level":3}]}],"title":"","includes":[],"html":"&lt;p&gt;&lt;a href=\"pages/api/overview.html\"&gt;API&lt;/a&gt; / &lt;a href=\"pages/api/Duration/overview.html\"&gt;Duration&lt;/a&gt; / Duration&lt;/p&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L13\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:13&lt;/a&gt;&lt;/p&gt;\n&lt;h2 id=\"methods\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#methods\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;Methods&lt;/span&gt;&lt;/a&gt;Methods&lt;/h2&gt;\n&lt;h3 id=\"add\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#add\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;add()&lt;/span&gt;&lt;/a&gt;add()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;add&lt;/strong&gt;(&lt;code&gt;amount&lt;/code&gt;, &lt;code&gt;unit?&lt;/code&gt;): &lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L69\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:69&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Make this Duration longer by the specified amount. Return a newly-constructed Duration.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;amount&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;a href=\"pages/api/Duration/type-aliases/DurationInput.html\"&gt;&lt;code&gt;DurationInput&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;unit?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;a href=\"pages/api/Duration/type-aliases/DurationUnit.html\"&gt;&lt;code&gt;DurationUnit&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"as\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#as\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;as()&lt;/span&gt;&lt;/a&gt;as()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;as&lt;/strong&gt;(&lt;code&gt;unit&lt;/code&gt;): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L15\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:15&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the specified unit.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;unit&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;a href=\"pages/api/Duration/type-aliases/DurationUnit.html\"&gt;&lt;code&gt;DurationUnit&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"asdays\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#asdays\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;asDays()&lt;/span&gt;&lt;/a&gt;asDays()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;asDays&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L46\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:46&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the days.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"ashours\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#ashours\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;asHours()&lt;/span&gt;&lt;/a&gt;asHours()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;asHours&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L41\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:41&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the hours.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"asmilliseconds\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#asmilliseconds\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;asMilliseconds()&lt;/span&gt;&lt;/a&gt;asMilliseconds()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;asMilliseconds&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L26\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:26&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the milliseconds.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"asminutes\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#asminutes\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;asMinutes()&lt;/span&gt;&lt;/a&gt;asMinutes()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;asMinutes&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L36\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:36&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the minutes.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"asmonths\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#asmonths\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;asMonths()&lt;/span&gt;&lt;/a&gt;asMonths()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;asMonths&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L56\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:56&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the months.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"asquarters\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#asquarters\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;asQuarters()&lt;/span&gt;&lt;/a&gt;asQuarters()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;asQuarters&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L61\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:61&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the quarters.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"asseconds\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#asseconds\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;asSeconds()&lt;/span&gt;&lt;/a&gt;asSeconds()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;asSeconds&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L31\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:31&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the seconds.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"asweeks\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#asweeks\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;asWeeks()&lt;/span&gt;&lt;/a&gt;asWeeks()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;asWeeks&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L51\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:51&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the weeks.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"asyears\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#asyears\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;asYears()&lt;/span&gt;&lt;/a&gt;asYears()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;asYears&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L66\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:66&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the length of the duration in the years.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"days\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#days\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;days()&lt;/span&gt;&lt;/a&gt;days()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;days&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L44\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:44&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the days.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"format\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#format\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;format()&lt;/span&gt;&lt;/a&gt;format()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;format&lt;/strong&gt;(&lt;code&gt;formatInput&lt;/code&gt;, &lt;code&gt;options?&lt;/code&gt;): &lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L102\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:102&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Returns a string representation of this Duration formatted according to the specified format string.&lt;br /&gt;\nUsed tokens are S for milliseconds, s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months, and y for years.&lt;br /&gt;\nAdd padding by repeating the token, e.g. 'yy' pads the years to two digits, \"hhhh\" pads the hours to four digits.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;formatInput&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;a href=\"pages/api/Duration/type-aliases/FormatOptions.html\"&gt;&lt;code&gt;FormatOptions&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"get\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#get\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;get()&lt;/span&gt;&lt;/a&gt;get()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;get&lt;/strong&gt;(&lt;code&gt;unit&lt;/code&gt;): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L18\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:18&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the value of unit.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;unit&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;a href=\"pages/api/Duration/type-aliases/DurationUnit.html\"&gt;&lt;code&gt;DurationUnit&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"hours\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#hours\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;hours()&lt;/span&gt;&lt;/a&gt;hours()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;hours&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L39\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:39&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the hours.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"humanize\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#humanize\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;humanize()&lt;/span&gt;&lt;/a&gt;humanize()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;humanize&lt;/strong&gt;(&lt;code&gt;withSuffix?&lt;/code&gt;): &lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L90\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:90&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Returns a string representation of a Duration in &lt;code&gt;dateTime.from&lt;/code&gt; format.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;withSuffix?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"humanizeintl\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#humanizeintl\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;humanizeIntl()&lt;/span&gt;&lt;/a&gt;humanizeIntl()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;humanizeIntl&lt;/strong&gt;(&lt;code&gt;options?&lt;/code&gt;): &lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L93\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:93&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Returns a string representation of a Duration with all units included.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;{ &lt;code&gt;listStyle?&lt;/code&gt;: &lt;code&gt;\"long\"&lt;/code&gt; | &lt;code&gt;\"short\"&lt;/code&gt; | &lt;code&gt;\"narrow\"&lt;/code&gt;; &lt;code&gt;unitDisplay?&lt;/code&gt;: &lt;code&gt;\"long\"&lt;/code&gt; | &lt;code&gt;\"short\"&lt;/code&gt; | &lt;code&gt;\"narrow\"&lt;/code&gt;; }&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options.listStyle?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;code&gt;\"long\"&lt;/code&gt; | &lt;code&gt;\"short\"&lt;/code&gt; | &lt;code&gt;\"narrow\"&lt;/code&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options.unitDisplay?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;code&gt;\"long\"&lt;/code&gt; | &lt;code&gt;\"short\"&lt;/code&gt; | &lt;code&gt;\"narrow\"&lt;/code&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"isvalid\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#isvalid\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;isValid()&lt;/span&gt;&lt;/a&gt;isValid()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;isValid&lt;/strong&gt;(): &lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L113\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:113&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"locale\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#locale\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;locale()&lt;/span&gt;&lt;/a&gt;locale()&lt;/h3&gt;\n&lt;p&gt;Call Signature&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;locale&lt;/strong&gt;(): &lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L77\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:77&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;p&gt;Call Signature&lt;/p&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;locale&lt;/strong&gt;(&lt;code&gt;locale&lt;/code&gt;): &lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L78\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:78&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;locale&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"milliseconds\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#milliseconds\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;milliseconds()&lt;/span&gt;&lt;/a&gt;milliseconds()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;milliseconds&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L24\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:24&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the milliseconds.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"minutes\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#minutes\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;minutes()&lt;/span&gt;&lt;/a&gt;minutes()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;minutes&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L34\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:34&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the minutes.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"months\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#months\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;months()&lt;/span&gt;&lt;/a&gt;months()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;months&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L54\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:54&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the months.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"negate\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#negate\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;negate()&lt;/span&gt;&lt;/a&gt;negate()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;negate&lt;/strong&gt;(): &lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L75\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:75&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Return the negative of this Duration.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"normalize\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#normalize\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;normalize()&lt;/span&gt;&lt;/a&gt;normalize()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;normalize&lt;/strong&gt;(&lt;code&gt;options?&lt;/code&gt;): &lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L105\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:105&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Reduce this Duration to its canonical representation in its current units.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;{ &lt;code&gt;roundUp?&lt;/code&gt;: &lt;code&gt;boolean&lt;/code&gt;; }&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options.roundUp?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"quarters\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#quarters\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;quarters()&lt;/span&gt;&lt;/a&gt;quarters()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;quarters&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L59\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:59&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the quarters.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"rescale\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#rescale\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;rescale()&lt;/span&gt;&lt;/a&gt;rescale()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;rescale&lt;/strong&gt;(&lt;code&gt;options?&lt;/code&gt;): &lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L111\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:111&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Rescale units to its largest representation&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;{ &lt;code&gt;roundUp?&lt;/code&gt;: &lt;code&gt;boolean&lt;/code&gt;; }&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options.roundUp?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"seconds\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#seconds\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;seconds()&lt;/span&gt;&lt;/a&gt;seconds()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;seconds&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L29\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:29&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the seconds.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"set\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#set\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;set()&lt;/span&gt;&lt;/a&gt;set()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;set&lt;/strong&gt;(&lt;code&gt;values&lt;/code&gt;): &lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L21\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:21&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Set the values of specified units. Return a newly-constructed Duration.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;values&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;code&gt;Partial&lt;/code&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"shiftto\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#shiftto\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;shiftTo()&lt;/span&gt;&lt;/a&gt;shiftTo()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;shiftTo&lt;/strong&gt;(&lt;code&gt;units&lt;/code&gt;, &lt;code&gt;options?&lt;/code&gt;): &lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L108\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:108&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Convert this Duration into its representation in a different set of units.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;units&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;a href=\"pages/api/Duration/type-aliases/DurationUnit.html\"&gt;&lt;code&gt;DurationUnit&lt;/code&gt;&lt;/a&gt;[]&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;{ &lt;code&gt;roundUp?&lt;/code&gt;: &lt;code&gt;boolean&lt;/code&gt;; }&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;options.roundUp?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"subtract\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#subtract\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;subtract()&lt;/span&gt;&lt;/a&gt;subtract()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;subtract&lt;/strong&gt;(&lt;code&gt;amount&lt;/code&gt;, &lt;code&gt;unit?&lt;/code&gt;): &lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L72\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:72&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Make this Duration shorter by the specified amount. Return a newly-constructed Duration.&lt;/p&gt;\n&lt;p&gt;Parameters&lt;/p&gt;\n&lt;table&gt;\n&lt;thead&gt;\n&lt;tr&gt;\n&lt;th&gt;Parameter&lt;/th&gt;\n&lt;th&gt;Type&lt;/th&gt;\n&lt;/tr&gt;\n&lt;/thead&gt;\n&lt;tbody&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;amount&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;a href=\"pages/api/Duration/type-aliases/DurationInput.html\"&gt;&lt;code&gt;DurationInput&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;tr&gt;\n&lt;td&gt;&lt;code&gt;unit?&lt;/code&gt;&lt;/td&gt;\n&lt;td&gt;&lt;a href=\"pages/api/Duration/type-aliases/DurationUnit.html\"&gt;&lt;code&gt;DurationUnit&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;\n&lt;/tr&gt;\n&lt;/tbody&gt;\n&lt;/table&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;Duration&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"toisostring\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#toisostring\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;toISOString()&lt;/span&gt;&lt;/a&gt;toISOString()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;toISOString&lt;/strong&gt;(): &lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L81\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:81&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Returns an ISO 8601-compliant string representation of this Duration.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"tojson\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#tojson\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;toJSON()&lt;/span&gt;&lt;/a&gt;toJSON()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;toJSON&lt;/strong&gt;(): &lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L84\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:84&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Returns an ISO 8601 representation of this Duration appropriate for use in JSON.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;string&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"toobject\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#toobject\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;toObject()&lt;/span&gt;&lt;/a&gt;toObject()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;toObject&lt;/strong&gt;(): &lt;code&gt;Partial&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L87\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:87&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Returns a JavaScript object with this Duration's values.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;Partial&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"weeks\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#weeks\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;weeks()&lt;/span&gt;&lt;/a&gt;weeks()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;weeks&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L49\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:49&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the weeks.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;hr /&gt;\n&lt;h3 id=\"years\"&gt;&lt;a href=\"pages/api/Duration/interfaces/Duration.html#years\" class=\"yfm-anchor\" aria-hidden=\"true\"&gt;&lt;span class=\"visually-hidden\" data-no-index=\"true\"&gt;years()&lt;/span&gt;&lt;/a&gt;years()&lt;/h3&gt;\n&lt;blockquote&gt;\n&lt;p&gt;&lt;strong&gt;years&lt;/strong&gt;(): &lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n&lt;/blockquote&gt;\n&lt;p&gt;Defined in: &lt;a href=\"https://github.com/gravity-ui/date-utils/blob/01bb2f7e66580ca91c11e578c1eed60fc6ebe8a5/src/typings/duration.ts#L64\" target=\"_blank\" rel=\"noreferrer noopener\"&gt;src/typings/duration.ts:64&lt;/a&gt;&lt;/p&gt;\n&lt;p&gt;Get the years.&lt;/p&gt;\n&lt;p&gt;Returns&lt;/p&gt;\n&lt;p&gt;&lt;code&gt;number&lt;/code&gt;&lt;/p&gt;\n","toc":{"title":"","href":"index.html","navigation":{"logo":{"url":"/date-utils","dark":{"icon":"https://storage.yandexcloud.net/gravity-ui-assets/gravity-logo-dark.svg","text":"Date Utils"},"light":{"icon":"https://storage.yandexcloud.net/gravity-ui-assets/gravity-logo-light.svg","text":"Date Utils"}},"header":{"leftItems":[{"text":"Github ➚","type":"link","url":"https://github.com/gravity-ui/date-utils"}],"rightItems":[{"type":"search"},{"type":"controls"}]}},"items":[{"name":"Overview","href":"pages/overview.html","id":"b697588c-b007-4ce3-8be0-52cc86eb23ee"},{"name":"Get started","href":"pages/get-started.html","id":"385d8013-4e86-4c7d-89b0-f3a6953de6c2"},{"name":"API","items":[{"name":"Overview","href":"pages/api/overview.html","id":"0f0ec472-6067-4e5c-b19d-cc4bdcb86b23"},{"name":"DateTime","items":[{"name":"Overview","href":"pages/api/DateTime/overview.html","id":"c0c33d08-fb7f-42f7-84a6-bab660076d4b"},{"name":"AllUnit","href":"pages/api/DateTime/type-aliases/AllUnit.html","id":"0f47f89e-67d0-4d72-a1cb-326df9d11304"},{"name":"BaseUnit","href":"pages/api/DateTime/type-aliases/BaseUnit.html","id":"2e7d3f8d-a7c9-4e6b-abd4-ab025d6da839"},{"name":"DateTime","href":"pages/api/DateTime/interfaces/DateTime.html","id":"2c1843a7-780a-4913-92e0-2144dd9ca2ae"},{"name":"DateTimeInput","href":"pages/api/DateTime/type-aliases/DateTimeInput.html","id":"df230f9a-db7f-4f60-815e-0db28361b99c"},{"name":"DateTimeOptionsWhenParsing","href":"pages/api/DateTime/interfaces/DateTimeOptionsWhenParsing.html","id":"5c480a98-2b34-44b2-af77-a039fcb8a2b2"},{"name":"FormatInput","href":"pages/api/DateTime/type-aliases/FormatInput.html","id":"66a30bc2-745b-437a-b948-bceda6c62ac7"},{"name":"InputObject","href":"pages/api/DateTime/type-aliases/InputObject.html","id":"a8d3fc79-6ea3-447c-862d-ee98cb8cfb9c"},{"name":"QuarterUnit","href":"pages/api/DateTime/type-aliases/QuarterUnit.html","id":"b3a713d1-32dd-4c50-a239-b18e570e2d5b"},{"name":"SetObject","href":"pages/api/DateTime/type-aliases/SetObject.html","id":"7024ca45-ef68-4894-98b1-5c998ad573c3"},{"name":"StartOfUnit","href":"pages/api/DateTime/type-aliases/StartOfUnit.html","id":"04075ef6-2577-489b-9a4f-78cc45e7ab9e"},{"name":"WeekUnit","href":"pages/api/DateTime/type-aliases/WeekUnit.html","id":"341cbe15-17e5-4985-815d-8d30fcf8c330"}],"id":"f7e4addf-3a45-426b-9872-7a9f8efc4158"},{"name":"Duration","items":[{"name":"Overview","href":"pages/api/Duration/overview.html","id":"840acb0d-af12-4555-8970-a29a952f293f"},{"name":"Duration","href":"pages/api/Duration/interfaces/Duration.html","id":"cf37a043-627a-42c3-9d92-89551a6dc54b"},{"name":"DurationInput","href":"pages/api/Duration/type-aliases/DurationInput.html","id":"2159bd99-05b4-4bc1-a0ad-c348515007d0"},{"name":"DurationInputObject","href":"pages/api/Duration/type-aliases/DurationInputObject.html","id":"add73ed0-3533-45cd-8445-711ac8e25815"},{"name":"DurationUnit","href":"pages/api/Duration/type-aliases/DurationUnit.html","id":"1334a663-d051-4703-8e37-ad5982cb4217"},{"name":"FormatOptions","href":"pages/api/Duration/type-aliases/FormatOptions.html","id":"9ce20b63-8a75-4fd8-ab4d-231c234419ef"}],"id":"9d2edd32-5530-491c-812f-201bb1b314ce"},{"name":"Settings","items":[{"name":"Overview","href":"pages/api/Settings/overview.html","id":"382505e3-536d-4d83-9974-8a9432f8ccde"},{"name":"Settings","href":"pages/api/Settings/interfaces/Settings.html","id":"6e1c33f1-3bc2-444e-958c-229102d5047d"}],"id":"d6b34c7c-1de9-4e51-a67d-509ab43f5dc7"},{"name":"Utilities","items":[{"name":"Overview","href":"pages/api/Utilities/overview.html","id":"646ac30b-af9f-49d3-9573-0bb79871812f"},{"name":"dateTime","href":"pages/api/Utilities/functions/dateTime.html","id":"ea433671-215b-4ef6-ab08-24fa8ffc0ae9"},{"name":"dateTimeParse","href":"pages/api/Utilities/functions/dateTimeParse.html","id":"46075990-31fe-4e3b-a08c-7fb2aae1856c"},{"name":"dateTimeUtc","href":"pages/api/Utilities/functions/dateTimeUtc.html","id":"b5e491e8-5f58-4d9c-a717-60cf44d1eae1"},{"name":"defaultIsLikeRelative","href":"pages/api/Utilities/functions/defaultIsLikeRelative.html","id":"0ef37bdd-30fc-45e7-bac3-bdf12c3dab14"},{"name":"duration","href":"pages/api/Utilities/functions/duration.html","id":"f7322aa3-8060-4c47-a84f-7c5e8c07e9e4"},{"name":"expandFormat","href":"pages/api/Utilities/functions/expandFormat.html","id":"064d7d38-25ea-4da0-8f9e-f9c4f92c52e0"},{"name":"getTimeZonesList","href":"pages/api/Utilities/functions/getTimeZonesList.html","id":"5fff83c9-005d-489a-9913-41e87dea1001"},{"name":"guessUserTimeZone","href":"pages/api/Utilities/functions/guessUserTimeZone.html","id":"f2266fa7-cfdd-4e42-8ded-a0b13d50e301"},{"name":"isDateTime","href":"pages/api/Utilities/functions/isDateTime.html","id":"c1af9cad-1dca-4a92-91a2-d67f0dab620e"},{"name":"isDuration","href":"pages/api/Utilities/functions/isDuration.html","id":"0d231d2c-2ee3-4f20-b5f2-1f1b2d12cc3f"},{"name":"isLikeRelative","href":"pages/api/Utilities/functions/isLikeRelative.html","id":"fd96b9e7-b5aa-42d2-8490-b237eae103f7"},{"name":"isValid","href":"pages/api/Utilities/functions/isValid.html","id":"f1bcc447-2ca2-42f7-8600-22608b21b1af"},{"name":"isValidTimeZone","href":"pages/api/Utilities/functions/isValidTimeZone.html","id":"3065ae1a-f557-4ba3-ab44-5e387390fd83"},{"name":"timeZoneOffset","href":"pages/api/Utilities/functions/timeZoneOffset.html","id":"d95dfb26-222e-45b9-ac48-d3faf63931c9"}],"id":"52ba0308-3bd6-4cd7-981e-cba0e0a946c0"}],"id":"96e302f3-6f66-48b1-9501-b63705e45dd4"}],"id":"9df699cb-96d2-4259-8710-69e9bd335d3c"},"leading":false},"router":{"pathname":"pages/api/Duration/interfaces/Duration","depth":5},"lang":"en","langs":["en"],"search":{"enabled":true,"provider":"local","api":"_search/api.js","link":"_search/en/index.html","resources":"_search/en/1745841557853-resources.js"}}
+                </script>
+                <script type="application/javascript">
+                   function unescapeJsonFromHtml(escaped) {
+  const unescaped = escaped.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+  return JSON.parse(unescaped);
+}
+                   const data = document.querySelector('script#diplodoc-state');
+                   window.__DATA__ = unescapeJsonFromHtml(data.innerText);
+                   window.STATIC_CONTENT = true;
+                </script>
+                <script src="toc.js" type="application/javascript"></script>
+                <script src="_search/en/1745841557853-resources.js" type="application/javascript"></script>
+                <script type="application/javascript" src="_bundle/react.js"></script>
+<script type="application/javascript" src="_bundle/app.js"></script>
+<script type="application/javascript" src="_bundle/vendor.js"></script>
+            </body>
+        </html>
+    
