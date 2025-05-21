@@ -239,5 +239,33 @@ describe('DateTime', () => {
                 }).toISOString(),
             ).toBe('0002-01-01T00:00:00.000Z');
         });
+
+        describe('European date format parsing', () => {
+            test.each<[string, [number, number, number, number, number, number, number]]>([
+                ['13.05.1997', [1997, 4, 13, 0, 0, 0, 0]], // dot
+                ['13/05/1997', [1997, 4, 13, 0, 0, 0, 0]], // slash
+                ['13-05-1997', [1997, 4, 13, 0, 0, 0, 0]], // dash
+                ['13 05 1997', [1997, 4, 13, 0, 0, 0, 0]], // space
+                ['13.05.1997 14:30', [1997, 4, 13, 14, 30, 0, 0]],
+                ['13.05.1997 14:30:45', [1997, 4, 13, 14, 30, 45, 0]],
+                ['13.05.1997 14:30:45.123', [1997, 4, 13, 14, 30, 45, 123]],
+                // Single digit day and month
+                ['1.5.1997', [1997, 4, 1, 0, 0, 0, 0]],
+                ['1.5.1997 23:59:59.999', [1997, 4, 1, 23, 59, 59, 999]],
+                ['1.5.1997 7:8:9.100', [1997, 4, 1, 7, 8, 9, 100]],
+            ])('should correctly parse European date format %s', (input, expected) => {
+                const date = dateTime({input, format: undefined});
+                expect([
+                    date.year(),
+                    date.month(),
+                    date.date(),
+                    date.hour(),
+                    date.minute(),
+                    date.second(),
+                    date.millisecond(),
+                ]).toEqual(expected);
+                expect(date.isValid()).toEqual(true);
+            });
+        });
     });
 });

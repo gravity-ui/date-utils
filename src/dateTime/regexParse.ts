@@ -236,6 +236,10 @@ const rfc850 =
 // Fri Nov 19 16:59:30 1982
 const ascii =
     /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
+// European date format: DD.MM.YYYY or DD.MM.YYYY HH:mm:ss
+// Supports various separators: . / - space
+const europeanDateRegex =
+    /^(\d{1,2})[.\-\s/](\d{1,2})[.\-\s/](\d{4})(?:[ T](\d{1,2})(?::(\d{1,2})(?::(\d{1,2})(?:[.,](\d{1,30}))?)?)?)?$/;
 
 function extractRFC1123Or850(
     match: RegExpExecArray,
@@ -267,6 +271,24 @@ function extractASCII(
             secondStr,
         );
     return [result, UtcTimeZone];
+}
+
+function extractEuropeanDate(
+    match: RegExpExecArray,
+): [dateObj: ExtractedDateObject, timezoneOffset: null] {
+    const [, day, month, year, hour, minute, second, millisecond] = match;
+
+    const result: ExtractedDateObject = {
+        year: parseInteger(year),
+        month: parseInteger(month, 1) - 1, // Month is 0-indexed in JS
+        date: parseInteger(day),
+        hour: parseInteger(hour),
+        minute: parseInteger(minute),
+        second: parseInteger(second),
+        millisecond: parseMilliseconds(millisecond),
+    };
+
+    return [result, null];
 }
 
 function parseInteger(str: string | undefined | null, defaultValue: number): number;
@@ -357,6 +379,10 @@ export function parseISOTimeOnly(s: string) {
     return parse(s, [isoTimeOnly, combineExtractors(extractISOTime)]);
 }
 
+export function parseEuropeanDate(s: string) {
+    return parse(s, [europeanDateRegex, extractEuropeanDate]);
+}
+
 export function parseDateString(input: string) {
     let [obj, offset] = parseISODate(input);
     if (obj !== null) {
@@ -371,6 +397,10 @@ export function parseDateString(input: string) {
         return [obj, offset] as const;
     }
     [obj, offset] = parseISOTimeOnly(input);
+    if (obj !== null) {
+        return [obj, offset] as const;
+    }
+    [obj, offset] = parseEuropeanDate(input);
     if (obj !== null) {
         return [obj, offset] as const;
     }
