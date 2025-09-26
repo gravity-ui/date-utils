@@ -11,6 +11,7 @@ dayjs.extend(updateLocale);
 
 dayjs.Ls['en'].formats = englishFormats;
 
+export {dayjs};
 export default dayjs;
 
 export type {ConfigTypeMap, ConfigType} from 'dayjs';
