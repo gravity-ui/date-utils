@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.6.0](https://github.com/gravity-ui/date-utils/compare/v2.5.6...v2.6.0) (2025-09-26)
+
+
+### Features
+
+* parse well known date strings ([#81](https://github.com/gravity-ui/date-utils/issues/81)) ([3e1b974](https://github.com/gravity-ui/date-utils/commit/3e1b974851a47b56b8baa7dd7b1e363ff854609f))
+
+
+### Bug Fixes
+
+* add named export of dayjs ([#89](https://github.com/gravity-ui/date-utils/issues/89)) ([08485c4](https://github.com/gravity-ui/date-utils/commit/08485c477911322bdf9c59bc2f5e4f1e8a8c98d9))
+
 ## [2.5.6](https://github.com/gravity-ui/date-utils/compare/v2.5.5...v2.5.6) (2024-11-21)
 
 
