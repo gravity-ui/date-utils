@@ -1,5 +1,5 @@
 /**
- * @typedef {Object} TypedocConfig
+ * @typedef {object} TypedocConfig
  * @property {string[]} [exclude] - Array of file patterns to exclude
  * @property {boolean} [excludeExternals] - Exclude external symbols
  * @property {boolean} [excludePrivate] - Exclude private members from documentation
@@ -17,23 +17,22 @@
  */
 
 /**
- * @typedef {Object} Config
+ * @typedef {object} Config
  * @property {string} pathToTocFile - Path to table of contents YAML file
  * @property {string} pathToDocsFolder - Path to documentation folder
- * @property {Object} typedocConfig - TypeDoc specific options
+ * @property {object} typedocConfig - TypeDoc specific options
  * @property {string} typedocConfig.out - Output directory for documentation
  * @property {string} typedocConfig.entryFileName - Entry file name for documentation
  * @property {string} typedocConfig.name - Project name
  */
 
 /**
- * @typedef {Object} TocFile
+ * @typedef {object} TocFile
  * @property {Array<TocItem>} items - Array of TOC items
- * @property {*} [key: string] - Any other properties
  */
 
 /**
- * @typedef {Object} TocItemBase
+ * @typedef {object} TocItemBase
  * @property {string} name - Display name of the item
  * @property {boolean} [autodoc] - Flag indicating if item is auto-documented
  */
@@ -51,8 +50,7 @@
  */
 
 /**
- * @typedef {Object.<string, ConfigValue>} ApiYamlConfig
- *
+ * @typedef {{[key: string]: string}} ApiYamlConfig
  * @typedef {string|{[key: string]: ConfigValue}} ConfigValue
  */
 

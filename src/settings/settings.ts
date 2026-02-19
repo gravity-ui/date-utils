@@ -30,7 +30,7 @@ class Settings implements PublicSettings {
                 this.loadedLocales.add(localeInLowerCase);
             } catch (error) {
                 throw new Error(
-                    `Can't load locale "${locale}". Either it does not exist, or there was a connection problem. Check the dayjs locations list: https://github.com/iamkun/dayjs/tree/dev/src/locale`,
+                    `Can't load locale "${locale}". Either it does not exist, or there was a connection problem. Check the dayjs locale list: https://github.com/iamkun/dayjs/tree/dev/src/locale .\n${error}`,
                 );
             }
         }

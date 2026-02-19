@@ -280,7 +280,7 @@ export class DurationImpl implements Duration {
 
     /**
      * Returns a string representation of this Duration appropriate for the REPL.
-     * @return {string}
+     * @returns {string}
      */
     [Symbol.for('nodejs.util.inspect.custom')]() {
         if (this.isValid()) {

@@ -1,8 +1,7 @@
 // Copyright 2015 Grafana Labs
 // Copyright 2021 YANDEX LLC
 
-import sinon from 'sinon';
-import type {SinonFakeTimers} from 'sinon';
+import MockDate from 'mockdate';
 
 import {dateTime} from '../dateTime';
 import type {DateTime, DurationUnit} from '../typings';
@@ -14,7 +13,6 @@ describe('DateMath', () => {
     const anchor = '2014-01-01T06:06:06.666Z';
     const unix = dateTime({input: anchor}).valueOf();
     const format = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
-    let clock: SinonFakeTimers;
 
     describe('Issues', () => {
         it('should return undefined if passed empty string', () => {
@@ -70,7 +68,7 @@ describe('DateMath', () => {
         let anchored: DateTime;
 
         beforeEach(() => {
-            clock = sinon.useFakeTimers(unix);
+            MockDate.set(unix);
             now = dateTime();
             anchored = dateTime({input: anchor});
         });
@@ -93,7 +91,7 @@ describe('DateMath', () => {
         });
 
         afterEach(() => {
-            clock.restore();
+            MockDate.reset();
         });
     });
 
@@ -101,7 +99,7 @@ describe('DateMath', () => {
         let now: DateTime;
 
         beforeEach(() => {
-            clock = sinon.useFakeTimers(unix);
+            MockDate.set(unix);
             now = dateTime();
         });
 
@@ -120,7 +118,7 @@ describe('DateMath', () => {
         });
 
         afterEach(() => {
-            clock.restore();
+            MockDate.reset();
         });
     });
 

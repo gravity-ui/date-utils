@@ -95,7 +95,8 @@ export interface Duration {
         unitDisplay?: Intl.NumberFormatOptions['unitDisplay'];
     }): string;
 
-    /** Returns a string representation of this Duration formatted according to the specified format string.
+    /**
+     *  Returns a string representation of this Duration formatted according to the specified format string.
      * Used tokens are S for milliseconds, s for seconds, m for minutes, h for hours, d for days, w for weeks, M for months, and y for years.
      * Add padding by repeating the token, e.g. 'yy' pads the years to two digits, "hhhh" pads the hours to four digits.
      */

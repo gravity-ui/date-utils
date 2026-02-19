@@ -1,9 +1,8 @@
-/* eslint-disable no-console */
 /**
  * Fetches and writes to the locale file from github dayjs
  * node.js >= 20 lts
  * @module Locale
- * */
+ */
 
 const fs = require('node:fs');
 const fsPromises = require('node:fs/promises');

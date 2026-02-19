@@ -73,7 +73,7 @@ function getConfig() {
 
 /**
  * Gets the index TOC file name
- * @param {string} [fileName=''] - Input file name
+ * @param {string} [fileName] - Input file name
  * @returns {string} Index TOC file name
  */
 function getIndexTocFileName(fileName = '') {
@@ -85,10 +85,10 @@ function getIndexTocFileName(fileName = '') {
  * Extracts markdown links from text and returns them as key-value pairs
  * @param {string} fileText - The text content to parse for markdown links
  * @param {string} projectName - The project name to exclude from results
- * @returns {Object.<string, string>} Object containing link text as keys and URLs as values, excluding links with text matching projectName
+ * @returns {{[key: string]: string}} Object containing link text as keys and URLs as values, excluding links with text matching projectName
  */
 function getFileLinks(fileText, projectName) {
-    /** @type {Object.<string, string>} */
+    /** @type {{[key: string]: string}} */
     const links = {};
     const matches = fileText.match(regexMdLinks);
     matches?.forEach((match) => {
@@ -110,13 +110,13 @@ function getFileLinks(fileText, projectName) {
 
 /**
  * Recursively traverses directories to build a map of index files and their links
- * @param {Object} options - Configuration options
+ * @param {object} options - Configuration options
  * @param {string} options.dirPath - Path to the directory to scan
  * @param {string} options.basePath - Base path for calculating relative paths
  * @param {string} options.entryFileName - Name of entry files to look for
- * @param {Object.<string, Object.<string, string>>} [options.indexFilesMap={}] - Accumulator for storing found index files
+ * @param {{[key: string]: {[key: string]: string}}} [options.indexFilesMap] - Accumulator for storing found index files
  * @param {string} options.projectName - Project name to exclude from link results
- * @returns {Object.<string, Object.<string, string>>} Map of relative file paths to their contained links
+ * @returns {{[key: string]: {[key: string]: string}}} Map of relative file paths to their contained links
  */
 function getIndexFilesMap({dirPath, basePath, entryFileName, indexFilesMap = {}, projectName}) {
     const files = fs.readdirSync(dirPath);
@@ -262,8 +262,8 @@ function createTmpDocs(pathToDocsFolder) {
 
 /**
  * Generates a configuration object for the API YAML items
- * @param {Object} params - An object containing the necessary parameters for generating the API YAML configuration.
- * @param {Object} params.indexFilesMap - A map of file paths to their corresponding entry file names.
+ * @param {object} params - An object containing the necessary parameters for generating the API YAML configuration.
+ * @param {object} params.indexFilesMap - A map of file paths to their corresponding entry file names.
  * @param {string} params.indexTocItemName - The name of the TOC item that represents the index file.
  * @param {string} params.baseTocItemPath - The base path for the TOC item paths.
  * @param {string} params.entryFileName - The name of the entry file.
@@ -271,7 +271,11 @@ function createTmpDocs(pathToDocsFolder) {
  */
 function getApiYamlConfig({indexFilesMap, indexTocItemName, baseTocItemPath, entryFileName}) {
     return Object.entries(indexFilesMap).reduce(
-        /** @param {ApiYamlConfig} acc */
+        /**
+         * @param {ApiYamlConfig} acc
+         * @param {[string, any]} root0
+         * @returns {ApiYamlConfig}
+         */
         (acc, [key, value]) => {
             let keyPath = key.split('/').filter(Boolean);
 
