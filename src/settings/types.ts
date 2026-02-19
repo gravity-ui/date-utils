@@ -59,13 +59,12 @@ export interface Parser {
 
 /**
  * Library settings. The object is implemented as a singleton that manages global configuration for all DateTime instances throughout the application
- *
  * @example
  * ```javascript
  * import {settings} from '@gravity-ui/date-utils';
-
-// Get current locale
-const currentLocale = settings.getLocale(); // default is "en"
+ *
+ * // Get current locale
+ * const currentLocale = settings.getLocale(); // default is "en"
  * ```
  */
 export interface PublicSettings {

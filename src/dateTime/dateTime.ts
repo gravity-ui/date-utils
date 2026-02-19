@@ -452,7 +452,6 @@ class DateTimeImpl implements DateTime {
         return this.isValid() ? daysInMonth(this._c.year, this._c.month) : NaN;
     }
 
-    // eslint-disable-next-line complexity
     set(unit: AllUnit | SetObject, amount?: number): DateTime {
         if (!this.isValid()) {
             return this;
@@ -708,7 +707,7 @@ class DateTimeImpl implements DateTime {
 
     /**
      * Returns a string representation of this DateTime appropriate for the REPL.
-     * @return {string}
+     * @returns {string}
      */
     [Symbol.for('nodejs.util.inspect.custom')]() {
         if (this.isValid()) {
@@ -924,7 +923,7 @@ export function dateTime(opt?: {
  * @param [opt]
  * @param {DateTimeInput=} [opt.input] - input to parse.
  * @param {string=} [opt.format] - strict {@link https://dayjs.gitee.io/docs/en/display/format format} for parsing user's input.
- * @param {number=} [opt.offset=0] - specified offset.
+ * @param {number=} [opt.offset] - specified offset.
  * @param {string=} [opt.lang] - specified locale.
  */
 export function dateTimeUtc(opt?: {
