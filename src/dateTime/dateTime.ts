@@ -854,7 +854,8 @@ function getTimestamp(
     } else if (format === undefined) {
         const [dateObject, timezoneOrOffset] = parseDateString(input);
         if (Object.keys(dateObject).length === 0) {
-            return [NaN, NaN];
+            // fallback to native Date parse
+            return getTimestamp(new Date(input), timezone, locale, format, fixedOffset);
         }
         [ts] = getTimestampFromObject(
             dateObject,

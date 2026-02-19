@@ -34,6 +34,12 @@ describe('Parser', () => {
         expect(date).toEqual(TESTED_DATE_STRING);
     });
 
+    it('should return DateTime in case of using Date.toString() value', () => {
+        const nativeDate = new Date('2023-11-06T00:00:00.000Z');
+        const date = dateTimeParse(nativeDate.toString());
+        expect(date?.toISOString()).toEqual(nativeDate.toISOString());
+    });
+
     it('should return DateTime in case of using relative date string', () => {
         const date = dateTimeParse('now')?.toISOString();
         expect(date).toEqual(new Date().toISOString());
