@@ -1,5 +1,3 @@
-import cloneDeep from 'lodash/cloneDeep';
-
 import {isLikeRelative, parse} from '../datemath';
 import dayjs from '../dayjs';
 import {normalizeTimeZone} from '../timeZone';
@@ -52,7 +50,7 @@ class Settings implements PublicSettings {
             throw new Error('There is something really wrong happening. Locale data is absent.');
         }
 
-        return cloneDeep(localeObject) as Locale;
+        return structuredClone(localeObject) as Locale;
     }
 
     setLocale(locale: string) {
