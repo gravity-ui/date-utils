@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.1](https://github.com/gravity-ui/date-utils/compare/v2.6.0...v2.6.1) (2026-02-19)
+
+
+### Bug Fixes
+
+* **dateTime:** set quarter ([#90](https://github.com/gravity-ui/date-utils/issues/90)) ([62260c7](https://github.com/gravity-ui/date-utils/commit/62260c758d42ca48f341bec08797de3f610ac6d5))
+* **dateTime:** string parse fallbacks to native Date parser ([#91](https://github.com/gravity-ui/date-utils/issues/91)) ([2934f34](https://github.com/gravity-ui/date-utils/commit/2934f34c832cec380ff50d8eae9287db12487d51))
+
 ## [2.6.0](https://github.com/gravity-ui/date-utils/compare/v2.5.6...v2.6.0) (2025-09-26)
 
 
