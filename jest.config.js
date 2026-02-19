@@ -2,7 +2,7 @@
 module.exports = {
     roots: ['<rootDir>/src'],
     transform: {
-        '^.+\\.ts$': ['ts-jest', {tsconfig: {verbatimModuleSyntax: false}}],
+        '^.+\\.ts$': ['ts-jest'],
     },
     setupFilesAfterEnv: ['<rootDir>/setup-tests.ts'],
 };

@@ -3,10 +3,7 @@
   "compilerOptions": {
     "noEmit": false,
     "declaration": true,
-    "outDir": "build",
-    "verbatimModuleSyntax": false,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "outDir": "build"
   },
   "include": ["src"],
   "exclude": ["**/*.test.ts", "**/__tests__/**/*"]

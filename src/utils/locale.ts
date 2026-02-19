@@ -12,14 +12,11 @@ export function getDateTimeFormat(locale: string, options: Intl.DateTimeFormatOp
     return dateTimeFormat;
 }
 
-// @ts-expect-error
 const listFormatCache = new Map<string, Intl.ListFormat>();
-// @ts-expect-error
 export function getListFormat(locale: string, options: Intl.ListFormatOptions = {}) {
     const key = JSON.stringify([locale, options]);
     let listFormat = listFormatCache.get(key);
     if (!listFormat) {
-        // @ts-expect-error
         listFormat = new Intl.ListFormat(locale, options);
         listFormatCache.set(key, listFormat);
     }
