@@ -462,6 +462,10 @@ class DateTimeImpl implements DateTime {
             normalizeComponent,
         );
 
+        if (newComponents.quarter && newComponents.month === undefined) {
+            newComponents.month = (newComponents.quarter - 1) * 3 + (this.month() % 3);
+        }
+
         const settingWeekStuff =
             newComponents.day !== undefined ||
             newComponents.weekNumber !== undefined ||
