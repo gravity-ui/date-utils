@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.0](https://github.com/gravity-ui/date-utils/compare/v2.6.1...v2.7.0) (2026-02-19)
+
+
+### Features
+
+* modernize build target to ES2022 ([#94](https://github.com/gravity-ui/date-utils/issues/94)) ([c2d3af8](https://github.com/gravity-ui/date-utils/commit/c2d3af8cf6e9c8ae846ea6b4d1f07eb405411d90))
+
 ## [2.6.1](https://github.com/gravity-ui/date-utils/compare/v2.6.0...v2.6.1) (2026-02-19)
 
 
