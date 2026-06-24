@@ -14,6 +14,7 @@ function cloneLocaleData<T>(value: T): T {
         return value.map((item) => cloneLocaleData(item)) as T;
     }
 
+    // Dayjs locale data is JSON-like with function fields; this is not a general structuredClone replacement.
     return Object.fromEntries(
         Object.entries(value).map(([key, item]) => [key, cloneLocaleData(item)]),
     ) as T;

@@ -25,6 +25,8 @@ describe('settings', () => {
     });
 
     it('should clone locale data with function values', () => {
+        settings.setLocale('en');
+
         const localeData = settings.getLocaleData();
         const nextLocaleData = settings.getLocaleData();
 
