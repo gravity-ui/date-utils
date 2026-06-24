@@ -23,4 +23,15 @@ describe('settings', () => {
         settings.setLocale(LOCALE);
         expect(settings.getLocale()).toEqual(LOCALE);
     });
+
+    it('should clone locale data with function values', () => {
+        settings.setLocale('en');
+
+        const localeData = settings.getLocaleData();
+        const nextLocaleData = settings.getLocaleData();
+
+        expect(typeof localeData.ordinal).toBe('function');
+        expect(localeData).not.toBe(nextLocaleData);
+        expect(localeData.formats).not.toBe(nextLocaleData.formats);
+    });
 });
