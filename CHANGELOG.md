@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.1](https://github.com/gravity-ui/date-utils/compare/v2.7.0...v2.7.1) (2026-06-24)
+
+
+### Bug Fixes
+
+* clone settings locale data ([#96](https://github.com/gravity-ui/date-utils/issues/96)) ([d83ed9a](https://github.com/gravity-ui/date-utils/commit/d83ed9ad4e3b908613b4f8ee339ad46ac841e12a))
+
 ## [2.7.0](https://github.com/gravity-ui/date-utils/compare/v2.6.1...v2.7.0) (2026-02-19)
 
 
