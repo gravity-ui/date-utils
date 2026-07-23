@@ -84,3 +84,7 @@ Timezone-aware date/time helpers — parsing (including relative expressions lik
 - **Forgetting to load a locale** — `settings.setLocale('de')` only formats localized names (weekdays, months) after `settings.loadLocale('de')` has resolved.
 - **Hallucinated function `formatDate` / `parseDate`** — the entry points are `dateTimeParse` (parse) and `dateTime(...).format(...)` (format).
 - **Assuming the user's timezone is applied automatically** — pass `timeZone` explicitly or the system timezone is used.
+
+## Documentation for AI agents
+
+Agent-readable documentation for the installed version is located in `node_modules/@gravity-ui/date-utils/build/docs/INDEX.md`.
