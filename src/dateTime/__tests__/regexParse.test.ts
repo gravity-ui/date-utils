@@ -84,13 +84,17 @@ test.each<[string, [number, number, number, number, number, number, number]]>([
 });
 
 test.each<[string, [number, number, number, number, number, number, number]]>([
+    ['2016-05-25 09', [2016, 4, 25, 9, 0, 0, 0]],
     ['2016-05-25 09:08', [2016, 4, 25, 9, 8, 0, 0]],
+    ['2016-05-25 0908', [2016, 4, 25, 9, 8, 0, 0]],
     ['2016-05-25 09:08:34', [2016, 4, 25, 9, 8, 34, 0]],
+    ['2016-05-25 090834', [2016, 4, 25, 9, 8, 34, 0]],
     ['2016-05-25 09:08:34.123', [2016, 4, 25, 9, 8, 34, 123]],
+    ['2016-05-25 090834.123', [2016, 4, 25, 9, 8, 34, 123]],
     ['2016-05-25 09:08:34.123456', [2016, 4, 25, 9, 8, 34, 123]],
     ['2016-05-25 09:08:34.000000', [2016, 4, 25, 9, 8, 34, 0]],
     ['2016-05-25 09:08:34,123', [2016, 4, 25, 9, 8, 34, 123]],
-])('DateTime from SQL (%p)', (input, expected) => {
+])('DateTime from space-separated datetime (%p)', (input, expected) => {
     const dt = dateTime({input});
     expect([
         dt.year(),
@@ -105,8 +109,11 @@ test.each<[string, [number, number, number, number, number, number, number]]>([
 
 test.each<[string, [number, number, number, number, number, number, number]]>([
     ['2016-05-25 09:08:34.123+06:00', [2016, 4, 25, 3, 8, 34, 123]],
+    ['2016-05-25 09:08:34.123+06', [2016, 4, 25, 3, 8, 34, 123]],
     ['2016-05-25 09:08:34.123Z', [2016, 4, 25, 9, 8, 34, 123]],
-])('DateTime from SQL with offset (%p)', (input, expected) => {
+    ['2016-05-25 09:08:34[Europe/Paris]', [2016, 4, 25, 7, 8, 34, 0]],
+    ['2016-05-25 09:08:34.123[Europe/Paris]', [2016, 4, 25, 7, 8, 34, 123]],
+])('DateTime from space-separated datetime with zone (%p)', (input, expected) => {
     const dt = dateTime({input}).utc();
     expect([
         dt.year(),

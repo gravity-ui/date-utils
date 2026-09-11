@@ -4,5 +4,6 @@ module.exports = {
     transform: {
         '^.+\\.ts$': ['ts-jest'],
     },
+    globalSetup: '<rootDir>/jest.global-setup.js',
     setupFilesAfterEnv: ['<rootDir>/setup-tests.ts'],
 };

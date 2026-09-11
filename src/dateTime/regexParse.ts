@@ -83,7 +83,11 @@ const isoOrdinalWithTimeExtensionRegex = new RegExp(
 );
 const isoTimeFullRegex = new RegExp(`^${isoTimeRegex.source}$`);
 
-// SQL-style datetime: YYYY-MM-DD hh:mm:ss.sss±00:00 (a space instead of T)
+// Datetime with a space instead of T — the shape SQL databases emit
+// (ClickHouse DateTime64, Postgres timestamptz, MySQL DATETIME).
+// Grammar: YYYY-MM-DD + the ISO time part, so compact/partial forms,
+// a comma fraction and a trailing [IANA] zone are accepted too.
+// https://www.postgresql.org/docs/current/datatype-datetime.html#DATATYPE-DATETIME-OUTPUT
 const sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
 const sqlYmdWithTimeRegex = new RegExp(`^${sqlYmdRegex.source} ${isoTimeRegex.source}$`);
 
