@@ -83,6 +83,10 @@ const isoOrdinalWithTimeExtensionRegex = new RegExp(
 );
 const isoTimeFullRegex = new RegExp(`^${isoTimeRegex.source}$`);
 
+// SQL-style datetime: YYYY-MM-DD hh:mm:ss.sss±00:00 (a space instead of T)
+const sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
+const sqlYmdWithTimeRegex = new RegExp(`^${sqlYmdRegex.source} ${isoTimeRegex.source}$`);
+
 // https://datatracker.ietf.org/doc/html/rfc2822#section-4.3
 const obsOffsets = {
     GMT: 0,
@@ -340,6 +344,10 @@ export function parseISODate(s: string) {
     );
 }
 
+export function parseSQLDate(s: string) {
+    return parse(s, [sqlYmdWithTimeRegex, extractISOYmdTimeAndOffset]);
+}
+
 export function parseRFC2822Date(s: string) {
     return parse(preprocessRFC2822(s), [rfc2822, extractRfc2822]);
 }
@@ -359,6 +367,10 @@ export function parseISOTimeOnly(s: string) {
 
 export function parseDateString(input: string) {
     let [obj, offset] = parseISODate(input);
+    if (obj !== null) {
+        return [obj, offset] as const;
+    }
+    [obj, offset] = parseSQLDate(input);
     if (obj !== null) {
         return [obj, offset] as const;
     }

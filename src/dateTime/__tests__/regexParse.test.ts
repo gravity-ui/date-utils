@@ -83,6 +83,42 @@ test.each<[string, [number, number, number, number, number, number, number]]>([
     ]).toEqual(expected);
 });
 
+test.each<[string, [number, number, number, number, number, number, number]]>([
+    ['2016-05-25 09:08', [2016, 4, 25, 9, 8, 0, 0]],
+    ['2016-05-25 09:08:34', [2016, 4, 25, 9, 8, 34, 0]],
+    ['2016-05-25 09:08:34.123', [2016, 4, 25, 9, 8, 34, 123]],
+    ['2016-05-25 09:08:34.123456', [2016, 4, 25, 9, 8, 34, 123]],
+    ['2016-05-25 09:08:34.000000', [2016, 4, 25, 9, 8, 34, 0]],
+    ['2016-05-25 09:08:34,123', [2016, 4, 25, 9, 8, 34, 123]],
+])('DateTime from SQL (%p)', (input, expected) => {
+    const dt = dateTime({input});
+    expect([
+        dt.year(),
+        dt.month(),
+        dt.date(),
+        dt.hour(),
+        dt.minute(),
+        dt.second(),
+        dt.millisecond(),
+    ]).toEqual(expected);
+});
+
+test.each<[string, [number, number, number, number, number, number, number]]>([
+    ['2016-05-25 09:08:34.123+06:00', [2016, 4, 25, 3, 8, 34, 123]],
+    ['2016-05-25 09:08:34.123Z', [2016, 4, 25, 9, 8, 34, 123]],
+])('DateTime from SQL with offset (%p)', (input, expected) => {
+    const dt = dateTime({input}).utc();
+    expect([
+        dt.year(),
+        dt.month(),
+        dt.date(),
+        dt.hour(),
+        dt.minute(),
+        dt.second(),
+        dt.millisecond(),
+    ]).toEqual(expected);
+});
+
 test("DateTime from ISO doesn't accept 24:23", () => {
     expect(dateTime({input: '2018-05-25T24:23'}).isValid()).toBe(false);
 });
