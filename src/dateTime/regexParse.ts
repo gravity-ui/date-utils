@@ -83,6 +83,14 @@ const isoOrdinalWithTimeExtensionRegex = new RegExp(
 );
 const isoTimeFullRegex = new RegExp(`^${isoTimeRegex.source}$`);
 
+// ISO 8601 specifies the use of uppercase letter T to separate the date and time.
+// PostgreSQL accepts that format on input, but on output it uses a space rather than T.
+// In the ISO style, the time zone is always shown as a signed numeric offset from UTC.
+// https://www.postgresql.org/docs/current/datatype-datetime.html#DATATYPE-DATETIME-OUTPUT
+const sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
+const sqlTimeRegex = RegExp(`${isoTimeBaseRegex.source}(?:${offsetRegex.source})?`);
+const sqlYmdWithTimeExtensionRegex = new RegExp(`^${sqlYmdRegex.source} ${sqlTimeRegex.source}$`);
+
 // https://datatracker.ietf.org/doc/html/rfc2822#section-4.3
 const obsOffsets = {
     GMT: 0,
@@ -340,6 +348,10 @@ export function parseISODate(s: string) {
     );
 }
 
+export function parseSQLDate(s: string) {
+    return parse(s, [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeAndOffset]);
+}
+
 export function parseRFC2822Date(s: string) {
     return parse(preprocessRFC2822(s), [rfc2822, extractRfc2822]);
 }
@@ -359,6 +371,10 @@ export function parseISOTimeOnly(s: string) {
 
 export function parseDateString(input: string) {
     let [obj, offset] = parseISODate(input);
+    if (obj !== null) {
+        return [obj, offset] as const;
+    }
+    [obj, offset] = parseSQLDate(input);
     if (obj !== null) {
         return [obj, offset] as const;
     }
