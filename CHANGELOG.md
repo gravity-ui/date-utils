@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.2](https://github.com/gravity-ui/date-utils/compare/v2.7.1...v2.7.2) (2026-09-14)
+
+
+### Bug Fixes
+
+* parse SQL-style datetime strings with a space separator ([#99](https://github.com/gravity-ui/date-utils/issues/99)) ([921bc7a](https://github.com/gravity-ui/date-utils/commit/921bc7ac4f5ad1c0f4b50b480a020801d4ab0ac4))
+
 ## [2.7.1](https://github.com/gravity-ui/date-utils/compare/v2.7.0...v2.7.1) (2026-06-24)
 
 
