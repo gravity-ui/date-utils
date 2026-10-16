@@ -70,6 +70,38 @@ test('format timezone', () => {
     expect(b.format('ZZ')).toMatch(/^[+-]\d{4}$/); // 'should be something like '+0700'
 });
 
+describe('unknown system timezone', () => {
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    test('format unknown timezone', () => {
+        const options = new Intl.DateTimeFormat().resolvedOptions();
+        jest.spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions').mockReturnValue({
+            ...options,
+            timeZone: 'Etc/Unknown',
+        });
+        const date = dateTime({input: '2024-01-15T12:00:00.000Z'});
+
+        expect(date.format('z')).toBe('GMT+03:00');
+        expect(date.format('zz')).toBe('GMT+03:00');
+        expect(date.format('YYYY-MM-DD HH:mm:ss z')).toBe('2024-01-15 15:00:00 GMT+03:00');
+    });
+
+    test('format explicit timezone when system timezone is unknown', () => {
+        const date = dateTime({input: '2024-01-15T12:00:00.000Z', timeZone: 'America/New_York'});
+        const expected = date.format('HH:mm z zz');
+        const options = new Intl.DateTimeFormat().resolvedOptions();
+        jest.spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions').mockReturnValue({
+            ...options,
+            timeZone: 'Etc/Unknown',
+        });
+
+        expect(date.format('HH:mm z zz')).toBe(expected);
+        expect(dateTimeUtc().format('z')).toBe('UTC');
+    });
+});
+
 test('unix timestamp', () => {
     const m = dateTime({input: 1234567890123});
     expect(m.format('X')).toBe('1234567890'); // 'unix timestamp without milliseconds'

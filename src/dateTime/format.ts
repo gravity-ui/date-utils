@@ -1,7 +1,7 @@
 import {englishFormats} from '../constants';
 import {settings} from '../settings';
 import type {Locale, LongDateFormat} from '../settings/types';
-import {parseZoneInfo} from '../timeZone';
+import {isValidTimeZone, parseZoneInfo} from '../timeZone';
 import type {DateTime} from '../typings';
 
 function getShortLocalizedFormatFromLongLocalizedFormat(format: string) {
@@ -373,23 +373,24 @@ formatTokenFunctions['X'] = (date) => {
     return `${date.unix()}`;
 };
 
-formatTokenFunctions['z'] = (date) => {
-    return parseZoneInfo({
-        ts: date.valueOf(),
-        locale: date.locale(),
-        timeZone: date.timeZone(),
-        offsetFormat: 'short',
-    });
-};
+function formatTimeZoneName(date: DateTime, offsetFormat: 'short' | 'long') {
+    const timeZone = date.timeZone();
+    // System zone detection can return an invalid ID such as Etc/Unknown even
+    // when the date's local offset is available. Preserve that offset in the label.
+    if (!isValidTimeZone(timeZone)) {
+        return `GMT${date.format('Z')}`;
+    }
 
-formatTokenFunctions['zz'] = (date) => {
     return parseZoneInfo({
         ts: date.valueOf(),
         locale: date.locale(),
-        timeZone: date.timeZone(),
-        offsetFormat: 'long',
+        timeZone,
+        offsetFormat,
     });
-};
+}
+
+formatTokenFunctions['z'] = (date) => formatTimeZoneName(date, 'short');
+formatTokenFunctions['zz'] = (date) => formatTimeZoneName(date, 'long');
 
 formatTokenFunctions['DDD'] = (date) => {
     return `${date.dayOfYear()}`;
