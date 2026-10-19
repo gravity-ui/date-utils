@@ -1,5 +1,6 @@
 import {HTML5_INPUT_FORMATS, englishFormats} from '../../constants';
 import {settings} from '../../settings';
+import {isValidTimeZone} from '../../timeZone';
 import {dateTime, dateTimeUtc} from '../dateTime';
 import {expandFormat} from '../format';
 
@@ -68,6 +69,69 @@ test('format timezone', () => {
     const b = dateTime({input: new Date(2010, 1, 14, 15, 25, 50, 125)});
     expect(b.format('Z')).toMatch(/^[+-]\d\d:\d\d$/); // 'should be something like '+07:30'
     expect(b.format('ZZ')).toMatch(/^[+-]\d{4}$/); // 'should be something like '+0700'
+});
+
+describe('unknown system timezone', () => {
+    const supportsOffsetTimeZones = isValidTimeZone('+03:00');
+
+    beforeEach(() => {
+        const options = new Intl.DateTimeFormat().resolvedOptions();
+        jest.spyOn(Intl.DateTimeFormat.prototype, 'resolvedOptions').mockReturnValue({
+            ...options,
+            timeZone: 'Etc/Unknown',
+        });
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    test('format unknown timezone', () => {
+        const date = dateTime({input: '2024-01-15T12:00:00.000Z', timeZone: 'system'});
+        const shortName = supportsOffsetTimeZones ? 'GMT+3' : 'GMT+03:00';
+
+        expect(date.timeZone()).toBe('Etc/Unknown');
+        expect(date.format('z')).toBe(shortName);
+        expect(date.format('zz')).toBe('GMT+03:00');
+        expect(date.format('YYYY-MM-DD HH:mm:ss z')).toBe(`2024-01-15 15:00:00 ${shortName}`);
+    });
+
+    test('format unknown timezone in French', async () => {
+        await settings.loadLocale('fr');
+        const date = dateTime({input: '2024-01-15T12:00:00.000Z', lang: 'fr'});
+
+        expect(date.format('z')).toBe(supportsOffsetTimeZones ? 'UTC+3' : 'GMT+03:00');
+        expect(date.format('zz')).toBe(supportsOffsetTimeZones ? 'UTC+03:00' : 'GMT+03:00');
+    });
+
+    test('format unknown timezone with zero offset', () => {
+        jest.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(0);
+        const date = dateTime({input: '2024-01-15T12:00:00.000Z'});
+
+        expect(date.format('z')).toBe(supportsOffsetTimeZones ? 'GMT' : 'GMT+00:00');
+        expect(date.format('zz')).toBe(
+            supportsOffsetTimeZones ? 'Greenwich Mean Time' : 'GMT+00:00',
+        );
+    });
+
+    test('format unknown timezone without Intl offset zone support', () => {
+        const DateTimeFormat = Intl.DateTimeFormat;
+        jest.spyOn(Intl, 'DateTimeFormat').mockImplementation((locales, options) => {
+            if (options?.timeZone?.match(/^[+-]/)) {
+                throw new RangeError('Offset time zones are not supported');
+            }
+            return new DateTimeFormat(locales, options);
+        });
+        const date = dateTime({input: '2024-01-15T12:00:00.000Z'});
+
+        expect(date.format('z zz')).toBe('GMT+03:00 GMT+03:00');
+    });
+
+    test('format explicit timezone when system timezone is unknown', () => {
+        const date = dateTime({input: '2024-01-15T12:00:00.000Z', timeZone: 'America/New_York'});
+
+        expect(date.format('HH:mm z zz')).toBe('07:00 EST Eastern Standard Time');
+    });
 });
 
 test('unix timestamp', () => {
