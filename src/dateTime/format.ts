@@ -267,7 +267,7 @@ formatTokenFunctions['A'] = (date, locale) => {
     return func(date.hour(), date.minute(), false);
 };
 
-formatTokenFunctions['Z'] = (date) => {
+function formatUtcOffset(date: DateTime) {
     let offset = date.utcOffset();
     let sign = '+';
     if (offset < 0) {
@@ -276,7 +276,9 @@ formatTokenFunctions['Z'] = (date) => {
     }
     // eslint-disable-next-line no-bitwise
     return `${sign}${zeroPad(~~(offset / 60), 2)}:${zeroPad(~~offset % 60, 2)}`;
-};
+}
+
+formatTokenFunctions['Z'] = formatUtcOffset;
 
 formatTokenFunctions['ZZ'] = (date) => {
     let offset = date.utcOffset();
@@ -378,7 +380,18 @@ function formatTimeZoneName(date: DateTime, offsetFormat: 'short' | 'long') {
     // System zone detection can return an invalid ID such as Etc/Unknown even
     // when the date's local offset is available. Preserve that offset in the label.
     if (!isValidTimeZone(timeZone)) {
-        return `GMT${date.format('Z')}`;
+        const offset = formatUtcOffset(date);
+        try {
+            return parseZoneInfo({
+                ts: date.valueOf(),
+                locale: date.locale(),
+                timeZone: offset,
+                offsetFormat,
+            });
+        } catch {
+            // Older engines do not support offset strings as Intl time zones.
+            return `GMT${offset}`;
+        }
     }
 
     return parseZoneInfo({
