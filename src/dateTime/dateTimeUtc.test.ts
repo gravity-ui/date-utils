@@ -51,6 +51,7 @@ describe('DateTimeUtc', () => {
             ['2023-12-31 01:00:00', '2023-12-31T01:00:00.000Z'],
             ['2023-12-31 01:00:00.000000', '2023-12-31T01:00:00.000Z'],
             ['2023-12-31 03:00:00+02', '2023-12-31T01:00:00.000Z'],
+            ['2023/12/31', '2023-12-31T00:00:00.000Z'],
         ])('input option (%p)', (input, expected) => {
             const date = dateTimeUtc({input}).toISOString();
             expect(date).toEqual(expected);
@@ -69,6 +70,7 @@ describe('DateTimeUtc', () => {
             ['2023-12-31T01:00', '2023-12-31T01:00:00.000+02:30'],
             ['2023-12-31T01:00Z', '2023-12-31T01:00:00.000+02:30'],
             ['2023-12-31T03:00+02:00', '2023-12-31T01:00:00.000+02:30'],
+            ['2023/12/31', '2023-12-31T00:00:00.000+02:30'],
         ])('input option (%p) with offset', (input, expected) => {
             const date = dateTimeUtc({input, offset: 150}).toISOString(true);
             expect(date).toEqual(expected);
