@@ -856,10 +856,12 @@ function getTimestamp(
         if (Object.keys(dateObject).length === 0) {
             // fallback to native Date parse,
             // with a fixed offset zone-less strings are read as wall-clock time at that offset
-            const fallbackTs =
-                fixedOffset === undefined
-                    ? new Date(input).valueOf()
-                    : dayjs.utc(input).valueOf() - fixedOffset * 60 * 1000;
+            const date = new Date(input);
+            let fallbackTs = date.valueOf();
+            if (fixedOffset !== undefined) {
+                const utcOffset = date.getTimezoneOffset() * 60 * 1000;
+                fallbackTs -= utcOffset + fixedOffset * 60 * 1000;
+            }
             return getTimestamp(fallbackTs, timezone, locale, format, fixedOffset);
         }
         [ts] = getTimestampFromObject(
