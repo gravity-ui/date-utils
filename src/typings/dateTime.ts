@@ -99,6 +99,12 @@ export interface DateTime {
     utc(keepLocalTime?: boolean): DateTime;
     utcOffset(): number;
     utcOffset(offset: number | string, keepLocalTime?: boolean): DateTime;
+    /**
+     * Returns the time zone, resolving the system zone through Intl.
+     * System zone detection may return an invalid ID such as `Etc/Unknown`.
+     * Validate the result with `isValidTimeZone` before passing it back to an API
+     * that accepts a time zone. Formatting z/zz handles this case separately.
+     */
     timeZone(): string;
     timeZone(timeZone: string, keepLocalTime?: boolean): DateTime;
     /** Get the number of days in the current month. */

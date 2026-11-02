@@ -1,7 +1,7 @@
 import {englishFormats} from '../constants';
 import {settings} from '../settings';
 import type {Locale, LongDateFormat} from '../settings/types';
-import {parseZoneInfo} from '../timeZone';
+import {isValidTimeZone, parseZoneInfo} from '../timeZone';
 import type {DateTime} from '../typings';
 
 function getShortLocalizedFormatFromLongLocalizedFormat(format: string) {
@@ -267,7 +267,7 @@ formatTokenFunctions['A'] = (date, locale) => {
     return func(date.hour(), date.minute(), false);
 };
 
-formatTokenFunctions['Z'] = (date) => {
+function formatUtcOffset(date: DateTime) {
     let offset = date.utcOffset();
     let sign = '+';
     if (offset < 0) {
@@ -276,7 +276,9 @@ formatTokenFunctions['Z'] = (date) => {
     }
     // eslint-disable-next-line no-bitwise
     return `${sign}${zeroPad(~~(offset / 60), 2)}:${zeroPad(~~offset % 60, 2)}`;
-};
+}
+
+formatTokenFunctions['Z'] = formatUtcOffset;
 
 formatTokenFunctions['ZZ'] = (date) => {
     let offset = date.utcOffset();
@@ -373,23 +375,35 @@ formatTokenFunctions['X'] = (date) => {
     return `${date.unix()}`;
 };
 
-formatTokenFunctions['z'] = (date) => {
-    return parseZoneInfo({
-        ts: date.valueOf(),
-        locale: date.locale(),
-        timeZone: date.timeZone(),
-        offsetFormat: 'short',
-    });
-};
+function formatTimeZoneName(date: DateTime, offsetFormat: 'short' | 'long') {
+    const timeZone = date.timeZone();
+    // System zone detection can return an invalid ID such as Etc/Unknown even
+    // when the date's local offset is available. Preserve that offset in the label.
+    if (!isValidTimeZone(timeZone)) {
+        const offset = formatUtcOffset(date);
+        try {
+            return parseZoneInfo({
+                ts: date.valueOf(),
+                locale: date.locale(),
+                timeZone: offset,
+                offsetFormat,
+            });
+        } catch {
+            // Older engines do not support offset strings as Intl time zones.
+            return `GMT${offset}`;
+        }
+    }
 
-formatTokenFunctions['zz'] = (date) => {
     return parseZoneInfo({
         ts: date.valueOf(),
         locale: date.locale(),
-        timeZone: date.timeZone(),
-        offsetFormat: 'long',
+        timeZone,
+        offsetFormat,
     });
-};
+}
+
+formatTokenFunctions['z'] = (date) => formatTimeZoneName(date, 'short');
+formatTokenFunctions['zz'] = (date) => formatTimeZoneName(date, 'long');
 
 formatTokenFunctions['DDD'] = (date) => {
     return `${date.dayOfYear()}`;

@@ -3,7 +3,10 @@ import type {TimeZone} from '../typings';
 import {getDateTimeFormat} from '../utils/locale';
 
 /**
- * Returns the user's time zone.
+ * Returns the user's time zone as reported by Intl.
+ * The result may be an invalid zone ID such as `Etc/Unknown` when detection fails.
+ * Validate it with `isValidTimeZone` before passing it to dateTime, timeZone,
+ * timeZoneOffset or settings.setDefaultTimeZone.
  */
 // eslint-disable-next-line new-cap
 export const guessUserTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
