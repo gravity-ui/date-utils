@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.3](https://github.com/gravity-ui/date-utils/compare/v2.7.2...v2.7.3) (2026-10-30)
+
+
+### Bug Fixes
+
+* parse zone-less fallback strings at the fixed offset in dateTimeUtc ([#103](https://github.com/gravity-ui/date-utils/issues/103)) ([bee794f](https://github.com/gravity-ui/date-utils/commit/bee794fef59050991c064cabafcfb9279d56b6ef))
+
 ## [2.7.2](https://github.com/gravity-ui/date-utils/compare/v2.7.1...v2.7.2) (2026-09-14)
 
 
